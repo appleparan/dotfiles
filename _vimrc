@@ -22,7 +22,7 @@ set ruler
 "bracket matching
 set showmatch
 set matchtime=3
-colorscheme slate
+colorscheme desert
 
 "highlighting
 "set cursorline
