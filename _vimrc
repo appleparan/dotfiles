@@ -41,7 +41,7 @@ if s:extfname ==? "f90"
     let fortran_fold_multilinecomments=1
     let fortran_more_precise=1
     let fortran_dialect="elf"
-    au! BufRead.BufNewFile *.f90
+"   au! BufRead.BufNewFile *.f90
     let b:fortran_do_enddo=1
     let fortran_have_tabs=1
     unlet! fortran_fixed_source
