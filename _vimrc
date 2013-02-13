@@ -1,5 +1,6 @@
 set shell=/bin/bash\ -l
 set tabstop=4
+set softtabstop=4
 filetype plugin indent on
 syntax on
 filetype on
@@ -34,6 +35,23 @@ hi Search ctermbg=4
 set nofoldenable
 set foldlevel=1
 
+"For html
+let html_use_css = 1
+" tabstop for html
+au Filetype xhtml,html,htm,php,xml setlocal tabstop=2
+" (et) expand tabs to spaces (use :retab to redo entire file)
+au Filetype xhtml,html,htm,php,xml setlocal shiftwidth=2 
+" (sts) makes spaces feel like tabs (like deleting)
+au Filetype xhtml,html,htm,php,xml setlocal softtabstop=2
+
+" allow the match paris operation (%) to work with '=' and ';'
+au Filetype c,h,java,js setlocal mps+==:;
+
+au Filetype java,js setlocal smartindent
+
+
+au Filetype txt setlocal fo+=tn
+
 let s:extfname = expand("%:e")
 if s:extfname ==? "f90"
     let fortran_fress_source=1
@@ -49,8 +67,9 @@ if s:extfname ==? "f90"
     unlet! fortran_have_tabs
     highlight OverLength ctermbg=red ctermfg=white guibg=#592929
     match OverLength /\%81v.\+/
-    set tabstop=2
-    set shiftwidth=2
+    setlocal tabstop=2
+    setlocal shiftwidth=2
+    setlocal softtabstop=2
 elseif s:extfname ==? "f77" || s:extfname ==? "f" 
     let fortran_fold=1
     let fortran_fold_conditionals=1
@@ -62,8 +81,9 @@ elseif s:extfname ==? "f77" || s:extfname ==? "f"
     unlet! fortran_fress_source
     highlight OverLength ctermbg=red ctermfg=white guibg=#592929
     match OverLength /\%81v.\+/
-    set tabstop=2
-    set shiftwidth=2
+    setlocal tabstop=2
+    setlocal shiftwidth=2
+    setlocal softtabstop=2
 elseif s:extfname ==? "c" || s:extfname ==? "py"
     highlight OverLength ctermbg=red ctermfg=white guibg=#592929
     match OverLength /\%81v.\+/
@@ -88,3 +108,5 @@ augroup resCur
   autocmd!
   autocmd BufWinEnter * call ResCur()
 augroup END
+
+nnoremap <F4> :set invpaste paste?<CR>
