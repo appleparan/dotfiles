@@ -1,6 +1,29 @@
 set shell=/bin/bash\ -l
+set textwidth=79
+set wrap
+set nobackup
+set visualbell
+set ruler
+
+set wrapscan    " allows search to wrap to top of document when the bottom has been hit
+set incsearch   " highlights what you are searching for as you type
+set hlsearch    " highlights all instance of the alst searched string
+set ignorecase  " ignores case in search patterns
+set smartcase   " don't ignore case when the search pattern has uppercase
+set number      
+set paste
+set ruler
+"bracket matching
+set showmatch
+set matchtime=3
+colorscheme desert
+
+set backspace=indent,eol,start
 set tabstop=4
+set shiftwidth=4
+set expandtab
 set softtabstop=4
+
 filetype plugin indent on
 syntax on
 filetype on
@@ -8,34 +31,17 @@ filetype on
 set autoindent
 set cindent
 set smartindent
-set textwidth=79
-set wrap
-set nobackup
-set visualbell
-set ruler
-set shiftwidth=4
-set incsearch
-set hlsearch
-set number
-set paste
-set expandtab
-set ruler
-"bracket matching
-set showmatch
-set matchtime=3
-colorscheme desert
-
 "highlighting
 "set cursorline
 hi Search ctermbg=4
 
-"Folding
+" Folding
 "set foldmethod=syntax
 "set foldnestmax=10
 set nofoldenable
 set foldlevel=1
 
-"For html
+" For html
 let html_use_css = 1
 " tabstop for html
 au Filetype xhtml,html,htm,php,xml setlocal tabstop=2
