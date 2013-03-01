@@ -1,3 +1,4 @@
+" http://wwww.apaulodesign.com/vimrc.html
 set shell=/bin/bash\ -l
 set textwidth=79
 set wrap
@@ -13,24 +14,24 @@ set smartcase   " don't ignore case when the search pattern has uppercase
 set number      
 set paste
 set ruler
+
 "bracket matching
 set showmatch
 set matchtime=3
-colorscheme desert
 
+set autoindent      " turn on auto-indenting (great for programers)
+set copyindent      " when auto-indenting, use the indenting format of previous line
+set cindent         " c-style indenting
+set smartindent     "
 set backspace=indent,eol,start
-set tabstop=4
-set shiftwidth=4
+set tabstop=4       " width (in spaces) that a <tab> is displayed as
+set shiftwidth=4    " width (in spaces) used in each step of autoindent (aswell as << and >>)
 set expandtab
 set softtabstop=4
 
 filetype plugin indent on
 syntax on
 filetype on
-
-set autoindent
-set cindent
-set smartindent
 "highlighting
 "set cursorline
 hi Search ctermbg=4
