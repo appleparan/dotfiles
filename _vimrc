@@ -15,6 +15,10 @@ set number
 set paste
 set ruler
 
+" for pathgen
+execute pathogen#infect()
+
+
 "bracket matching
 set showmatch
 set matchtime=3
@@ -31,16 +35,18 @@ set softtabstop=4
 
 filetype plugin indent on
 syntax on
+
 filetype on
 "highlighting
-"set cursorline
+set nocursorline
+syntax sync minlines=512
 hi Search ctermbg=4
 
 " Folding
 "set foldmethod=syntax
 "set foldnestmax=10
-set nofoldenable
-set foldlevel=1
+"set nofoldenable
+"set foldlevel=1
 
 " For html
 let html_use_css = 1
@@ -117,3 +123,7 @@ augroup resCur
 augroup END
 
 nnoremap <F4> :set invpaste paste?<CR>
+
+autocmd BufReadPre SConstruct set filetype=python
+autocmd BufReadPre SConscript set filetype=python
+autocmd BufReadPost *.sconscript set filetype=python
