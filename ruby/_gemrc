@@ -1,3 +1,0 @@
-# rvm already does this by default.
-# use `gem rdoc gherkin` to create rdoc/ri docs
-gem: --no-ri --no-rdoc
