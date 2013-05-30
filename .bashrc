@@ -53,13 +53,3 @@ else
     fi
 fi
 
-if [ -z "$TMUX" ]; then
-  if [ ! -z "$SSH_TTY" ]; then
-      if [ ! -z "SSH_AUTH_SOCK" ]; then
-          ln -sf "$SSH_AUTH_SOCK" "$HOME/.wrap_auth_sock"
-      fi
-      export SSH_AUTH_SOCK="$HOME/.wrap_auth_sock"
-
-      exec "$HOME/bin/tmux-session" "sshwrap"
-  fi
-fi
