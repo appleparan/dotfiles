@@ -10,6 +10,8 @@ fi
 #alias cplot='ifort -r8 mo.f -o plot'
 # User specific environment and startup programs
 
+source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
+
 PATH=$HOME/usr/bin:$HOME/bin:/engrid/enhpc/intel/xe/bin:/engrid/enhpc/mpich2/intel/bin:$PATH
 PYTHONPATH=$HOME/usr/lib64/python2.6/site-packages:$PYTHONPATH:
 
