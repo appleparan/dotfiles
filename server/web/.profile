@@ -22,7 +22,6 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 export WORKON_HOME=$HOME/.virtualenvs
-#source /home/appleparan/bin/virtualenvwrapper.sh
 export PIP_VIRTUALENV_BASE=$WORKON_HOME # Tell pip to create its virtualenvs in $WORKON_HOME.
 export PIP_RESPECT_VIRTUALENV=true # Tell pip to automatically use the currently active virtualenv.i
 
