@@ -22,12 +22,11 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 export WORKON_HOME=$HOME/.virtualenvs
-source /home/appleparan/bin/virtualenvwrapper.sh
+#source /home/appleparan/bin/virtualenvwrapper.sh
 export PIP_VIRTUALENV_BASE=$WORKON_HOME # Tell pip to create its virtualenvs in $WORKON_HOME.
 export PIP_RESPECT_VIRTUALENV=true # Tell pip to automatically use the currently active virtualenv.i
 
-[[ -s "$HOME/.pythonbrew/etc/bashrc" ]] && source "$HOME/.pythonbrew/etc/bashrc"
-pythonbrew switch 2.7.3
+pythonbrew switch 3.2.3
 
 if [ -z "$TMUX" ]; then
   if [ ! -z "$SSH_TTY" ]; then
