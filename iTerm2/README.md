@@ -1,5 +1,5 @@
 #iTerm Color Schemes#
-
+Cloned from https://github.com/mbadolato/iTerm2-Color-Schemes
 ##Intro##
 This is a set of color schemes for iTerm (aka iTerm2). Screenshots below and in the [screenshots](https://github.com/mbadolato/iTerm2-Color-Schemes/tree/master/screenshots) directory.
 
