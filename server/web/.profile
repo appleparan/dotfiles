@@ -21,20 +21,25 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-export WORKON_HOME=$HOME/.virtualenvs
-export PIP_VIRTUALENV_BASE=$WORKON_HOME # Tell pip to create its virtualenvs in $WORKON_HOME.
-export PIP_RESPECT_VIRTUALENV=true # Tell pip to automatically use the currently active virtualenv.i
-
-pythonbrew switch 3.2.3
-
+export MY_IP_ADDR="165.132.28.100"
+export SSH_CLIENT_ADDR=`echo $SSH_CLIENT | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}'`
 if [ -z "$TMUX" ]; then
   if [ ! -z "$SSH_TTY" ]; then
       if [ ! -z "SSH_AUTH_SOCK" ]; then
           ln -sf "$SSH_AUTH_SOCK" "$HOME/.wrap_auth_sock"
       fi
-      export SSH_AUTH_SOCK="$HOME/.wrap_auth_sock"
 
-      exec "$HOME/bin/tmux-session" "sshwrap"
+      export SSH_AUTH_SOCK="$HOME/.wrap_auth_sock"
+      if [[ "$SSH_CLIENT_ADDR" != "$MY_IP_ADDR" ]]; then
+        exec "$HOME/bin/tmux-session" "sshwrap"
+      fi
   fi
 fi
 
+pythonbrew switch 2.7.3
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+export WORKON_HOME=$HOME/.virtualenvs
+source  /usr/local/bin/virtualenvwrapper.sh
+
+export LC_ALL=en_US.utf8
+export LANG=en_US.utf8
