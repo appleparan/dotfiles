@@ -24,20 +24,27 @@ fi
 export MY_IP_ADDR="165.132.28.100"
 export SSH_CLIENT_ADDR=`echo $SSH_CLIENT | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}'`
 if [ -z "$TMUX" ]; then
-  if [ ! -z "$SSH_TTY" ]; then
-      if [ ! -z "SSH_AUTH_SOCK" ]; then
-          ln -sf "$SSH_AUTH_SOCK" "$HOME/.wrap_auth_sock"
-      fi
+    #if [ ! -z "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent_sock" ] ; then
+    #    unlink "$HOME/.ssh/agent_sock" 2>/dev/null
+    #    ln -s "$SSH_AUTH_SOCK" "$HOME/.ssh/agent_sock"
+    #    export SSH_AUTH_SOCK="$HOME/.ssh/agent_sock"
+    #fi
 
-      export SSH_AUTH_SOCK="$HOME/.wrap_auth_sock"
-      if [[ "$SSH_CLIENT_ADDR" != "$MY_IP_ADDR" ]]; then
+    if [[ "$SSH_CLIENT_ADDR" != "$MY_IP_ADDR" ]]; then
+    if [ ! -z "$SSH_TTY" ]; then
+        if [ ! -z "SSH_AUTH_SOCK" ]; then
+            ln -sf "$SSH_AUTH_SOCK" "$HOME/.wrap_auth_sock"
+        fi
+        export SSH_AUTH_SOCK="$HOME/.wrap_auth_sock"
+
         exec "$HOME/bin/tmux-session" "sshwrap"
-      fi
-  fi
+    fi
+    fi
 fi
 
-pythonbrew switch 2.7.3
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 export WORKON_HOME=$HOME/.virtualenvs
 source  /usr/local/bin/virtualenvwrapper.sh
 
