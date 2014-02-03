@@ -31,7 +31,7 @@ export LD_LIBRARY_PATH
 
 unset USERNAME
 
-
+# for ssh keys
 if [ -z "$TMUX" ]; then
   if [ ! -z "$SSH_TTY" ]; then
       if [ ! -z "SSH_AUTH_SOCK" ]; then
@@ -43,7 +43,9 @@ if [ -z "$TMUX" ]; then
   fi
 fi
 
+# for python(pyenv)
 eval "$(pyenv init -)"
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-source /home/appleparan/.rvm/scripts/rvm
+# for ruby(rvm & rubygem)
+# [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
+# source /home/appleparan/.rvm/scripts/rvm
