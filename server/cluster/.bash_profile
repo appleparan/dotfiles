@@ -34,6 +34,18 @@ unset USERNAME
 # for python(pyenv)
 eval "$(pyenv init -)"
 
+# for ssh keys
+if [ -z "$TMUX" ]; then
+  if [ ! -z "$SSH_TTY" ]; then
+      if [ ! -z "SSH_AUTH_SOCK" ]; then
+          ln -sf "$SSH_AUTH_SOCK" "$HOME/.wrap_auth_sock"
+      fi
+      export SSH_AUTH_SOCK="$HOME/.wrap_auth_sock"
+
+      exec "$HOME/bin/tmux-session" "sshwrap"
+  fi
+fi
+
 # for ruby(rvm & rubygem)
 # [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 # source /home/appleparan/.rvm/scripts/rvm
