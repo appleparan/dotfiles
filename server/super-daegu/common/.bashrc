@@ -9,8 +9,9 @@ fi
 
 source /opt/intel/composerxe/bin/compilervars.sh intel64
 
+LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/lib:$LD_LIBRARY_PATH
 PATH=/opt/intel/composerxe/bin:/opt/intel/impi/4.0.3/bin64/mpivars.sh:$PATH:$HOME/bin
 
-export PATH
 
+export LD_LIBRARY_PATH
 export PATH
