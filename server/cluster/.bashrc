@@ -25,7 +25,8 @@ function test_identities {
     # test whether standard identities have been added to the agent already
     ssh-add -l | grep "The agent has no identities" > /dev/null
     if [ $? -eq 0 ]; then
-        ssh-add location_of_rsa
+        ssh-add ~/.ssh/bitbucket_rsa
+        ssh-add ~/.ssh/github_rsa
         # $SSH_AUTH_SOCK broken so we start a new proper agent
         if [ $? -eq 2 ];then
             start_agent
@@ -53,3 +54,5 @@ else
     fi
 fi
 
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
