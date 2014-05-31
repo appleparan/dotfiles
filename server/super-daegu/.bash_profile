@@ -6,5 +6,8 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # User specific environment and startup programs
+alias tnbit="ssh -C -L 8022:bitbucket.org:22 REDACTED -N ,"
+alias tngithub="ssh -C -L 8022:github.com:22 REDACTED -N ,"
+
 
 
