@@ -15,6 +15,7 @@ set number
 set paste
 set ruler
 
+set fileformat=unix
 
 "bracket matching
 set showmatch
