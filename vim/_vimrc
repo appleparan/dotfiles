@@ -62,6 +62,8 @@ au Filetype c,h,java,js setlocal mps+==:;
 
 au Filetype java,js setlocal smartindent
 
+" gitcommit message
+au Filetype gitcommit setlocal spell textwidth=72
 
 au Filetype txt setlocal fo+=tn
 
