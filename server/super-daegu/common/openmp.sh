@@ -11,6 +11,8 @@
 #PBS -q workq
 #PBS -r n
 #PBS -j oe
+#PBS -o job_output.out
+#PBS -e job_error.out
 export OMP_NUM_THREADS=16
 cd $PBS_O_WORKDIR
 [ -f stdout.out ] && rm stdout.out

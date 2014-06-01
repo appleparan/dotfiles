@@ -11,6 +11,8 @@
 #PBS -q workq
 #PBS -r n
 #PBS -j oe
+#PBS -o job_output.out
+#PBS -e job_error.out
 cd $PBS_O_WORKDIR
 [ -f stdout.out ] && rm stdout.out
 date > stdout.out
