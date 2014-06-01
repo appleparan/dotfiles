@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -l select=1:ncpus=16:ngpus=1
+#PBS -l select=1:ncpus=16:ngpus=0
 #PBS -M Mail Address
 ### mail option
 ## a send mail when job is aborted by batch system
