@@ -1,0 +1,14 @@
+#!/bin/sh
+#$ -cwd
+#$ -V
+#$ -N "your job name"
+#$ -S /bin/sh
+#$ -v MPIHOME=/engrid/enhpc/v11.1.038/mpich-1.2.7p1/intel
+#$ -A "your name"
+#$ -j y
+#$ -q omp.q
+#$ -o log_omp.out
+#$ -e log_err.out
+#$ -pe mpich_ef 36
+cp $PE_HOSTFILE ./pe_hostfile
+$MPIHOME/bin/mpirun -np $NSLOTS -machinefile  $TMPDIR/machines $PWD/exec.run
