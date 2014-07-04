@@ -16,10 +16,6 @@ set number
 set paste
 set ruler
 
-" for pathgen
-execute pathogen#infect()
-
-
 "bracket matching
 set showmatch
 set matchtime=3
