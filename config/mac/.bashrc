@@ -8,8 +8,6 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 eval "$(pyenv init -)"
 
-export DYLD_FALLBACK_LIBRARY_PATH=/Applications/Postgres.app/Contents/MacOS/lib:$DYLD_LIBRARY_PATH
-
 source /opt/intel/bin/compilervars.sh intel64
 
 # start the ssh-agent

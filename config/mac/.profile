@@ -10,4 +10,4 @@ alias li='ls -lvh'
 export PS1="\[\033[01;32m\]\u@\h \[\033[01;34m\]\W \$\[\033[00m\] "
 #export PS1='\[\033[0;36m\]\u@\h\[\033[01m\]:\[\033[0;35m\]\w\[\033[00m\]\[\033[1;30m\]\[\033[0;37m\]`__git_ps1 " (%s)"`\[\033[00m\]\[\033[0;37m\]\$ '
 
-export PATH=/usr/loca/sbin:$PATH
+export PATH=$PATH:/usr/local/bin:/usr/local/sbin
