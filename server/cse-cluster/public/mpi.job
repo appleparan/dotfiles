@@ -1,20 +1,16 @@
 #!/bin/sh
 #$ -cwd
 #$ -V
-#$ -N "your job name"
+#$ -N MPI_TEST
 #$ -S /bin/sh
-#$ -v MPIHOME=/engrid/enhpc/xe/mpich2-1.3.1/intel
+#$ -v MPIHOME=/engrid/enhpc/mpich3.0.4
 #$ -v NSLOTS=8
+#$ -A JongsuKim
 #$ -j y
 #$ -q omp.q
 #$ -o log_omp.out
 #$ -e log_err.out
 #$ -pe mpich_ef 8
-cp $PE_HOSTFILE ./pe_hostfile
-$MPIHOME/bin/mpiexec -l -machinefile $TMPDIR/machines -n $NSLOTS $PWD/executable_file
 
-jobs=`$MPIHOME/bin/mpdlistjobs`
-if [ X"$jobs" = X ]; then
-        $MPIHOME/bin/mpdallexit
-fi
-
+export HYDRA_HOST_FILE=$PE_HOSTFILE
+$MPIHOME/bin/mpiexec -l -machinefile $TMPDIR/machines -n $NSLOTS $PWD/mpitest
