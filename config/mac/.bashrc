@@ -5,6 +5,8 @@ PATH=/usr/local/bin:$PATH
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+PYENV_ROOT="$HOME/.pyenv"
+PATH=$PATH:$PYENV_ROOT/bin
 
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
