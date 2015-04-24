@@ -9,4 +9,4 @@
 #$ -e log_err.out
 #$ -q omp.q
 #$ -pe openmp 8
-matlab -nojvm -nodesktop -nosplash -r "run $PWD/exec.run; quit;"
+matlab -nojvm -nodesktop -nosplash -r "run $PWD/exec.m; quit;"
