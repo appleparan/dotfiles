@@ -7,7 +7,7 @@
 #$ -j y
 #$ -o log_omp.out
 #$ -e log_err.out
-#$ -q smp.q
+#$ -q omp.q
 #$ -pe openmp 8
 export OMP_NUM_THREADS=8
 $PWD/exec.run
