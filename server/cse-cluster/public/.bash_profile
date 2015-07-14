@@ -6,6 +6,7 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # User specific environment and startup programs
+# Remove duplicates : http://unix.stackexchange.com/a/40973
 if [ -n "$PATH" ]; then
   old_PATH=$PATH:; PATH=
   while [ -n "$old_PATH" ]; do
