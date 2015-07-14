@@ -54,33 +54,6 @@ else
     fi
 fi
 
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
-source /engrid/enhpc/intel/xe/bin/iccvars.sh intel64
-
-PYENV_ROOT=$HOME/.pyenv
-PATH=$PYENV_ROOT/bin:/engrid/enhpc/intel/xe/bin:/engrid/enhpc/mpich3.0.4/bin:/engrid/enhpc/mpich2/intel/bin:$PATH:$HOME/bin:$HOME/usr/bin
-PYTHONPATH=$HOME/usr/lib64/python2.6/site-packages:$PYTHONPATH:
-
-LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/lib:$LD_LIBRARY_PATH
-
-GDFONTPATH=/usr/share/fonts/dejavu/
-GNUPLOT_DEFAULT_GDFONT="DejaVuSans"
-
-export PYENV_ROOT
-export PATH
-export GDFONTPATH
-export GNUPLOT_DEFAULT_GDFONT
-export PYTHONPATH
-export LD_LIBRARY_PATH
-
-unset USERNAME
-
-# for python(pyenv)
-eval "$(pyenv init -)"
-
 # for ssh keys
 if [ -z "$TMUX" ]; then
   if [ ! -z "$SSH_TTY" ]; then
@@ -93,6 +66,29 @@ if [ -z "$TMUX" ]; then
   fi
 fi
 
-# for ruby(rvm & rubygem)
-# [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
-# source /home/appleparan/.rvm/scripts/rvm
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
+source /engrid/enhpc/intel/xe/bin/iccvars.sh intel64
+
+PYENV_ROOT=$HOME/.pyenv
+PATH=$PYENV_ROOT/bin:/engrid/enhpc/intel/xe/bin:/engrid/enhpc/mpich3.0.4/bin:/engrid/enhpc/mpich2/intel/bin:$PATH:$HOME/bin:$HOME/usr/bin
+PYTHONPATH=$HOME/usr/lib64/python2.6/site-packages:$PYTHONPATH:
+
+MKLROOT=/engrid/enhpc/intel/xe/composer_xe_2011_sp1.7.256/mkl/
+GDFONTPATH=/usr/share/fonts/dejavu/
+GNUPLOT_DEFAULT_GDFONT="DejaVuSans"
+LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$HOME/lib:$LD_LIBRARY_PATH
+
+export PYENV_ROOT
+export PATH
+export GDFONTPATH
+export GNUPLOT_DEFAULT_GDFONT
+export PYTHONPATH
+export LD_LIBRARY_PATH
+
+unset USERNAME
+
+# for python(pyenv)
+eval "$(pyenv init -)"
