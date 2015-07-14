@@ -8,6 +8,7 @@ fi
 alias cdgist="ssh 210.110.244.101 -p 1444 -l ycse02"
 
 # User specific environment and startup programs
+# Remove duplicates : http://unix.stackexchange.com/a/40973
 if [ -n "$PATH" ]; then
   old_PATH=$PATH:; PATH=
   while [ -n "$old_PATH" ]; do
