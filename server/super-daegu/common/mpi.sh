@@ -23,4 +23,4 @@ NP=`/usr/bin/wc -l $PBS_NODEFILE | awk '{ print $1 }'`
 echo $NP >> stdout.out
 
 #### mpirun config
-mpirun -genv I_MPI_FABRICS=shm:ofa -genv I_MPI_OFA_USE_XRC=1 -genv I_MPI_OFA_DYNAMIC_QPS=1 -genv I_MPI_DEBUG=5 -np $NP -machinefile $PBS_NODEFILE /a.out >> stdout.out
+mpirun -genv I_MPI_FABRICS=shm:ofa -genv I_MPI_OFA_USE_XRC=1 -genv I_MPI_OFA_DYNAMIC_QPS=1 -genv I_MPI_DEBUG=5 -np $NP -machinefile $PBS_NODEFILE ./a.out >> stdout.out
