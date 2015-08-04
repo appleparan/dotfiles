@@ -15,6 +15,7 @@ set number
 set paste
 set ruler
 
+
 "bracket matching
 set showmatch
 set matchtime=3
@@ -58,13 +59,11 @@ au Filetype c,h,java,js setlocal mps+==:;
 
 au Filetype java,js setlocal smartindent
 
-" gitcommit message
-au Filetype gitcommit setlocal spell textwidth=72
 
 au Filetype txt setlocal fo+=tn
 
 let s:extfname = expand("%:e")
-if s:extfname ==? "f90"
+if s:extfname ==? "f90" || s:extfname ==? "f" 
     let fortran_fress_source=1
     let fortran_fold=1
     let fortran_fold_conditionals=1
@@ -78,10 +77,10 @@ if s:extfname ==? "f90"
     unlet! fortran_have_tabs
     highlight OverLength ctermbg=red ctermfg=white guibg=#592929
     match OverLength /\%81v.\+/
-    setlocal tabstop=2
-    setlocal shiftwidth=2
-    setlocal softtabstop=2
-elseif s:extfname ==? "f77" || s:extfname ==? "f" 
+    setlocal tabstop=4
+    setlocal shiftwidth=4
+    setlocal softtabstop=4
+elseif s:extfname ==? "f77"
     let fortran_fold=1
     let fortran_fold_conditionals=1
     let fortran_fold_multilinecomments=1
@@ -108,8 +107,7 @@ endif
 "  n... :  where to save the viminfo files
 set viminfo='10,\"100,:20,%,n~/.viminfo
 
-nnoremap <F4> :set invpaste paste?<CR>
-
 autocmd BufReadPre SConstruct set filetype=python
 autocmd BufReadPre SConscript set filetype=python
 autocmd BufReadPost *.sconscript set filetype=python
+
