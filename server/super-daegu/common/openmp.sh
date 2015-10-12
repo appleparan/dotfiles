@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -l select=1:ncpus=16:ngpus=0
+#PBS -l select=1:ncpus=16
 #PBS -M Mail Address
 ### mail option
 ## a send mail when job is aborted by batch system
@@ -23,4 +23,4 @@ NP=`/usr/bin/wc -l $PBS_NODEFILE | awk '{ print $1 }'`
 
 echo $NP >> stdout.out
 
-./a.out >> stdout.out
+./a.out &> stdout.out
