@@ -20,4 +20,4 @@ NP=`/usr/bin/wc -l $PBS_NODEFILE | awk '{ print $1 }'`
 
 echo $NP >> jobout.out
 
-./a.out &> jobout.out
+./a.out >> jobout.out 2>&1
