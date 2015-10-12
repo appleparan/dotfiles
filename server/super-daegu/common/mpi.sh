@@ -11,17 +11,14 @@
 #PBS -N test
 #PBS -q workq
 #PBS -r n
-#PBS -j oe
-#PBS -o job_output.out
-#PBS -e job_error.out
 cd $PBS_O_WORKDIR
-[ -f stdout.out ] && rm stdout.out
-date > stdout.out
-cat $PBS_NODEFILE >> stdout.out
+[ -f jobout.out ] && rm jobout.out
+date > jobout.out
+cat $PBS_NODEFILE >> jobout.out
 
 NP=`/usr/bin/wc -l $PBS_NODEFILE | awk '{ print $1 }'`
 
-echo $NP >> stdout.out
+echo $NP >> jobout.out
 
 #### mpirun config
-mpirun -genv I_MPI_FABRICS=shm:ofa -genv I_MPI_OFA_USE_XRC=1 -genv I_MPI_OFA_DYNAMIC_QPS=1 -genv I_MPI_DEBUG=5 -np $NP -machinefile $PBS_NODEFILE ./a.out &> stdout.out
+mpirun -genv I_MPI_FABRICS=shm:ofa -genv I_MPI_OFA_USE_XRC=1 -genv I_MPI_OFA_DYNAMIC_QPS=1 -genv I_MPI_DEBUG=5 -np $NP -machinefile $PBS_NODEFILE ./a.out &> jobout.out
