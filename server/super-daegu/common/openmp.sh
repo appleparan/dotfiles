@@ -10,17 +10,14 @@
 #PBS -N test
 #PBS -q workq
 #PBS -r n
-#PBS -j oe
-#PBS -o job_output.out
-#PBS -e job_error.out
 export OMP_NUM_THREADS=16
 cd $PBS_O_WORKDIR
-[ -f stdout.out ] && rm stdout.out
-date > stdout.out
-cat $PBS_NODEFILE >> stdout.out
+[ -f jobout.out ] && rm jobout.out
+date > jobout.out
+cat $PBS_NODEFILE >> jobout.out
 
 NP=`/usr/bin/wc -l $PBS_NODEFILE | awk '{ print $1 }'`
 
-echo $NP >> stdout.out
+echo $NP >> jobout.out
 
-./a.out &> stdout.out
+./a.out &> jobout.out
