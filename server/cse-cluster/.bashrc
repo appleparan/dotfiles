@@ -7,6 +7,33 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
+source /engrid/enhpc/intel/xe/bin/iccvars.sh intel64
+source /engrid/enhpc/intel/xe/composer_xe_2011_sp1.7.256/mkl/bin/mklvars.sh intel64
+
+PATH=$HOME/.anyenv/bin:$HOME/bin:$HOME/usr/bin:/engrid/enhpc/mpich3.0.4/bin:/engrid/enhpc/mpich2/intel/bin:$PATH:/bin
+PYTHONPATH=$HOME/usr/lib64/python2.6/site-packages:$PYTHONPATH:
+
+MKLROOT=/engrid/enhpc/intel/xe/composer_xe_2011_sp1.7.256/mkl/
+GDFONTPATH=/usr/share/fonts/dejavu/
+GNUPLOT_DEFAULT_GDFONT="DejaVuSans"
+LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$HOME/lib:$LD_LIBRARY_PATH
+
+export PYENV_ROOT
+export PATH
+export GDFONTPATH
+export GNUPLOT_DEFAULT_GDFONT
+export PYTHONPATH
+export LD_LIBRARY_PATH
+
+unset USERNAME
+
+eval "$(anyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+# SSH
 SSH_ENV="$HOME/.ssh/environment"
   
 # start the ssh-agent
@@ -67,28 +94,3 @@ if [ -z "$TMUX" ]; then
 fi
 
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
-source /engrid/enhpc/intel/xe/bin/iccvars.sh intel64
-
-PYENV_ROOT=$HOME/.pyenv
-PATH=$PYENV_ROOT/bin:/engrid/enhpc/intel/xe/bin:/engrid/enhpc/mpich3.0.4/bin:/engrid/enhpc/mpich2/intel/bin:$PATH:$HOME/bin:$HOME/usr/bin
-PYTHONPATH=$HOME/usr/lib64/python2.6/site-packages:$PYTHONPATH:
-
-MKLROOT=/engrid/enhpc/intel/xe/composer_xe_2011_sp1.7.256/mkl/
-GDFONTPATH=/usr/share/fonts/dejavu/
-GNUPLOT_DEFAULT_GDFONT="DejaVuSans"
-LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$HOME/lib:$LD_LIBRARY_PATH
-
-export PYENV_ROOT
-export PATH
-export GDFONTPATH
-export GNUPLOT_DEFAULT_GDFONT
-export PYTHONPATH
-export LD_LIBRARY_PATH
-
-unset USERNAME
-
-# for python(pyenv)
-eval "$(pyenv init -)"

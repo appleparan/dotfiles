@@ -22,6 +22,8 @@ if [ -n "$PATH" ]; then
   PATH=${PATH#:}
   unset old_PATH x
 fi
+echo "Environmental variable \$PATH"
+echo $PATH
 
 if [ -n "$LD_LIBRARY_PATH" ]; then
   old_LD_LIBRARY_PATH=$LD_LIBRARY_PATH:; LD_LIBRARY_PATH=
@@ -36,4 +38,7 @@ if [ -n "$LD_LIBRARY_PATH" ]; then
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH#:}
   unset old_LD_LIBRARY_PATH x
 fi
+echo "Environmental variable \$LD_LIBRARY_PATH"
+echo $LD_LIBRARY_PATH
+
 
