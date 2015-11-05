@@ -41,4 +41,4 @@ fi
 echo "Environmental variable \$LD_LIBRARY_PATH"
 echo $LD_LIBRARY_PATH
 
-
+eval `keychain --eval --agents ssh bitbucket_rsa github_rsa cdgist`
