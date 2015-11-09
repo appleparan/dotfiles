@@ -19,7 +19,6 @@ set ruler
 " for pathgen
 execute pathogen#infect()
 
-
 "bracket matching
 set showmatch
 set matchtime=3
@@ -34,9 +33,14 @@ set shiftwidth=4    " width (in spaces) used in each step of autoindent (aswell 
 set expandtab
 set softtabstop=4
 
-filetype plugin indent on
 syntax on
+" colorscheme
+set background=dark
+colorscheme solarized
+let g:solarized_termcolors=256
 
+
+filetype plugin indent on
 filetype on
 "highlighting
 set nocursorline
