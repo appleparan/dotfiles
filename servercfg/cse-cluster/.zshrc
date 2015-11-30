@@ -34,17 +34,6 @@
 # autoload -U colors
 #colors
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
-source /engrid/enhpc/intel/xe/bin/iccvars.sh intel64
-
-MKLROOT=/engrid/enhpc/intel/xe/composer_xe_2011_sp1.7.256/mkl/
-LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$HOME/lib:$LD_LIBRARY_PATH
-
-export PATH
-export MKLROOT
-export LD_LIBRARY_PATH
 
 if [[ "$TERM" != "screen" ]] &&
     [[ "$SSH_CONNECTION" != "" ]]; then
