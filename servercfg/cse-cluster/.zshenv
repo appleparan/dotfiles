@@ -5,12 +5,20 @@ alias cdgist="ssh 210.110.244.101 -p 1444 -l ycse02"
 alias ls="ls --color=auto"
 
 PYENV_ROOT="$HOME/.pyenv"
-PATH=$HOME/usr/bin:$HOME/.rvm/bin:$HOME/.pyenv/bin:/engrid/enhpc/mpich3.0.4/bin:/engrid/enhpc/mpich2/intel/bin:$PATH:/bin
-FPATH=$HOME/usr/share/zsh/5.1.1/functions:$FPATH
-source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
-source /engrid/enhpc/intel/xe/bin/iccvars.sh intel64
 
-MKLROOT=/engrid/enhpc/intel/xe/composer_xe_2011_sp1.7.256/mkl/
+FPATH=$HOME/usr/share/zsh/5.1.1/functions:$FPATH
+
+# system wide intel fortran
+#PATH=$HOME/usr/bin:$HOME/.rvm/bin:$HOME/.pyenv/bin:/engrid/enhpc/mpich3.0.4/bin:/engrid/enhpc/mpich2/intel/bin:/bin:$PATH
+#source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
+#source /engrid/enhpc/intel/xe/bin/iccvars.sh intel64
+#source /engrid/enhpc/intel/xe/composer_xe_2011_sp1.7.256/mkl/bin/iccvars.sh intel64
+#MKLROOT=/engrid/enhpc/intel/xe/composer_xe_2011_sp1.7.256/mkl/
+
+# intel 2016 (personal use)
+PATH=$HOME/usr/bin:$HOME/.rvm/bin:$HOME/.pyenv/bin:/engrid/enhpc/mpich3.0.4/bin:/bin:/usr/bin
+source /home/appleparan/usr/intel/bin/compilervars.sh intel64
+
 LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$HOME/lib:$LD_LIBRARY_PATH
 
 export PYENV_ROOT
