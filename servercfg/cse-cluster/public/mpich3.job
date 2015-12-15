@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 #$ -cwd
 #$ -V
 #$ -N "your job name"
-#$ -S /bin/sh
+#$ -S /bin/bash
 #$ -v MPIHOME=/engrid/enhpc/mpich3.0.4
 #$ -v NSLOTS=8
 #$ -A "your name"
@@ -12,5 +12,5 @@
 #$ -e log_err.out
 #$ -pe mpich_ef 8
 
-export HYDRA_HOST_FILE=$PE_HOSTFILE
+#export HYDRA_HOST_FILE=$PE_HOSTFILE
 $MPIHOME/bin/mpiexec -n $NSLOTS $PWD/mpitest
