@@ -120,6 +120,8 @@ PYENV_ROOT=$HOME/.pyenv
 pathmunge $PYENV_ROOT/bin
 pathmunge $HOME/bin
 pathmunge $HOME/usr/bin 
+pathmunge $HOME/usr/local/cmake/bin 
+pathmunge $HOME/usr/local/julia/bin 
 
 export PYENV_ROOT
 export PATH

@@ -16,7 +16,7 @@ FPATH=$HOME/usr/share/zsh/5.1.1/functions:$FPATH
 #MKLROOT=/engrid/enhpc/intel/xe/composer_xe_2011_sp1.7.256/mkl/
 
 # intel 2016 (personal use)
-PATH=$HOME/usr/bin:$HOME/.rvm/bin:$HOME/.pyenv/bin:/engrid/enhpc/mpich3.0.4/bin:/bin:/usr/bin
+PATH=$HOME/usr/bin:$HOME/.rvm/bin:$HOME/.pyenv/bin:$HOME/usr/local/julia/bin:$HOME/usr/local/cmake/bin:/engrid/enhpc/mpich3.0.4/bin:/bin:/usr/bin
 source /home/appleparan/usr/intel/bin/compilervars.sh intel64
 
 LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$HOME/lib:$LD_LIBRARY_PATH
