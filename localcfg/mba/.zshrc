@@ -54,7 +54,8 @@ plugins=(osx brew tmux tmuxinator cp git git-flow git-extras github themes batte
 source $ZSH/oh-my-zsh.sh
 # User configuration
 
-export PATH=$PATH:/usr/local/bin:/usr/local/sbin:$PYENV_ROOT/bin
+export GOPATH=$HOME/go
+export PATH=$PATH:/usr/local/bin:/usr/local/sbin:$PYENV_ROOT/bin:$GOPATH/bin:/usr/local/go_appengine
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -83,15 +84,19 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-PYENV_ROOT="$HOME/.pyenv"
-
-if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-if which pyenv > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
-
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-# ssh keyagent
-eval `keychain --eval --agents ssh bitbucket_rsa github_console_rsa`
-
 # tmuxinator
-source ~/.bin/tmuxinator.zsh
+#source ~/.bin/tmuxinator.zsh
+
+# The next line updates PATH for the Google Cloud SDK.
+source '/Users/appleparan/src/google-cloud-sdk/path.zsh.inc'
+
+# The next line enables shell command completion for gcloud.
+source '/Users/appleparan/src/google-cloud-sdk/completion.zsh.inc'
+
+function frameworkpython {
+    if [[ ! -z "$VIRTUAL_ENV" ]]; then
+        PYTHONHOME=$VIRTUAL_ENV /usr/local/bin/python "$@"
+    else
+        /usr/local/bin/python "$@"
+    fi
+}
