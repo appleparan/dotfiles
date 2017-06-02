@@ -13,4 +13,4 @@
 #$ -pe mpich_ef 8
 
 #export HYDRA_HOST_FILE=$PE_HOSTFILE
-$MPIHOME/bin/mpiexec -n $NSLOTS $PWD/mpitest
+$MPIHOME/bin/mpiexec -n $NSLOTS --hostfile $TMPIDR/machines $PWD/mpitest
