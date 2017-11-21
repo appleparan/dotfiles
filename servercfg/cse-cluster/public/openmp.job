@@ -3,11 +3,13 @@
 #$ -V
 #$ -N "your job name"
 #$ -S /bin/sh
-#$ -A "your name"
 #$ -j y
 #$ -o log_omp.out
 #$ -e log_err.out
 #$ -q omp.q
-#$ -pe openmp 8
-export OMP_NUM_THREADS=8
+#$ -pe openmp "number_of_cores"
+
+## change "number_of_cores" to integer number (maximum = 8) 
+export OMP_NUM_THREADS="number_of_cores"
+## exec.run is your executable file, change it if you want
 $PWD/exec.run
