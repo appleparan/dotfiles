@@ -4,13 +4,14 @@
 #$ -N "your job name"
 #$ -S /bin/bash
 #$ -v MPIHOME=/engrid/enhpc/mpich3.0.4
-#$ -v NSLOTS=8
-#$ -A "your name"
+#$ -v NSLOTS="number_of_cores"
 #$ -j y
 #$ -q omp.q
 #$ -o log_omp.out
 #$ -e log_err.out
-#$ -pe mpich_ef 8
+#$ -pe mpich_ef "number_of_cores"
 
-#export HYDRA_HOST_FILE=$PE_HOSTFILE
-$MPIHOME/bin/mpiexec -n $NSLOTS --hostfile $TMPIDR/machines $PWD/mpitest
+## change MPIHOME if you use another MPI implementation (such as Intel MPI)
+
+## exec.run is your executable file, change it if you want
+$MPIHOME/bin/mpiexec -n $NSLOTS --hostfile $TMPDIR/machines $PWD/exec.run
