@@ -3,10 +3,11 @@
 #$ -V
 #$ -N "your job name"
 #$ -S /bin/sh
-#$ -A "your name"
 #$ -j y
 #$ -o log_omp.out
 #$ -e log_err.out
 #$ -q omp.q
 #$ -pe openmp 8
+
+## exec.m is your executable file, change it if you want
 matlab -nojvm -nodesktop -nosplash -r "run $PWD/exec.m; quit;"
