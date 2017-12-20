@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 #$ -cwd
 #$ -V
 #$ -N "your job name"
 #$ -S /bin/bash
-#$ -v MPIHOME=/engrid/enhpc/mpich3.0.4
+#$ -v MPIHOME=/engrid/enhpc/mpich-3.2.1
 #$ -v NSLOTS="number_of_cores"
 #$ -j y
 #$ -q omp.q
