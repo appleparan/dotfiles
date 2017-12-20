@@ -9,7 +9,8 @@ fi
 source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
 source /engrid/enhpc/intel/xe/bin/iccvars.sh intel64
 
-PATH=/engrid/enhpc/intel/xe/bin:/engrid/enhpc/mpich3.0.4/bin:$PATH
+export MPIHOME=/engrid/ensge/mpich-3.2.1
+PATH=/engrid/enhpc/intel/xe/bin:$MPIHOME/bin:$PATH
 #PATH=/engrid/enhpc/intel/xe/bin:/engrid/enhpc/mpich2/intel/bin:$PATH
 
 export PATH
