@@ -40,28 +40,8 @@ set nocursorline
 syntax sync minlines=512
 hi Search ctermbg=4
 
-" Folding
-"set foldmethod=syntax
-"set foldnestmax=10
-"set nofoldenable
-"set foldlevel=1
-
-" For html
-let html_use_css = 1
-" tabstop for html
-au Filetype xhtml,html,htm,php,xml setlocal tabstop=2
-" (et) expand tabs to spaces (use :retab to redo entire file)
-au Filetype xhtml,html,htm,php,xml setlocal shiftwidth=2 
-" (sts) makes spaces feel like tabs (like deleting)
-au Filetype xhtml,html,htm,php,xml setlocal softtabstop=2
-
 " allow the match paris operation (%) to work with '=' and ';'
 au Filetype c,h,java,js setlocal mps+==:;
-
-au Filetype java,js setlocal smartindent
-
-
-au Filetype txt setlocal fo+=tn
 
 let s:extfname = expand("%:e")
 if s:extfname ==? "f90"
@@ -108,7 +88,4 @@ endif
 "  n... :  where to save the viminfo files
 set viminfo='10,\"100,:20,%,n~/.viminfo
 
-autocmd BufReadPre SConstruct set filetype=python
-autocmd BufReadPre SConscript set filetype=python
-autocmd BufReadPost *.sconscript set filetype=python
 

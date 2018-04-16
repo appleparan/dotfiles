@@ -93,7 +93,6 @@ PATH=$JAVA_HOME/bin:$PATH
 ############################################################
 #
 
-export PYENV_ROOT
 export PATH
 export LD_LIBRARY_PATH
 

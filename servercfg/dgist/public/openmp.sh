@@ -10,7 +10,7 @@
 #PBS -N test
 #PBS -q workq
 #PBS -r n
-export OMP_NUM_THREADS=15
+export OMP_NUM_THREADS=7
 cd $PBS_O_WORKDIR
 [ -f jobout.out ] && rm jobout.out
 date > jobout.out
