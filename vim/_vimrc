@@ -15,7 +15,6 @@ set number
 set paste
 set ruler
 
-
 "bracket matching
 set showmatch
 set matchtime=3
@@ -29,6 +28,7 @@ set tabstop=4       " width (in spaces) that a <tab> is displayed as
 set shiftwidth=4    " width (in spaces) used in each step of autoindent (aswell as << and >>)
 set expandtab
 set softtabstop=4
+set fileformat=unix 
 
 filetype plugin indent on
 syntax on
@@ -45,20 +45,19 @@ hi Search ctermbg=4
 "set nofoldenable
 "set foldlevel=1
 
-" For html
-let html_use_css = 1
-" tabstop for html
-au Filetype xhtml,html,htm,php,xml setlocal tabstop=2
-" (et) expand tabs to spaces (use :retab to redo entire file)
-au Filetype xhtml,html,htm,php,xml setlocal shiftwidth=2 
-" (sts) makes spaces feel like tabs (like deleting)
-au Filetype xhtml,html,htm,php,xml setlocal softtabstop=2
+au Filetype js,html,css
+    \ setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 
+
+au Filetype python 
+    \ setlocal  tabstop=4 shiftwidth=4 softtabstop=4
+    \           expandtab smarttab
+    \           autoindent smartindent
+    \           fileformat=unix 
 
 " allow the match paris operation (%) to work with '=' and ';'
 au Filetype c,h,java,js setlocal mps+==:;
 
 au Filetype java,js setlocal smartindent
-
 
 au Filetype txt setlocal fo+=tn
 
@@ -111,3 +110,9 @@ autocmd BufReadPre SConstruct set filetype=python
 autocmd BufReadPre SConscript set filetype=python
 autocmd BufReadPost *.sconscript set filetype=python
 
+autocmd BufNewFile * :write
+au VimLeave * %bdelete
+
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
