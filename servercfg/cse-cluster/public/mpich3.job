@@ -14,4 +14,4 @@
 ## change MPIHOME if you use another MPI implementation (such as Intel MPI)
 
 ## exec.run is your executable file, change it if you want
-$MPIHOME/bin/mpiexec -n $NSLOTS --hostfile $TMPDIR/machines $PWD/exec.run
+$MPIHOME/bin/mpiexec -launcher sge -n $NSLOTS --hostfile $TMPDIR/machines $PWD/exec.run
