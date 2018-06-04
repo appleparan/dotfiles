@@ -119,3 +119,5 @@ fi
 # added by Anaconda3 installer
 export PATH="/opt/anaconda3/bin:$PATH"
 eval "$(register-python-argcomplete conda)"
+
+export PETSC_DIR="/opt/PETSc"
