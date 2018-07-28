@@ -117,7 +117,15 @@ if ! shopt -oq posix; then
 fi
 
 # added by Anaconda3 installer
-export PATH="/opt/anaconda3/bin:$PATH"
+PATH="/opt/anaconda3/bin:$PATH"
+
+# add cuda
+PATH=/usr/local/cuda-9.1/bin${PATH:+:${PATH}}
+LD_LIBRARY_PATH=/usr/local/cuda-9.1/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+export PATH
+export LD_LIBRARY_PATH
+
 eval "$(register-python-argcomplete conda)"
 
 export PETSC_DIR="/opt/PETSc"
