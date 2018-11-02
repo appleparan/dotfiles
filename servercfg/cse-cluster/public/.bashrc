@@ -9,6 +9,7 @@ if [ -f /etc/bashrc ]; then
 fi
 
 alias ls="ls --color"
+alias size?='du -ah --max-depth=1 .'
 
 # User specific aliases and functions
 source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
