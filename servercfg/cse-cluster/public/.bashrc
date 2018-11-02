@@ -9,7 +9,6 @@ if [ -f /etc/bashrc ]; then
 fi
 
 alias ls="ls --color"
-alias vim="/usr/bin/vim -X"
 
 # User specific aliases and functions
 source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
