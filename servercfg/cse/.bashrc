@@ -10,8 +10,8 @@ fi
 
 alias cdgist="ssh 210.110.244.101 -p 1444 -l ycse02"
 alias ls="ls --color"
-alias vim="/usr/bin/vim -X"
 alias size?="du --max-depth=1 -h ."
+alias vim="vim -X"
 
 # User specific aliases and functions
 source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
@@ -28,10 +28,12 @@ PATH=$MPIHOME/bin:$PATH
 
 # user defined executable path
 PATH=$HOME/usr/bin:$HOME/.rvm/bin:$HOME/.pyenv/bin:$PATH
+PATH=$HOME/usr/local/vim/bin:$PATH
+PATH=$HOME/usr/local/tmux/bin:$PATH
 PATH=$HOME/usr/local/HDF5/bin:$PATH
 PATH=$HOME/usr/local/cmake/bin:$PATH
 PATH=$HOME/usr/local/git/bin:$PATH
-PATH=$HOME/usr/local/tmux/bin:$PATH
+PATH=$HOME/usr/local/julia/bin:$PATH
 
 # user defined LD_LIBARY_PATH
 LD_LIBRARY_PATH=$HOME/usr/local/HDF5/lib:$LD_LIBRARY_PATH
