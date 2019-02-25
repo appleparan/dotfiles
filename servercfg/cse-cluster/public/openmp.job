@@ -11,5 +11,6 @@
 
 ## change "number_of_cores" to integer number (maximum = 8) 
 export OMP_NUM_THREADS="number_of_cores"
+export OMP_STACKSIZE=2000M
 ## exec.run is your executable file, change it if you want
 $PWD/exec.run
