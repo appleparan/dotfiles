@@ -1,24 +1,33 @@
 # .bash_profile
 
 # Get the aliases and functions
-export SHELL=$HOME/usr/bin/zsh
-export EVENT_NOEPOLL=1 
-[ -f $HOME/usr/bin/zsh ] && exec $HOME/usr/bin/zsh -l
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/engrid/ensge/bin/lx24-amd64/
+LD_LIBRARY_PATH=/lib:/usr/lib
 
-#if [ -f ~/.bashrc ]; then
-#	. ~/.bashrc
+PATH=$HOME/usr/local/tmux/bin:$PATH
+PATH=$HOME/usr/local/zsh/bin:$PATH
+
+export PATH
+export LD_LIBRARY_PATH
+export SHELL=$HOME/usr/local/zsh/bin/zsh
+export EVENT_NOEPOLL=1 
+[ -f $HOME/usr/local/zsh/bin/zsh ] && exec $HOME/usr/local/zsh/bin/zsh -l
+
+#if [ -n "$BASH_VERSION" ]; then
+#    # include .bashrc if it exists
+#    if [ -f "$HOME/.bashrc" ]; then
+#        . "$HOME/.bashrc"
+#    fi
 #fi
 
-PATH=$HOME/.anyenv/bin:$HOME/bin:$HOME/usr/bin:$PATH
-LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$HOME/lib:$LD_LIBRARY_PATH
-PYTHONPATH=$HOME/usr/lib64/python2.6/site-packages:$PYTHONPATH:
-
-export PYENV_ROOT
-export LD_LIBRARY_PATH
-export PYTHONPATH
-
-eval "$(anyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+#PYTHONPATH=$HOME/usr/lib64/python2.6/site-packages:$PYTHONPATH
+#
+#export PYENV_ROOT
+#export LD_LIBRARY_PATH
+#export PYTHONPATH
+#
+#eval "$(anyenv init -)"
+#eval "$(pyenv virtualenv-init -)"
 
 #alias cdgist="ssh 210.110.244.101 -p 1444 -l ycse02"
 #
