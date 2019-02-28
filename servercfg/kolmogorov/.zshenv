@@ -5,7 +5,7 @@ alias vim="vim -X"
 PYENV_ROOT="$HOME/.pyenv"
 
 # basic PATH & LD_LIBRARY_PATH
-PATH=/usr/bin:/usr/sbin:/sbin:/bin
+PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
 LD_LIBRARY_PATH=/lib:/usr/lib
 
 # user defined executable path
