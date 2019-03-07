@@ -10,6 +10,8 @@ alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias df='df -h'
+fb () { find . -size "+$1" -print;  }
+fb_rm () { find . -size "+$1" -print -exec rm -i {} \; ;}
 #alias ls='ls -F --color=never'
 
 ulimit -l unlimited

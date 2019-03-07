@@ -10,6 +10,8 @@ fi
 
 alias ls="ls --color"
 alias size?='du -ah --max-depth=1 .'
+fb () { find . -size "+$1" -print;  }
+fb_rm () { find . -size "+$1" -print -exec rm -i {} \; ;}
 
 # User specific aliases and functions
 source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
