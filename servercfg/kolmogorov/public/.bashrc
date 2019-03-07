@@ -8,6 +8,11 @@ case $- in
       *) return;;
 esac
 
+alias ls="ls --color"
+alias size?='du -ah --max-depth=1 .'
+fb () { find . -size "+$1" -print;  }
+fb_rm () { find . -size "+$1" -print -exec rm -i {} \; ;}
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
