@@ -116,9 +116,14 @@ if ! shopt -oq posix; then
   fi
 fi
 
+PATH=/usr/local/bin${PATH:+:${PATH}}
 PATH=/opt/anaconda3/bin${PATH:+:${PATH}}
 PATH=/usr/local/cuda-9.1/bin${PATH:+:${PATH}}
 LD_LIBRARY_PATH=/usr/local/cuda-9.1/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+GOPATH=${HOME}/go
+PATH=/usr/local/go/bin:${GOPATH}/bin${PATH:+:${PATH}}
+
 export PATH
 export LD_LIBRARY_PATH
 export PETSC_DIR=/opt/PETSc
