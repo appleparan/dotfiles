@@ -96,6 +96,8 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+fb () { find . -size "+$1" -print;  }
+fb_rm () { find . -size "+$1" -print -exec rm -i {} \; ;}
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -124,9 +126,19 @@ fi
 # added by Anaconda3 installer
 PATH="/opt/anaconda3/bin:$PATH"
 
+# /usr/local/bin
+PATH=/usr/local/bin${PATH:+:${PATH}}
+
+# anaconda
+PATH=/opt/anaconda3/bin${PATH:+:${PATH}}
+
 # add cuda
-PATH=/usr/local/cuda-9.1/bin${PATH:+:${PATH}}
-LD_LIBRARY_PATH=/usr/local/cuda-9.1/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+LD_LIBRARY_PATH=/usr/local/cuda/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+# GOPATH
+GOPATH=${HOME}/go
+PATH=/usr/local/go/bin:${GOPATH}/bin${PATH:+:${PATH}}
 
 export PATH
 export LD_LIBRARY_PATH
@@ -134,3 +146,19 @@ export LD_LIBRARY_PATH
 eval "$(register-python-argcomplete conda)"
 
 export PETSC_DIR="/opt/PETSc"
+
+# >>> conda init >>>
+ # !! Contents within this block are managed by 'conda init' !!
+ __conda_setup="$(CONDA_REPORT_ERRORS=false '/opt/Anaconda3/bin/conda    ' shell.bash hook 2> /dev/null)"
+ if [ $? -eq 0 ]; then
+    \eval "$__conda_setup"
+ else
+     if [ -f "/opt/Anaconda3/etc/profile.d/conda.sh" ]; then
+         . "/opt/Anaconda3/etc/profile.d/conda.sh"
+         CONDA_CHANGEPS1=false conda activate base
+     else
+         \export PATH="/opt/Anaconda3/bin:$PATH"
+     fi
+ fi
+ unset __conda_setup
+# <<< conda init <<<
