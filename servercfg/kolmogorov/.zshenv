@@ -2,15 +2,21 @@ LS_COLORS=$LS_COLORS:'di=32:' ; export LS_COLORS
 alias ls="ls --color"
 alias vim="vim -X"
 
+# PYENV
 PYENV_ROOT="$HOME/.pyenv"
+# GO PATH
+GOPATH=${HOME}/go
+# JULIA PATH
+JULIA_BINDIR=$HOME/usr/local/julia/bin
 
 # basic PATH & LD_LIBRARY_PATH
-PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
+PATH=/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin
 LD_LIBRARY_PATH=/lib:/usr/lib
 
 # user defined executable path
 PATH=$HOME/usr/bin:$HOME/.rvm/bin:$HOME/.pyenv/bin:$PATH
-PATH=$HOME/usr/local/julia/bin:$PATH
+PATH=/usr/local/go/bin:$GOPATH/bin:$PATH
+PATH=$JULIA_BINDIR:$PATH
 
 # user defined LD_LIBARY_PATH
 LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$LD_LIBRARY_PATH
