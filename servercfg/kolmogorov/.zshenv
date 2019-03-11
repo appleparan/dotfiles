@@ -13,6 +13,10 @@ JULIA_BINDIR=$HOME/usr/local/julia/bin
 PATH=/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin
 LD_LIBRARY_PATH=/lib:/usr/lib
 
+# CUDA
+PATH=/usr/local/cuda/bin:$PATH
+LD_LIBRARY_PATH=/usr/local/cuda/lib:$LD_LIBRARY_PATH
+
 # user defined executable path
 PATH=$HOME/usr/bin:$HOME/.rvm/bin:$HOME/.pyenv/bin:$PATH
 PATH=/usr/local/go/bin:$GOPATH/bin:$PATH

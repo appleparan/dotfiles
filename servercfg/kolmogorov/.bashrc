@@ -116,19 +116,16 @@ if ! shopt -oq posix; then
   fi
 fi
 
-PATH=/usr/local/bin${PATH:+:${PATH}}
 PATH=/opt/anaconda3/bin${PATH:+:${PATH}}
-PATH=/usr/local/cuda-9.1/bin${PATH:+:${PATH}}
-LD_LIBRARY_PATH=/usr/local/cuda-9.1/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-
-GOPATH=${HOME}/go
-PATH=/usr/local/go/bin:${GOPATH}/bin${PATH:+:${PATH}}
-
+PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+LD_LIBRARY_PATH=/usr/local/cuda/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 export PATH
 export LD_LIBRARY_PATH
 export PETSC_DIR=/opt/PETSc
 
 eval "$(register-python-argcomplete conda)"
+
+eval `keychain --eval --agents ssh github`
 
 # >>> conda init >>>
  # !! Contents within this block are managed by 'conda init' !!
@@ -145,3 +142,5 @@ eval "$(register-python-argcomplete conda)"
  fi
  unset __conda_setup
 # <<< conda init <<<
+export GOPATH=${HOME}/go
+export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
