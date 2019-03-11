@@ -130,9 +130,6 @@ export PETSC_DIR=/opt/PETSc
 
 eval "$(register-python-argcomplete conda)"
 
-eval `keychain --eval --agents ssh github`
-
-
 # >>> conda init >>>
  # !! Contents within this block are managed by 'conda init' !!
  __conda_setup="$(CONDA_REPORT_ERRORS=false '/opt/Anaconda3/bin/conda    ' shell.bash hook 2> /dev/null)"
