@@ -29,7 +29,8 @@ LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$LD_LIBRARY_PATH
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
 
-#export PYENV_ROOT
+export PYENV_ROOT
+export GOPATH
 export PATH
 export LD_LIBRARY_PATH
 
