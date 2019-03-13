@@ -116,12 +116,44 @@ if ! shopt -oq posix; then
   fi
 fi
 
-PATH=/opt/anaconda3/bin${PATH:+:${PATH}}
+# PYENV
+PYENV_ROOT="$HOME/.pyenv"
+# GO PATH
+GOPATH=${HOME}/go
+# JULIA PATH
+JULIA_BINDIR=$HOME/usr/local/julia/bin
+# PETSC_DIR
+PETSC_DIR=/opt/PETSc
+
+export PYENV_ROOT
+export GOPATH
+export JULIA_BINDIR
+export PETSC_DIR=/opt/PETSc
+
+# basic PATH & LD_LIBRARY_PATH
+PATH=/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin
+LD_LIBRARY_PATH=/lib:/usr/lib:/usr/lib/x86_64-linux-gnu
+
+# CUDA
 PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
-LD_LIBRARY_PATH=/usr/local/cuda/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+# ruby
+PATH=$HOME/.rvm/bin${PATH:+:${PATH}}
+# python
+PATH+$HOME/.pyenv/bin${PATH:+:${PATH}}
+# go
+PATH=/usr/local/go/bin:$GOPATH/bin${PATH:+:${PATH}}
+# julia
+PATH=${JULIA_BINDIR$}{PATH:+:${PATH}}
+# user defined executable path
+PATH=$HOME/usr/bin${PATH:+:${PATH}}
+
+# user defined LD_LIBARY_PATH
+LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$LD_LIBRARY_PATH
+
 export PATH
 export LD_LIBRARY_PATH
-export PETSC_DIR=/opt/PETSc
 
 eval "$(register-python-argcomplete conda)"
 
@@ -142,5 +174,4 @@ eval `keychain --eval --agents ssh github`
  fi
  unset __conda_setup
 # <<< conda init <<<
-export GOPATH=${HOME}/go
-export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
+
