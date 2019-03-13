@@ -7,6 +7,8 @@ LS_COLORS=$LS_COLORS:'di=32:' ; export LS_COLORS
 alias cdgist="ssh 210.110.244.101 -p 1444 -l ycse02"
 alias ls="ls --color"
 alias vim="vim -X"
+fb () { find . -size "+$1" -print;  }
+fb_rm () { find . -size "+$1" -print -exec rm -i {} \; ;}
 
 PYENV_ROOT="$HOME/.pyenv"
 
