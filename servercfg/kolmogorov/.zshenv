@@ -11,7 +11,7 @@ JULIA_BINDIR=$HOME/usr/local/julia/bin
 
 # basic PATH & LD_LIBRARY_PATH
 PATH=/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin
-LD_LIBRARY_PATH=/lib:/usr/lib
+LD_LIBRARY_PATH=/lib:/usr/lib:/usr/lib/x86_64-linux-gnu
 
 # CUDA
 PATH=/usr/local/cuda/bin:$PATH
@@ -54,3 +54,4 @@ if [[ "$TERM" != "screen" ]] &&
         tmux -2 new-session -s $WHOAMI
     fi
 fi
+alias si="singularity"
