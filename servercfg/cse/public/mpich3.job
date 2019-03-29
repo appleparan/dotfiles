@@ -3,7 +3,7 @@
 #$ -V
 #$ -N "your job name"
 #$ -S /bin/bash
-#$ -v MPIHOME=/engrid/enhpc/mpich-3.2.1
+#$ -v MPIHOME=/engrid/enhpc/mvapich2-2.3.1
 #$ -v NSLOTS="number_of_cores"
 #$ -j y
 #$ -q omp.q
