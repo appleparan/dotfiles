@@ -79,6 +79,10 @@ au Filetype java,js setlocal smartindent
 
 au Filetype txt setlocal fo+=tn
 
+" add yaml stuffs
+au! BufNewFile,BufReadPost *.{yaml,yml,toml,json} set filetype=yaml foldmethod=indent
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
 let s:extfname = expand("%:e")
 if s:extfname ==? "f90" || s:extfname ==? "f" 
     let fortran_fress_source=1
