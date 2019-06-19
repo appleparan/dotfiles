@@ -54,7 +54,7 @@ if [[ "$TERM" != "screen" ]] &&
     fi 
 
     if tmux has-session -t $TMUXNAME 2> /dev/null; then
-        tmux -2 attach-session -t $TMUXNAME
+        #tmux -2 attach-session -t $TMUXNAME
     else
         tmux -2 new-session -s $TMUXNAME
     fi
