@@ -1,0 +1,16 @@
+#!/bin/bash
+#$ -cwd
+#$ -V
+#$ -N "your job name"
+#$ -S /bin/sh
+#$ -j y
+#$ -o log_omp.out
+#$ -e log_err.out
+#$ -q smp.q
+#$ -pe smp "number_of_cores"
+
+## change "number_of_cores" to integer number (maximum = 8) 
+export OMP_NUM_THREADS="number_of_cores"
+export OMP_STACKSIZE=2000M
+## exec.run is your executable file, change it if you want
+$PWD/exec.run
