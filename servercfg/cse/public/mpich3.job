@@ -1,17 +1,16 @@
 #!/bin/sh
 #$ -cwd
 #$ -V
-#$ -N "your job name"
+#$ -N TEST_MPI
 #$ -S /bin/bash
-#$ -v MPIHOME=/engrid/enhpc/mvapich2-2.3.1
-#$ -v NSLOTS="number_of_cores"
+#$ -v MPIHOME=/engrid/enhpc/mpich-3.2.1
 #$ -j y
 #$ -q omp.q
 #$ -o log_omp.out
 #$ -e log_err.out
-#$ -pe mpich_ef "number_of_cores"
+#$ -pe mpi_hydra "number of cores"
 
 ## change MPIHOME if you use another MPI implementation (such as Intel MPI)
 
 ## exec.run is your executable file, change it if you want
-$MPIHOME/bin/mpiexec -launcher sge -n $NSLOTS --hostfile $TMPDIR/machines $PWD/exec.run
+$MPIHOME/bin/mpiexec.hydra $PWD/exec.run
