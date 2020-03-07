@@ -9,7 +9,7 @@
 #$ -q omp.q
 #$ -o log_omp.out
 #$ -e log_err.out
-#$ -pe mpich_openmp "total_cores"
+#$ -pe mpi_hydra "total_cores"
 
 ## change MPIHOME if you want to use another MPI implementation (such as Intel MPI)
 
@@ -23,5 +23,4 @@
 ## set total_cores = 16, number_of_MPI_processors = 2, OMP_NUM_THREADS_VALUE = 8
 ## result : $MPIHOME/bin/mpiexec -n 2 -genv OMP_NUM_THREADS 8 --hostfile $TMPDIR/machines $PWD/exec.run
 
-export HYDRA_HOST_FILE=$TMPDIR/machines
-$MPIHOME/bin/mpiexec -launcher sge -n "number_of_MPI_processors" -genv OMP_NUM_THREADS "OMP_NUM_THREADS_VALUE" $PWD/"exec.run"
+$MPIHOME/bin/mpiexec.hydra -n "number_of_MPI_processors" -genv OMP_NUM_THREADS "OMP_NUM_THREADS_VALUE" $PWD/"exec.run"
