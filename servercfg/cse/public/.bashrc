@@ -17,7 +17,7 @@ fb_rm () { find . -size "+$1" -print -exec rm -i {} \; ;}
 source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
 source /engrid/enhpc/intel/xe/bin/iccvars.sh intel64
 
-export MPIHOME=/engrid/enhpc/mvapich2-2.3.1
+export MPIHOME=/engrid/enhpc/mpich-3.2.1
 
 PATH=/engrid/enhpc/intel/xe/bin:$MPIHOME/bin:$PATH
 #PATH=/engrid/enhpc/intel/xe/bin:/engrid/enhpc/mpich2/intel/bin:$PATH
