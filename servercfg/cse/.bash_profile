@@ -1,8 +1,8 @@
 # .bash_profile
 
 # Get the aliases and functions
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/engrid/ensge/bin/lx24-amd64/
-LD_LIBRARY_PATH=/lib:/usr/lib
+PATH=/bin:/usr/bin:/usr/local/bin:/engrid/ensge/bin/lx24-amd64/
+LD_LIBRARY_PATH=/lib:/lib64:/usr/lib:/usr/lib64
 
 PATH=$HOME/usr/local/tmux/bin:$PATH
 PATH=$HOME/usr/local/zsh/bin:$PATH
