@@ -1,7 +1,7 @@
 # .bashrc
 
-export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/engrid/ensge/bin/lx24-amd64/
-export LD_LIBRARY_PATH=/lib:/usr/lib
+export PATH=/bin:/usr/bin:/usr/local/bin:/engrid/ensge/bin/lx24-amd64/
+export LD_LIBRARY_PATH=/lib:/lib64:/usr/lib:/usr/lib64
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
