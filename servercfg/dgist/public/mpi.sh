@@ -9,7 +9,7 @@
 ## n do not send mail
 #PBS -m n
 #PBS -N test
-#PBS -q workq
+#PBS -q ycse
 #PBS -r n
 cd $PBS_O_WORKDIR
 [ -f jobout.out ] && rm jobout.out

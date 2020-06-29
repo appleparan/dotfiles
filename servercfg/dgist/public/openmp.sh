@@ -8,7 +8,7 @@
 ## n do not send mail
 #PBS -m n
 #PBS -N test
-#PBS -q workq
+#PBS -q ycse
 #PBS -r n
 export OMP_NUM_THREADS=7
 cd $PBS_O_WORKDIR
