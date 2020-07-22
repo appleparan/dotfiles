@@ -24,16 +24,16 @@ fb_rm () { find . -size "+$1" -print -exec rm -i {} \; ;}
 
 # User specific aliases and functions
 # GCC-10.1
-PATH=/engrid/enhpc/gcc-10.1/bin:$PATH
-LD_LIBRARY_PATH=/engrid/enhpc/gcc-10.1/lib64:$LD_LIBRARY_PATH
-
-# binutils-2.32
-PATH=/engrid/enhpc/binutils-2.32/bin:$PATH
-LD_LIBRARY_PATH=/engrid/enhpc/binutils-2.32/lib:$LD_LIBRARY_PATH
-
-# GLIBC-2.14.1
-PATH=/engrid/enhpc/glibc-2.14.1/bin:$PATH
-LD_LIBRARY_PATH=/engrid/enhpc/glibc-2.14.1/lib:$LD_LIBRARY_PATH
+#PATH=/engrid/enhpc/gcc-10.1/bin:$PATH
+#LD_LIBRARY_PATH=/engrid/enhpc/gcc-10.1/lib64:$LD_LIBRARY_PATH
+#
+## binutils-2.32
+#PATH=/engrid/enhpc/binutils-2.32/bin:$PATH
+#LD_LIBRARY_PATH=/engrid/enhpc/binutils-2.32/lib:$LD_LIBRARY_PATH
+#
+## GLIBC-2.14.1
+#PATH=/engrid/enhpc/glibc-2.14.1/bin:$PATH
+#LD_LIBRARY_PATH=/engrid/enhpc/glibc-2.14.1/lib:$LD_LIBRARY_PATH
 
 # MPI
 export MPIHOME=/engrid/enhpc/mpich-3.2.1
