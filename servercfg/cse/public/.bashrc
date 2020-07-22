@@ -14,8 +14,8 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-export PATH=/engrid/enhpc/glibc-2.14.1/bin:/bin:/usr/bin:/usr/local/bin:/engrid/ensge/bin/lx24-amd64/
-export LD_LIBRARY_PATH=/engrid/enhpc/glibc-2.14.1/lib:/usr/lib:/usr/lib64:/lib:/lib64
+export PATH=/bin:/usr/bin:/usr/local/bin:/engrid/ensge/bin/lx24-amd64/
+export LD_LIBRARY_PATH=/usr/lib:/usr/lib64:/lib:/lib64
 
 alias ls="ls --color"
 alias size?='du -ah --max-depth=1 .'
@@ -32,8 +32,8 @@ PATH=/engrid/enhpc/binutils-2.32/bin:$PATH
 LD_LIBRARY_PATH=/engrid/enhpc/binutils-2.32/lib:$LD_LIBRARY_PATH
 
 # GLIBC-2.14.1
-#PATH=/engrid/enhpc/glibc-2.14.1/bin:$PATH
-#LD_LIBRARY_PATH=/engrid/enhpc/glibc-2.14.1/lib:$LD_LIBRARY_PATH
+PATH=/engrid/enhpc/glibc-2.14.1/bin:$PATH
+LD_LIBRARY_PATH=/engrid/enhpc/glibc-2.14.1/lib:$LD_LIBRARY_PATH
 
 # MPI
 export MPIHOME=/engrid/enhpc/mpich-3.2.1
