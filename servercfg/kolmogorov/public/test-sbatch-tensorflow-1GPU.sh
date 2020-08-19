@@ -1,9 +1,8 @@
 #!/bin/bash
 
-#SBATCH -J  tensor-1GPU                   # Job name
-#SBATCH -o  out.test-tensorflow-1GPU.%j   # Name of stdout output file (%j expands to %jobId)
-#SBATCH -p  gpu                           # queue or partiton name
-#SBATCH --gpus-per-task=1                 # each task has 1 GPU
+#SBATCH -J tensor-1GPU                   # Job name
+#SBATCH -o out.test-tensorflow-1GPU.%j   # Name of stdout output file (%j expands to %jobId)
+#SBATCH -p gpu                           # queue or partiton name
 #SBATCH --gres=gpu:1                      # Num Devices
 
 echo
