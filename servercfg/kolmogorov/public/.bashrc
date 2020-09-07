@@ -133,7 +133,7 @@ PATH=/usr/local/bin${PATH:+:${PATH}}
 PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
 LD_LIBRARY_PATH=/usr/local/cuda/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
-source /usr/share/Modules/init/bash
+source /usr/local/modules/init/bash
 
 export PATH
 export LD_LIBRARY_PATH
