@@ -70,7 +70,6 @@ alias si="singularity"
 alias tm="tmux -2 attach-session -t $TMUXNAME"
 alias da="cd /data/appleparan/"
 
-source /opt/intel/bin/compilervars.sh intel64
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
 
 export SQUEUE_FORMAT="%.8i %.9P %.30j %.16u %.2t %.10M %.6D %.6C %.20R"
