@@ -10,5 +10,6 @@
 #SBATCH -p cpu                      # queue or partiton name
 
 # executable file 
+export OMP_NUM_THREADS=16
 $PWD/exec.run
 # End of File.
