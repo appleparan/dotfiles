@@ -75,8 +75,8 @@ PATH=/opt/pbs/default/bin:/opt/pbs/default/sbin:$PATH
 ############################################################
 #
 #Ver. release 5.0, V0.2.1221
-LD_LIBRARY_PATH=/usr/local/cuda-5.0/lib64:$LD_LIBRARY_PATH
-PATH=/usr/local/cuda-5.0/bin:$PATH
+LD_LIBRARY_PATH=/usr/local/cuda-9.1/lib64:$LD_LIBRARY_PATH
+PATH=/usr/local/cuda-9.1/bin:$PATH
 
 #Ver. release 4.2, V
 #export LD_LIBRARY_PATH=/usr/local/cuda-4.2/lib64:$LD_LIBRARY_PATH
