@@ -38,6 +38,7 @@ fb_rm () { find . -size "+$1" -print -exec rm -i {} \; ;}
 # MPI
 export MPIHOME=/engrid/enhpc/mpich-3.2.1
 PATH=$MPIHOME/bin:$PATH
+LD_LIBRARY_PATH=$MPIHOME/lib:$LD_LIBRARY_PATH
 
 #PATH=/engrid/enhpc/intel/xe/bin:/engrid/enhpc/mpich2/intel/bin:$PATH
 source /engrid/enhpc/intel/xe/bin/ifortvars.sh intel64
