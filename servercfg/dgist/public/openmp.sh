@@ -10,9 +10,15 @@
 #PBS -N test
 #PBS -q workq
 #PBS -r n
-export OMP_NUM_THREADS=7
+
+# openmp environmental variables
+export OMP_NUM_THREADS=16
 export OMP_STACKSIZE=4000M
+
+# load modules
 module load INTEL/2019_UP5
+
+# log node information
 cd $PBS_O_WORKDIR
 [ -f jobout.out ] && rm jobout.out
 date > jobout.out
@@ -22,4 +28,5 @@ NP=`/usr/bin/wc -l $PBS_NODEFILE | awk '{ print $1 }'`
 
 echo $NP >> jobout.out
 
+# redirect stdout to stderr
 ./a.out >> jobout.out 2>&1

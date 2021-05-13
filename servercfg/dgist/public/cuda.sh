@@ -1,6 +1,5 @@
 #!/bin/bash
-## 8 node, 8 physical cpus per node, make 8 mpi process (logical) per node, then we have 64 mpi process
-#PBS -l select=8:ncpus=8:mpiprocs=8
+#PBS -l select=1:ncpus=1:ngpus=1
 #PBS -M Mail Address
 ### mail option
 ## a send mail when job is aborted by batch system
@@ -12,12 +11,8 @@
 #PBS -q workq
 #PBS -r n
 
-# openmp environmental variables
-export OMP_NUM_THREADS=16
-export OMP_STACKSIZE=4000M
-
 # load modules
-module load INTEL/2019_UP5
+module load CUDA/10.0
 
 # log node information
 cd $PBS_O_WORKDIR
@@ -29,6 +24,5 @@ NP=`/usr/bin/wc -l $PBS_NODEFILE | awk '{ print $1 }'`
 
 echo $NP >> jobout.out
 
-#### mpirun config
 # redirect stdout to stderr
-mpirun -genv I_MPI_FABRICS=shm:ofa -genv I_MPI_OFA_USE_XRC=1 -genv I_MPI_OFA_DYNAMIC_QPS=1 -genv I_MPI_DEBUG=5 -np $NP -machinefile $PBS_NODEFILE ./a.out >> jobout.out 2>&1
+./a.out >> jobout.out 2>&1
