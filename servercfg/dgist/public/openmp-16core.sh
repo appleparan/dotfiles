@@ -8,9 +8,11 @@
 ## n do not send mail
 #PBS -m n
 #PBS -N test
-#PBS -q ycse
+#PBS -q workq
 #PBS -r n
 export OMP_NUM_THREADS=16
+export OMP_STACKSIZE=4000M
+module load INTEL/2019_UP5
 cd $PBS_O_WORKDIR
 [ -f jobout.out ] && rm jobout.out
 date > jobout.out

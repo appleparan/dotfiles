@@ -11,6 +11,8 @@
 #PBS -N test
 #PBS -q ycse
 #PBS -r n
+module load INTEL/2019_UP5
+
 cd $PBS_O_WORKDIR
 [ -f jobout.out ] && rm jobout.out
 date > jobout.out
