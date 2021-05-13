@@ -12,10 +12,6 @@
 #PBS -q workq
 #PBS -r n
 
-# openmp environmental variables
-export OMP_NUM_THREADS=16
-export OMP_STACKSIZE=4000M
-
 # load modules
 module load INTEL/2019_UP5
 
