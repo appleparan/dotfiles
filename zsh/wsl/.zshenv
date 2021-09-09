@@ -40,6 +40,16 @@ export PATH=$HOME/.poetry/bin:$HOME/.pyenv/bin:$PATH
 if which pyenv > /dev/null; then eval "$(pyenv init --path)"; fi
 #if which pyenv > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
+# poetry
+export PATH="$HOME/.poetry/bin:$PATH"
+
+# ruby
+source /usr/share/rvm/scripts/rvm
+
+# nvm
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
 # ssh agent
 eval `keychain --eval --agents ssh github`
 
@@ -49,4 +59,5 @@ typeset -U LD_LIBRARY_PATH
 
 export PATH
 export LD_LIBRARY_PATH
+
 
