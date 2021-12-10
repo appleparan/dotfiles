@@ -128,13 +128,3 @@ endif
 "  n... :  where to save the viminfo files
 set viminfo='10,\"100,:20,%,n~/.viminfo
 
-autocmd BufReadPre SConstruct set filetype=python
-autocmd BufReadPre SConscript set filetype=python
-autocmd BufReadPost *.sconscript set filetype=python
-
-autocmd BufNewFile * :write
-au VimLeave * %bdelete
-
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-endif
