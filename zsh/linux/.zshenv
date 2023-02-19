@@ -9,25 +9,8 @@ alias ls="ls --color"
 PATH=/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin
 LD_LIBRARY_PATH=/lib:/usr/lib:/usr/lib/x86_64-linux-gnu
 
-# CUDA
-PATH=/usr/local/cuda/bin:$PATH
-LD_LIBRARY_PATH=/usr/local/cuda/lib:$LD_LIBRARY_PATH
-
-# user defined executable path
-PATH=$HOME/usr/bin:$PATH
-
-# user defined LD_LIBARY_PATH
-LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$LD_LIBRARY_PATH
-
 # Rust
 . "$HOME/.cargo/env"
-
-# Ruby
-. "/etc/profile.d/rvm.sh"
-
-# Go
-GOPATH=${HOME}/go
-PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
 
 # Julia
 ## JULIA PATH
@@ -43,15 +26,8 @@ if which pyenv > /dev/null; then eval "$(pyenv init --path)"; fi
 # poetry
 export PATH="$HOME/.poetry/bin:$PATH"
 
-# ruby
-source /usr/share/rvm/scripts/rvm
-
-# nvm
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
 # ssh agent
-eval `keychain --eval --agents ssh github`
+# eval `keychain --eval --agents ssh github`
 
 # remove dupliate path
 typeset -U PATH
