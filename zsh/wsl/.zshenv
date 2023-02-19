@@ -40,11 +40,9 @@ export PATH=$HOME/.poetry/bin:$HOME/.pyenv/bin:$PATH
 if which pyenv > /dev/null; then eval "$(pyenv init --path)"; fi
 #if which pyenv > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
-# poetry
-export PATH="$HOME/.poetry/bin:$PATH"
-
-# ruby
-source /usr/share/rvm/scripts/rvm
+# Ruby
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
 
 # nvm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
@@ -53,6 +51,10 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 # ssh agent
 eval `keychain --eval --agents ssh github`
 
+export KUBERNETES_MASTER=$(sudo grep server: /etc/rancher/k3s/k3s.yaml | cut -c13-)
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+
 # remove dupliate path
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
@@ -60,4 +62,12 @@ typeset -U LD_LIBRARY_PATH
 export PATH
 export LD_LIBRARY_PATH
 
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+path=('$HOME/.juliaup/bin' $path)
+export PATH
+
+# <<< juliaup initialize <<<
 
