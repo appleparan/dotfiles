@@ -22,17 +22,16 @@ LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$LD_LIBRARY_PATH
 # Rust
 . "$HOME/.cargo/env"
 
-# Ruby
-. "/etc/profile.d/rvm.sh"
+# nvm
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # Go
 GOPATH=${HOME}/go
 PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
-
-# Julia
-## JULIA PATH
-JULIA_BINDIR=/usr/local/julia/bin
-PATH=$JULIA_BINDIR:$PATH
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Python
 PYENV_ROOT="$HOME/.pyenv"
@@ -40,27 +39,12 @@ export PATH=$HOME/.poetry/bin:$HOME/.pyenv/bin:$PATH
 if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 if which pyenv > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
-# Ruby
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-# nvm
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
 # ssh agent
-eval `keychain --eval --agents ssh github`
+eval `keychain --eval --agents ssh github hf`
 
 #export KUBERNETES_MASTER=$(sudo grep server: /etc/rancher/k3s/k3s.yaml | cut -c13-)
 #export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-
-# remove dupliate path
-typeset -U PATH
-typeset -U LD_LIBRARY_PATH
-
-export PATH
-export LD_LIBRARY_PATH
 
 # >>> juliaup initialize >>>
 
@@ -71,7 +55,13 @@ export PATH
 
 # <<< juliaup initialize <<<
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval "$(~/.rbenv/bin/rbenv init - zsh)"
+
+# remove dupliate path
+typeset -U PATH
+typeset -U LD_LIBRARY_PATH
+
+export PATH
+export LD_LIBRARY_PATH
+
 
