@@ -5,20 +5,6 @@ export LANG=en_US.UTF-8
 LS_COLORS=$LS_COLORS:'di=32:ow=1;34:' ; export LS_COLORS
 alias ls="ls --color"
 
-# basic PATH & LD_LIBRARY_PATH
-PATH=/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin
-LD_LIBRARY_PATH=/lib:/usr/lib:/usr/lib/x86_64-linux-gnu
-
-# CUDA
-PATH=/usr/local/cuda/bin:$PATH
-LD_LIBRARY_PATH=/usr/local/cuda/lib:$LD_LIBRARY_PATH
-
-# user defined executable path
-PATH=$HOME/usr/bin:$PATH
-
-# user defined LD_LIBARY_PATH
-LD_LIBRARY_PATH=$HOME/usr/lib:$HOME/usr/lib64:$LD_LIBRARY_PATH
-
 # Rust
 . "$HOME/.cargo/env"
 
@@ -42,20 +28,16 @@ if which pyenv > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 # ssh agent
 eval `keychain --eval --agents ssh github hf`
 
-#export KUBERNETES_MASTER=$(sudo grep server: /etc/rancher/k3s/k3s.yaml | cut -c13-)
-#export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-
 # >>> juliaup initialize >>>
 
 # !! Contents within this block are managed by juliaup !!
 
-path=('$HOME/.juliaup/bin' $path)
+path=('/home/appleparan/.juliaup/bin' $path)
 export PATH
 
 # <<< juliaup initialize <<<
 
-eval "$(~/.rbenv/bin/rbenv init - zsh)"
+# eval "$(~/.rbenv/bin/rbenv init - zsh)"
 
 # remove dupliate path
 typeset -U PATH
