@@ -8,22 +8,26 @@ alias ls="ls --color"
 # Rust
 . "$HOME/.cargo/env"
 
-# nvm
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
 # Go
 GOPATH=${HOME}/go
 PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# nvm
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Java
+# export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 # Python
-PYENV_ROOT="$HOME/.pyenv"
-export PATH=$HOME/.poetry/bin:$HOME/.pyenv/bin:$PATH
-if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-if which pyenv > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+## pyenv
+# PYENV_ROOT="$HOME/.pyenv"
+# export PATH=$HOME/.poetry/bin:$HOME/.pyenv/bin:$PATH
+# if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+# if which pyenv > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+## rye
+source "$HOME/.rye/env"
 
 # ssh agent
 eval `keychain --eval --agents ssh github hf`
