@@ -25,15 +25,17 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 # Go
 GOPATH=${HOME}/go
 PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Python
-#PYENV_ROOT="$HOME/.pyenv"
-#export PATH=$HOME/.poetry/bin:$HOME/.pyenv/bin:$PATH
-#if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-#if which pyenv > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+eval "$(uv generate-shell-completion zsh)"
+eval "$(uvx --generate-shell-completion zsh)"
+
+# Ruby
+eval "$(~/.rbenv/bin/rbenv init - zsh)"
+
+# node
+VOLTA_HOME=$HOME/.volta
+PATH=$VOLTA_HOME:$PATH
 
 # ssh agent
 eval `keychain --eval --agents ssh github hf`
@@ -50,11 +52,6 @@ path=('$HOME/.juliaup/bin' $path)
 export PATH
 
 # <<< juliaup initialize <<<
-
-eval "$(~/.rbenv/bin/rbenv init - zsh)"
-
-source "$HOME/.rye/env"
-
 # remove dupliate path
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
