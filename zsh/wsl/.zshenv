@@ -1,6 +1,9 @@
-
 LS_COLORS=$LS_COLORS:'di=32:ow=1;34:' ; export LS_COLORS
 alias ls="ls --color"
+
+# zsh auto-completion
+autoload -Uz compinit
+compinit
 
 # Rust
 . "$HOME/.cargo/env"
