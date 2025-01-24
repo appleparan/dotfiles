@@ -10,11 +10,12 @@ GOPATH=${HOME}/go
 PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
 
 # Python
+source $HOME/.local/bin/env
 eval "$(uv generate-shell-completion zsh)"
 eval "$(uvx --generate-shell-completion zsh)"
 
 # Ruby
-eval "$(~/.rbenv/bin/rbenv init - zsh)"
+#eval "$(~/.rbenv/bin/rbenv init - zsh)"
 
 # node
 VOLTA_HOME=$HOME/.volta
