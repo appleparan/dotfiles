@@ -49,15 +49,15 @@ install_system_packages() {
     
     if command_exists apt-get; then
         sudo apt-get update
-        sudo apt-get install -y zsh curl git build-essential
+        sudo apt-get install -y zsh curl git build-essential unzip fontconfig
     elif command_exists yum; then
-        sudo yum install -y zsh curl git gcc gcc-c++ make
+        sudo yum install -y zsh curl git gcc gcc-c++ make unzip fontconfig
     elif command_exists dnf; then
-        sudo dnf install -y zsh curl git gcc gcc-c++ make
+        sudo dnf install -y zsh curl git gcc gcc-c++ make unzip fontconfig
     elif command_exists pacman; then
-        sudo pacman -S --noconfirm zsh curl git base-devel
+        sudo pacman -S --noconfirm zsh curl git base-devel unzip fontconfig
     else
-        log_warning "Unknown package manager. Please install zsh, curl, and git manually."
+        log_warning "Unknown package manager. Please install zsh, curl, git, unzip, and fontconfig manually."
     fi
 }
 
@@ -93,16 +93,55 @@ install_zsh_plugins() {
     fi
 }
 
-# Install gallifrey theme
-install_gallifrey_theme() {
-    log_info "Installing gallifrey theme..."
+# Install MesloLGS NF Font (Meslo Nerd Font patched for Powerlevel10k)
+install_nerd_fonts() {
+    log_info "Installing MesloLGS NF Font..."
     
-    if [ ! -f "$HOME/.oh-my-zsh/custom/themes/gallifrey.zsh-theme" ]; then
-        curl -fsSL https://raw.githubusercontent.com/yottaawesome/gallifrey-zsh-theme/master/gallifrey.zsh-theme \
-            -o "$HOME/.oh-my-zsh/custom/themes/gallifrey.zsh-theme"
-        log_success "gallifrey theme installed"
+    local font_dir="$HOME/.local/share/fonts"
+    
+    # Create fonts directory if it doesn't exist
+    mkdir -p "$font_dir"
+    
+    # Check if MesloLGS NF is already installed
+    if fc-list | grep -i "meslolgs nf" > /dev/null 2>&1; then
+        log_info "MesloLGS NF Font already installed"
+        return
+    fi
+    
+    # Download and install MesloLGS NF fonts
+    log_info "Downloading MesloLGS NF Font..."
+    
+    local fonts=(
+        "MesloLGS%20NF%20Regular.ttf"
+        "MesloLGS%20NF%20Bold.ttf"
+        "MesloLGS%20NF%20Italic.ttf"
+        "MesloLGS%20NF%20Bold%20Italic.ttf"
+    )
+    
+    local base_url="https://github.com/romkatv/powerlevel10k-media/raw/master"
+    local download_success=true
+    
+    for font in "${fonts[@]}"; do
+        local font_file="${font//%20/ }"  # Replace %20 with spaces
+        log_info "Downloading $font_file..."
+        
+        if ! curl -fsSL "$base_url/$font" -o "$font_dir/$font_file"; then
+            log_error "Failed to download $font_file"
+            download_success=false
+        fi
+    done
+    
+    if $download_success; then
+        # Update font cache
+        if command_exists fc-cache; then
+            fc-cache -f -v > /dev/null 2>&1
+            log_success "MesloLGS NF Font installed and font cache updated"
+        else
+            log_success "MesloLGS NF Font installed"
+            log_warning "Please install fontconfig and run 'fc-cache -f -v' to update font cache"
+        fi
     else
-        log_info "gallifrey theme already installed"
+        log_error "Some fonts failed to download"
     fi
 }
 
@@ -136,6 +175,26 @@ install_dev_tools() {
     else
         log_info "fnm already installed"
     fi
+}
+
+# Install vim plugins
+install_vim_plugins() {
+    log_info "Installing vim plugins..."
+    
+    # Install vim-plug if not present
+    if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
+        log_info "Installing vim-plug..."
+        curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
+            https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        log_success "vim-plug installed"
+    else
+        log_info "vim-plug already installed"
+    fi
+    
+    # Install plugins
+    log_info "Installing vim plugins (this may take a while)..."
+    vim +PlugInstall +qall
+    log_success "vim plugins installed"
 }
 
 # Setup dotfiles
@@ -210,15 +269,17 @@ main() {
     install_system_packages
     install_oh_my_zsh
     install_zsh_plugins
-    install_gallifrey_theme
+    install_nerd_fonts
     install_dev_tools
     create_directories
     setup_dotfiles
+    install_vim_plugins
     change_shell
     
     log_success "Installation completed successfully!"
     log_info "Please restart your terminal or run 'source ~/.zshrc' to apply changes"
     log_info "Note: Some tools like juliaup, deno, and fnm require a new terminal session to be available in PATH"
+    log_info "Don't forget to set your terminal font to 'MesloLGS NF Regular' for optimal display"
 }
 
 # Handle script arguments
@@ -233,9 +294,11 @@ case "${1:-}" in
         echo "  --dry-run      Show what would be installed without actually installing"
         echo ""
         echo "This script will:"
-        echo "  - Install zsh and oh-my-zsh"
-        echo "  - Install required zsh plugins and themes"
+        echo "  - Install zsh and oh-my-zsh with agnoster theme"
+        echo "  - Install required zsh plugins"
+        echo "  - Install MesloLGS NF Font (optimized for Powerlevel10k)"
         echo "  - Install development tools (juliaup, deno, fnm)"
+        echo "  - Setup modern vim configuration with plugins"
         echo "  - Setup dotfiles with symbolic links"
         echo "  - Change default shell to zsh"
         exit 0
@@ -243,11 +306,12 @@ case "${1:-}" in
     --dry-run)
         log_info "DRY RUN MODE - No changes will be made"
         log_info "Would install:"
-        log_info "  - System packages: zsh, curl, git, build tools"
-        log_info "  - oh-my-zsh"
+        log_info "  - System packages: zsh, curl, git, build tools, unzip, fontconfig"
+        log_info "  - oh-my-zsh with agnoster theme"
         log_info "  - zsh plugins: autosuggestions, syntax-highlighting"
-        log_info "  - gallifrey theme"
+        log_info "  - MesloLGS NF Font (optimized for Powerlevel10k)"
         log_info "  - Development tools: juliaup, deno, fnm"
+        log_info "  - vim-plug and modern vim configuration"
         log_info "  - Dotfiles symlinks for platform: $(detect_platform)"
         exit 0
         ;;

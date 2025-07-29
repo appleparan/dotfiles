@@ -42,7 +42,8 @@ This repository contains configuration files (dotfiles) for various command-line
 
 ### Zsh Configuration
 - **Oh-My-Zsh**: Feature-rich framework for zsh
-- **Gallifrey Theme**: Clean and informative prompt theme
+- **Agnoster Theme**: Beautiful powerline-based theme with git status
+- **MesloLGS NF Font**: Meslo Nerd Font patched for Powerlevel10k with optimal powerline support
 - **zsh-autosuggestions**: Fish-like autosuggestions for zsh
 - **zsh-syntax-highlighting**: Syntax highlighting for the zsh command line
 - **1Password Plugin**: Integration with 1Password CLI (if available)
@@ -52,6 +53,15 @@ This repository contains configuration files (dotfiles) for various command-line
 - **Deno**: Modern runtime for JavaScript and TypeScript
 - **fnm**: Fast Node.js version manager written in Rust
 - **Git**: Version control with oh-my-zsh git plugin integration
+
+### Vim Configuration
+- **vim-plug**: Modern plugin manager for Vim
+- **CoC (Conquer of Completion)**: Language Server Protocol support with auto-completion
+- **Language Support**: Optimized for Python, Go, Rust, JavaScript/TypeScript/Node.js
+- **Code Formatting**: Automatic formatting with ALE (black, gofmt, rustfmt, prettier)
+- **Syntax Highlighting**: Enhanced syntax highlighting for all supported languages
+- **File Navigation**: FZF integration for fuzzy file finding
+- **Git Integration**: GitGutter for diff indicators and Fugitive for Git commands
 
 ## Installation
 
@@ -69,10 +79,11 @@ This repository contains configuration files (dotfiles) for various command-line
    ```
 
 The installation script will automatically:
-- Install zsh and oh-my-zsh
+- Install zsh and oh-my-zsh with agnoster theme
 - Install required zsh plugins (autosuggestions, syntax-highlighting)
-- Install the gallifrey theme
+- Install MesloLGS NF Font for optimal terminal display
 - Install development tools (juliaup, deno, fnm)
+- Setup modern vim configuration with plugins
 - Create symbolic links for your platform (Linux/WSL)
 - Change your default shell to zsh
 
@@ -100,10 +111,21 @@ If you prefer to install manually or want to customize the process:
    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
    ```
 
-4. Install gallifrey theme:
+4. Install MesloLGS NF Font:
    ```bash
-   curl -fsSL https://raw.githubusercontent.com/yottaawesome/gallifrey-zsh-theme/master/gallifrey.zsh-theme \
-       -o ~/.oh-my-zsh/custom/themes/gallifrey.zsh-theme
+   # Create fonts directory
+   mkdir -p ~/.local/share/fonts
+   
+   # Download MesloLGS NF fonts (optimized for Powerlevel10k)
+   base_url="https://github.com/romkatv/powerlevel10k-media/raw/master"
+   fonts=("MesloLGS NF Regular.ttf" "MesloLGS NF Bold.ttf" "MesloLGS NF Italic.ttf" "MesloLGS NF Bold Italic.ttf")
+   
+   for font in "${fonts[@]}"; do
+       curl -fsSL "$base_url/${font// /%20}" -o ~/.local/share/fonts/"$font"
+   done
+   
+   # Update font cache
+   fc-cache -f -v
    ```
 
 5. Create symbolic links based on your platform:
@@ -133,6 +155,8 @@ If you prefer to install manually or want to customize the process:
    ```bash
    chsh -s $(which zsh)
    ```
+
+7. Configure your terminal to use MesloLGS NF Regular for optimal display of the agnoster theme.
 
 ### Installation Script Options
 
@@ -192,6 +216,113 @@ deno run script.ts
 # Update Deno
 deno upgrade
 ```
+
+### Vim Usage
+
+The modern vim configuration includes many productivity features:
+
+#### Key Mappings (Leader key: Space)
+```vim
+" File operations
+<Space>w    - Save file
+<Space>q    - Quit
+<Space>x    - Save and quit
+
+" File navigation
+<Space>e    - Toggle NERDTree
+<Space>f    - Find current file in NERDTree
+<Space>p    - Fuzzy file finder (FZF)
+<Space>b    - Buffer list
+<Space>rg   - Search in files (ripgrep)
+
+" Code navigation
+gd          - Go to definition
+gr          - Go to references
+K           - Show documentation
+<Space>rn   - Rename symbol
+
+" Code formatting
+<Space>F    - Format selected code
+
+" Buffer/Tab management
+<Space>bn   - Next buffer
+<Space>bp   - Previous buffer
+<Space>bd   - Delete buffer
+```
+
+#### Language-Specific Features
+
+**Python**:
+- Black formatting on save
+- PEP 8 compliance checking
+- Type checking with mypy
+- `<Space>r` to run current file
+
+**Go**:
+- Auto-imports with goimports
+- Built-in testing support
+- `<Space>r` to run, `<Space>b` to build, `<Space>t` to test
+
+**Rust**:
+- rustfmt formatting on save
+- Cargo integration
+- `<Space>r` to run, `<Space>b` to build, `<Space>t` to test
+
+**JavaScript/TypeScript**:
+- Prettier formatting on save
+- ESLint integration
+- `<Space>r` to run with node/ts-node
+
+#### Plugin Management
+```bash
+# Update vim plugins
+vim +PlugUpdate +qall
+
+# Install new plugins (after adding to .vimrc)
+vim +PlugInstall +qall
+
+# Clean unused plugins
+vim +PlugClean +qall
+```
+
+## Terminal Font Configuration
+
+For the best experience with the agnoster theme, configure your terminal to use **MesloLGS NF Regular**:
+
+### Popular Terminal Emulators
+
+**GNOME Terminal / Ubuntu Terminal:**
+1. Open terminal preferences
+2. Go to Profiles → Text
+3. Enable "Custom font" and select "MesloLGS NF Regular"
+
+**Windows Terminal:**
+```json
+{
+    "profiles": {
+        "defaults": {
+            "fontFace": "MesloLGS NF"
+        }
+    }
+}
+```
+
+**VS Code Integrated Terminal:**
+```json
+{
+    "terminal.integrated.fontFamily": "MesloLGS NF"
+}
+```
+
+**iTerm2 (macOS):**
+1. iTerm2 → Preferences → Profiles → Text
+2. Change font to "MesloLGS NF Regular"
+
+### Font Features
+- **Optimized for Powerlevel10k**: Specially patched for maximum compatibility
+- **Perfect powerline symbols**: Seamless arrows and separators in agnoster theme
+- **Nerd Font icons**: Git status, file type, and other visual indicators
+- **Consistent spacing**: Monospace with proper character alignment
 
 ## Platform-Specific Notes
 
