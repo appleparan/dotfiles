@@ -20,15 +20,6 @@ eval "$(uvx --generate-shell-completion zsh)"
 # Ruby
 #eval "$(~/.rbenv/bin/rbenv init - zsh)"
 
-# node
-VOLTA_HOME=$HOME/.volta
-PATH=$VOLTA_HOME:$PATH
-
-# CUDA
-export CUDA_HOME=/usr/local/cuda-12.8
-export PATH=$CUDA_HOME/bin:$PATH
-export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
-
 # ssh agent
 eval `keychain --eval --agents ssh github hf`
 

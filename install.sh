@@ -242,6 +242,53 @@ install_dev_tools() {
     else
         log_info "fnm already installed"
     fi
+    
+    # Install bun (JavaScript runtime and package manager)
+    if ! command_exists bun; then
+        log_info "Installing bun..."
+        curl -fsSL https://bun.sh/install | bash
+        log_success "bun installed"
+    else
+        log_info "bun already installed"
+    fi
+    
+    # Install uv (Python package manager)
+    if ! command_exists uv; then
+        log_info "Installing uv..."
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        log_success "uv installed"
+    else
+        log_info "uv already installed"
+    fi
+    
+    # Install Rust
+    if ! command_exists rustc; then
+        log_info "Installing Rust..."
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        log_success "Rust installed"
+    else
+        log_info "Rust already installed"
+    fi
+    
+    # Install Go
+    if ! command_exists go; then
+        log_info "Installing Go..."
+        local go_version="1.21.5"
+        local go_archive="go${go_version}.linux-amd64.tar.gz"
+        
+        # Download and install Go
+        curl -fsSL "https://go.dev/dl/${go_archive}" -o "/tmp/${go_archive}"
+        if check_sudo; then
+            sudo rm -rf /usr/local/go
+            sudo tar -C /usr/local -xzf "/tmp/${go_archive}"
+            rm "/tmp/${go_archive}"
+            log_success "Go installed"
+        else
+            log_warning "Go installation requires sudo privileges. Please install Go manually from https://golang.org/dl/"
+        fi
+    else
+        log_info "Go already installed"
+    fi
 }
 
 # Install vim plugins
@@ -346,7 +393,7 @@ main() {
     
     log_success "Installation completed successfully!"
     log_info "Please restart your terminal or run 'source ~/.zshrc' to apply changes"
-    log_info "Note: Some tools like juliaup and fnm require a new terminal session to be available in PATH"
+    log_info "Note: Some tools like juliaup, fnm, bun, uv, rust, and go require a new terminal session to be available in PATH"
     log_info "Don't forget to set your terminal font to 'MesloLGS NF Regular' for optimal display"
 }
 
@@ -366,7 +413,7 @@ case "${1:-}" in
         echo "  - Install required zsh plugins"
         echo "  - Install spaceship prompt theme"
         echo "  - Install MesloLGS NF Font (optimized for Powerlevel10k)"
-        echo "  - Install development tools (juliaup, fnm)"
+        echo "  - Install development tools (juliaup, fnm, bun, uv, rust, go)"
         echo "  - Setup modern vim configuration with plugins"
         echo "  - Setup dotfiles with symbolic links"
         echo "  - Change default shell to zsh"
@@ -380,7 +427,7 @@ case "${1:-}" in
         log_info "  - zsh plugins: autosuggestions, syntax-highlighting"
         log_info "  - spaceship prompt theme"
         log_info "  - MesloLGS NF Font (optimized for Powerlevel10k)"
-        log_info "  - Development tools: juliaup, fnm"
+        log_info "  - Development tools: juliaup, fnm, bun, uv, rust, go"
         log_info "  - vim-plug and modern vim configuration"
         log_info "  - Dotfiles symlinks for platform: $(detect_platform)"
         exit 0

@@ -36,7 +36,7 @@ This repository contains configuration files (dotfiles) for various command-line
 - **Terminal multiplexing**: Tmux configuration for enhanced terminal productivity
 - **Editor setup**: Vim configuration for consistent editing experience
 - **Oh-My-Zsh integration**: Pre-configured with useful plugins and spaceship theme
-- **Development tools**: Automated setup for Julia and Node.js version managers
+- **Development tools**: Automated setup for Julia, Node.js version manager, Bun, Python (uv), Rust, and Go
 
 ## Included Tools and Plugins
 
@@ -51,6 +51,10 @@ This repository contains configuration files (dotfiles) for various command-line
 ### Development Tools
 - **juliaup**: Julia version manager for easy Julia installation and management
 - **fnm**: Fast Node.js version manager written in Rust
+- **bun**: Fast JavaScript runtime and package manager
+- **uv**: Ultra-fast Python package manager and project manager
+- **Rust**: Systems programming language with cargo package manager
+- **Go**: Fast, statically typed programming language
 - **Git**: Version control with oh-my-zsh git plugin integration
 
 ### Vim Configuration
@@ -81,7 +85,7 @@ The installation script will automatically:
 - Install zsh and oh-my-zsh with spaceship theme
 - Install required zsh plugins (autosuggestions, syntax-highlighting)
 - Install MesloLGS NF Font for optimal terminal display
-- Install development tools (juliaup, fnm)
+- Install development tools (juliaup, fnm, bun, uv, rust, go)
 - Setup modern vim configuration with plugins
 - Create symbolic links for your platform (Linux/WSL)
 - Change your default shell to zsh
@@ -210,6 +214,91 @@ fnm use 18
 
 # Set default version
 fnm default 18
+```
+
+### Bun
+Bun is installed globally and ready to use:
+```bash
+# Check Bun version
+bun --version
+
+# Initialize a new project
+bun init
+
+# Install dependencies
+bun install
+
+# Run a JavaScript/TypeScript file
+bun run script.ts
+
+# Update Bun
+bun upgrade
+```
+
+### uv (Python Package Manager)
+uv is installed globally for fast Python package management:
+```bash
+# Check uv version
+uv --version
+
+# Create a new Python project
+uv init my-project
+cd my-project
+
+# Install dependencies
+uv add requests
+
+# Install development dependencies
+uv add --dev pytest
+
+# Run Python with uv
+uv run python script.py
+
+# Sync dependencies
+uv sync
+```
+
+### Rust
+Rust is installed with rustup for easy toolchain management:
+```bash
+# Check Rust version
+rustc --version
+cargo --version
+
+# Create a new Rust project
+cargo new my-project
+cd my-project
+
+# Build the project
+cargo build
+
+# Run the project
+cargo run
+
+# Update Rust
+rustup update
+```
+
+### Go
+Go is installed globally and ready for development:
+```bash
+# Check Go version
+go version
+
+# Initialize a new Go module
+go mod init example.com/my-project
+
+# Install dependencies
+go get github.com/gin-gonic/gin
+
+# Build the project
+go build
+
+# Run the project
+go run main.go
+
+# Format code
+go fmt ./...
 ```
 
 ### Vim Usage
