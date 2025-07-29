@@ -233,14 +233,6 @@ install_dev_tools() {
         log_info "Julia already installed"
     fi
     
-    # Install deno
-    if ! command_exists deno; then
-        log_info "Installing deno..."
-        curl -fsSL https://deno.land/install.sh | sh
-        log_success "deno installed"
-    else
-        log_info "deno already installed"
-    fi
     
     # Install fnm (Node.js version manager)
     if ! command_exists fnm; then
@@ -354,7 +346,7 @@ main() {
     
     log_success "Installation completed successfully!"
     log_info "Please restart your terminal or run 'source ~/.zshrc' to apply changes"
-    log_info "Note: Some tools like juliaup, deno, and fnm require a new terminal session to be available in PATH"
+    log_info "Note: Some tools like juliaup and fnm require a new terminal session to be available in PATH"
     log_info "Don't forget to set your terminal font to 'MesloLGS NF Regular' for optimal display"
 }
 
@@ -374,7 +366,7 @@ case "${1:-}" in
         echo "  - Install required zsh plugins"
         echo "  - Install spaceship prompt theme"
         echo "  - Install MesloLGS NF Font (optimized for Powerlevel10k)"
-        echo "  - Install development tools (juliaup, deno, fnm)"
+        echo "  - Install development tools (juliaup, fnm)"
         echo "  - Setup modern vim configuration with plugins"
         echo "  - Setup dotfiles with symbolic links"
         echo "  - Change default shell to zsh"
@@ -388,7 +380,7 @@ case "${1:-}" in
         log_info "  - zsh plugins: autosuggestions, syntax-highlighting"
         log_info "  - spaceship prompt theme"
         log_info "  - MesloLGS NF Font (optimized for Powerlevel10k)"
-        log_info "  - Development tools: juliaup, deno, fnm"
+        log_info "  - Development tools: juliaup, fnm"
         log_info "  - vim-plug and modern vim configuration"
         log_info "  - Dotfiles symlinks for platform: $(detect_platform)"
         exit 0
