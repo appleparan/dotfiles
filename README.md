@@ -36,7 +36,7 @@ This repository contains configuration files (dotfiles) for various command-line
 - **Terminal multiplexing**: Tmux configuration for enhanced terminal productivity
 - **Editor setup**: Vim configuration for consistent editing experience
 - **Oh-My-Zsh integration**: Pre-configured with useful plugins and spaceship theme
-- **Development tools**: Automated setup for Julia, Deno, and Node.js version managers
+- **Development tools**: Automated setup for Julia and Node.js version managers
 
 ## Included Tools and Plugins
 
@@ -50,7 +50,6 @@ This repository contains configuration files (dotfiles) for various command-line
 
 ### Development Tools
 - **juliaup**: Julia version manager for easy Julia installation and management
-- **Deno**: Modern runtime for JavaScript and TypeScript
 - **fnm**: Fast Node.js version manager written in Rust
 - **Git**: Version control with oh-my-zsh git plugin integration
 
@@ -82,7 +81,7 @@ The installation script will automatically:
 - Install zsh and oh-my-zsh with spaceship theme
 - Install required zsh plugins (autosuggestions, syntax-highlighting)
 - Install MesloLGS NF Font for optimal terminal display
-- Install development tools (juliaup, deno, fnm)
+- Install development tools (juliaup, fnm)
 - Setup modern vim configuration with plugins
 - Create symbolic links for your platform (Linux/WSL)
 - Change your default shell to zsh
@@ -211,19 +210,6 @@ fnm use 18
 
 # Set default version
 fnm default 18
-```
-
-### Deno
-Deno is installed globally and ready to use:
-```bash
-# Check Deno version
-deno --version
-
-# Run a TypeScript file
-deno run script.ts
-
-# Update Deno
-deno upgrade
 ```
 
 ### Vim Usage

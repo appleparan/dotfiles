@@ -51,8 +51,6 @@ typeset -U LD_LIBRARY_PATH
 export PATH
 export LD_LIBRARY_PATH
 
-. "/home/appleparan/.deno/env"
-
 export KUBECONFIG=~/.kube/config
 
 FNM_PATH="/home/appleparan/.local/share/fnm"
