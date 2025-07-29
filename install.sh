@@ -43,9 +43,53 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Check if sudo is available and user has sudo privileges
+check_sudo() {
+    if command_exists sudo && sudo -n true 2>/dev/null; then
+        return 0  # sudo available
+    else
+        return 1  # sudo not available or no privileges
+    fi
+}
+
+# Check if required packages are installed
+check_packages_installed() {
+    local packages=("zsh" "curl" "git" "unzip")
+    
+    for pkg in "${packages[@]}"; do
+        if ! command_exists "$pkg"; then
+            return 1  # At least one package is missing
+        fi
+    done
+    
+    # Check for build tools
+    if ! command_exists gcc && ! command_exists clang; then
+        return 1  # No compiler found
+    fi
+    
+    return 0  # All packages are installed
+}
+
 # Install system packages
 install_system_packages() {
-    log_info "Installing system packages..."
+    log_info "Checking system packages..."
+    
+    # Check if packages are already installed
+    if check_packages_installed; then
+        log_success "All required packages are already installed"
+        return 0
+    fi
+    
+    # Packages are missing, check sudo availability
+    if ! check_sudo; then
+        log_warning "Some required packages are missing but sudo is not available or you don't have sudo privileges"
+        log_warning "Please install the following packages manually: zsh, curl, git, build-essential/gcc, unzip, fontconfig"
+        log_warning "Continuing with installation..."
+        return 0
+    fi
+    
+    # Packages are missing but sudo is available
+    log_info "Installing missing system packages..."
     
     if command_exists apt-get; then
         sudo apt-get update
@@ -58,6 +102,14 @@ install_system_packages() {
         sudo pacman -S --noconfirm zsh curl git base-devel unzip fontconfig
     else
         log_warning "Unknown package manager. Please install zsh, curl, git, unzip, and fontconfig manually."
+        return 1
+    fi
+    
+    # Verify installation
+    if check_packages_installed; then
+        log_success "System packages installed successfully"
+    else
+        log_warning "Some packages may not have been installed correctly"
     fi
 }
 
@@ -90,6 +142,29 @@ install_zsh_plugins() {
         log_success "zsh-syntax-highlighting installed"
     else
         log_info "zsh-syntax-highlighting already installed"
+    fi
+}
+
+# Install spaceship prompt theme
+install_spaceship_theme() {
+    log_info "Installing spaceship prompt theme..."
+    
+    local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+    
+    # Install spaceship prompt
+    if [ ! -d "$zsh_custom/themes/spaceship-prompt" ]; then
+        git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$zsh_custom/themes/spaceship-prompt" --depth=1
+        log_success "spaceship-prompt cloned"
+    else
+        log_info "spaceship-prompt already installed"
+    fi
+    
+    # Create symlink for spaceship theme
+    if [ ! -L "$zsh_custom/themes/spaceship.zsh-theme" ]; then
+        ln -s "$zsh_custom/themes/spaceship-prompt/spaceship.zsh-theme" "$zsh_custom/themes/spaceship.zsh-theme"
+        log_success "spaceship theme symlink created"
+    else
+        log_info "spaceship theme symlink already exists"
     fi
 }
 
@@ -269,6 +344,7 @@ main() {
     install_system_packages
     install_oh_my_zsh
     install_zsh_plugins
+    install_spaceship_theme
     install_nerd_fonts
     install_dev_tools
     create_directories
@@ -294,8 +370,9 @@ case "${1:-}" in
         echo "  --dry-run      Show what would be installed without actually installing"
         echo ""
         echo "This script will:"
-        echo "  - Install zsh and oh-my-zsh with agnoster theme"
+        echo "  - Install zsh and oh-my-zsh with spaceship theme"
         echo "  - Install required zsh plugins"
+        echo "  - Install spaceship prompt theme"
         echo "  - Install MesloLGS NF Font (optimized for Powerlevel10k)"
         echo "  - Install development tools (juliaup, deno, fnm)"
         echo "  - Setup modern vim configuration with plugins"
@@ -307,8 +384,9 @@ case "${1:-}" in
         log_info "DRY RUN MODE - No changes will be made"
         log_info "Would install:"
         log_info "  - System packages: zsh, curl, git, build tools, unzip, fontconfig"
-        log_info "  - oh-my-zsh with agnoster theme"
+        log_info "  - oh-my-zsh with spaceship theme"
         log_info "  - zsh plugins: autosuggestions, syntax-highlighting"
+        log_info "  - spaceship prompt theme"
         log_info "  - MesloLGS NF Font (optimized for Powerlevel10k)"
         log_info "  - Development tools: juliaup, deno, fnm"
         log_info "  - vim-plug and modern vim configuration"

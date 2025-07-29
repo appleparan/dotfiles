@@ -35,14 +35,14 @@ This repository contains configuration files (dotfiles) for various command-line
 - **Shell configurations**: Both Bash and Zsh setups with platform-specific optimizations
 - **Terminal multiplexing**: Tmux configuration for enhanced terminal productivity
 - **Editor setup**: Vim configuration for consistent editing experience
-- **Oh-My-Zsh integration**: Pre-configured with useful plugins and gallifrey theme
+- **Oh-My-Zsh integration**: Pre-configured with useful plugins and spaceship theme
 - **Development tools**: Automated setup for Julia, Deno, and Node.js version managers
 
 ## Included Tools and Plugins
 
 ### Zsh Configuration
 - **Oh-My-Zsh**: Feature-rich framework for zsh
-- **Agnoster Theme**: Beautiful powerline-based theme with git status
+- **Spaceship Theme**: Modern, minimalist theme with git status and extensive customization
 - **MesloLGS NF Font**: Meslo Nerd Font patched for Powerlevel10k with optimal powerline support
 - **zsh-autosuggestions**: Fish-like autosuggestions for zsh
 - **zsh-syntax-highlighting**: Syntax highlighting for the zsh command line
@@ -79,7 +79,7 @@ This repository contains configuration files (dotfiles) for various command-line
    ```
 
 The installation script will automatically:
-- Install zsh and oh-my-zsh with agnoster theme
+- Install zsh and oh-my-zsh with spaceship theme
 - Install required zsh plugins (autosuggestions, syntax-highlighting)
 - Install MesloLGS NF Font for optimal terminal display
 - Install development tools (juliaup, deno, fnm)
@@ -111,7 +111,16 @@ If you prefer to install manually or want to customize the process:
    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
    ```
 
-4. Install MesloLGS NF Font:
+4. Install spaceship prompt theme:
+   ```bash
+   # Clone spaceship prompt
+   git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
+   
+   # Create symbolic link
+   ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+   ```
+
+5. Install MesloLGS NF Font:
    ```bash
    # Create fonts directory
    mkdir -p ~/.local/share/fonts
@@ -128,7 +137,7 @@ If you prefer to install manually or want to customize the process:
    fc-cache -f -v
    ```
 
-5. Create symbolic links based on your platform:
+6. Create symbolic links based on your platform:
 
    **For Linux:**
    ```bash
@@ -151,12 +160,12 @@ If you prefer to install manually or want to customize the process:
    ln -sf ~/dotfiles/bash/.bash_profile ~/.bash_profile
    ```
 
-6. Change default shell to zsh:
+7. Change default shell to zsh:
    ```bash
    chsh -s $(which zsh)
    ```
 
-7. Configure your terminal to use MesloLGS NF Regular for optimal display of the agnoster theme.
+8. Configure your terminal to use MesloLGS NF Regular for optimal display of the spaceship theme.
 
 ### Installation Script Options
 
@@ -287,7 +296,7 @@ vim +PlugClean +qall
 
 ## Terminal Font Configuration
 
-For the best experience with the agnoster theme, configure your terminal to use **MesloLGS NF Regular**:
+For the best experience with the spaceship theme, configure your terminal to use **MesloLGS NF Regular**:
 
 ### Popular Terminal Emulators
 
@@ -320,7 +329,7 @@ For the best experience with the agnoster theme, configure your terminal to use 
 
 ### Font Features
 - **Optimized for Powerlevel10k**: Specially patched for maximum compatibility
-- **Perfect powerline symbols**: Seamless arrows and separators in agnoster theme
+- **Perfect powerline symbols**: Seamless arrows and separators in spaceship theme
 - **Nerd Font icons**: Git status, file type, and other visual indicators
 - **Consistent spacing**: Monospace with proper character alignment
 
