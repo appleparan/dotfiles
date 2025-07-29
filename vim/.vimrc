@@ -1,112 +1,397 @@
-" http://wwww.apaulodesign.com/vimrc.html
-set shell=/bin/bash\ -l
-set textwidth=79
-set wrap
-set nobackup
-set visualbell
-set ruler
+" Modern Vim Configuration for Python, Go, Rust, and Node.js Development
+" Optimized for productivity and modern development workflows
 
-set wrapscan    " allows search to wrap to top of document when the bottom has been hit
-set incsearch   " highlights what you are searching for as you type
-set hlsearch    " highlights all instance of the alst searched string
-set ignorecase  " ignores case in search patterns
-set smartcase   " don't ignore case when the search pattern has uppercase
-set number      
-set paste
-set ruler
+" =============================================================================
+" Plugin Management with vim-plug
+" =============================================================================
+" Auto-install vim-plug if not present
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-"bracket matching
-set showmatch
-set matchtime=3
+call plug#begin('~/.vim/plugged')
 
-set autoindent      " turn on auto-indenting (great for programers)
-set copyindent      " when auto-indenting, use the indenting format of previous line
-set cindent         " c-style indenting
-set smartindent     "
-set backspace=indent,eol,start
-set tabstop=4       " width (in spaces) that a <tab> is displayed as
-set shiftwidth=4    " width (in spaces) used in each step of autoindent (aswell as << and >>)
-set expandtab
-set softtabstop=4
-set fileformat=unix 
+" Essential plugins
+Plug 'tpope/vim-sensible'           " Sensible defaults
+Plug 'tpope/vim-surround'           " Surrounding text objects
+Plug 'tpope/vim-commentary'         " Easy commenting
+Plug 'tpope/vim-fugitive'           " Git integration
+Plug 'tpope/vim-repeat'             " Repeat plugin commands
 
+" File management and fuzzy finding
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'preservim/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" Status line and UI
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'morhetz/gruvbox'
+
+" Code completion and LSP
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Language-specific plugins
+" Python
+Plug 'vim-python/python-syntax'
+Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'jeetsukumaran/vim-pythonsense'
+
+" Go
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
+" Rust
+Plug 'rust-lang/rust.vim'
+
+" JavaScript/TypeScript/Node.js
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'MaxMEllon/vim-jsx-pretty'
+
+" Syntax highlighting and formatting
+Plug 'sheerun/vim-polyglot'
+Plug 'dense-analysis/ale'
+Plug 'editorconfig/editorconfig-vim'
+
+" Additional productivity plugins
+Plug 'jiangmiao/auto-pairs'
+Plug 'preservim/tagbar'
+Plug 'airblade/vim-gitgutter'
+Plug 'terryma/vim-multiple-cursors'
+
+call plug#end()
+
+" =============================================================================
+" Basic Settings
+" =============================================================================
+set nocompatible
 filetype plugin indent on
 syntax on
 
-filetype on
-"highlighting
-set nocursorline
-syntax sync minlines=512
-hi Search ctermbg=4
+" UI and appearance
+set number relativenumber
+set cursorline
+set showmatch
+set ruler
+set laststatus=2
+set showcmd
+set wildmenu
+set wildmode=longest:full,full
+set scrolloff=8
+set sidescrolloff=8
 
-" Folding
-"set foldmethod=syntax
-"set foldnestmax=10
-"set nofoldenable
-"set foldlevel=1
+" Search settings
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set wrapscan
 
-au Filetype js,html,css
-    \ setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2 
+" Indentation and tabs
+set autoindent
+set smartindent
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set shiftround
 
-au Filetype python 
-    \ setlocal  tabstop=4 shiftwidth=4 softtabstop=4
-    \           expandtab smarttab
-    \           autoindent smartindent
-    \           fileformat=unix 
+" File handling
+set autoread
+set backup
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swap//
+set undofile
+set undodir=~/.vim/undo//
+set encoding=utf-8
+set fileencoding=utf-8
 
-" allow the match paris operation (%) to work with '=' and ';'
-au Filetype c,h,java,js setlocal mps+==:;
-
-au Filetype java,js setlocal smartindent
-
-au Filetype txt setlocal fo+=tn
-
-" add yaml stuffs
-au! BufNewFile,BufReadPost *.{yaml,yml,toml,json} set filetype=yaml
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-
-let s:extfname = expand("%:e")
-if s:extfname ==? "f90" || s:extfname ==? "f" 
-    let fortran_fress_source=1
-    let fortran_fold=1
-    let fortran_fold_conditionals=1
-    let fortran_fold_multilinecomments=1
-    let fortran_more_precise=1
-    let fortran_dialect="elf"
-"   au! BufRead.BufNewFile *.f90
-    let b:fortran_do_enddo=1
-    let fortran_have_tabs=1
-    unlet! fortran_fixed_source
-    unlet! fortran_have_tabs
-    highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-    match OverLength /\%81v.\+/
-    setlocal tabstop=4
-    setlocal shiftwidth=4
-    setlocal softtabstop=4
-elseif s:extfname ==? "f77"
-    let fortran_fold=1
-    let fortran_fold_conditionals=1
-    let fortran_fold_multilinecomments=1
-    let fortran_fixed_source=1
-    let fortran_have_tabs = 1
-    let fortran_do_enddo=1
-    unlet! fortran_dialect
-    unlet! fortran_fress_source
-    highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-    match OverLength /\%81v.\+/
-    setlocal tabstop=2
-    setlocal shiftwidth=2
-    setlocal softtabstop=2
-elseif s:extfname ==? "c" || s:extfname ==? "py"
-    highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-    match OverLength /\%81v.\+/
+" Create backup directories if they don't exist
+if !isdirectory($HOME."/.vim/backup")
+    call mkdir($HOME."/.vim/backup", "p", 0700)
+endif
+if !isdirectory($HOME."/.vim/swap")
+    call mkdir($HOME."/.vim/swap", "p", 0700)
+endif
+if !isdirectory($HOME."/.vim/undo")
+    call mkdir($HOME."/.vim/undo", "p", 0700)
 endif
 
-" Tell vim to remember certain things when we exit
-"  '10  :  marks will be remembered for up to 10 previously edited files
-"  "100 :  will save up to 100 lines for each register
-"  :20  :  up to 20 lines of command-line history will be remembered
-"  %    :  saves and restores the buffer list
-"  n... :  where to save the viminfo files
-set viminfo='10,\"100,:20,%,n~/.viminfo
+" Performance
+set lazyredraw
+set synmaxcol=300
+set updatetime=300
 
+" Other settings
+set backspace=indent,eol,start
+set clipboard=unnamedplus
+set mouse=a
+set splitbelow splitright
+set timeoutlen=500
+set ttimeoutlen=0
+
+" =============================================================================
+" Theme and Colors
+" =============================================================================
+set termguicolors
+set background=dark
+colorscheme gruvbox
+
+" Transparent background
+hi Normal guibg=NONE ctermbg=NONE
+
+" =============================================================================
+" Key Mappings
+" =============================================================================
+let mapleader = " "
+let maplocalleader = ","
+
+" Quick save and quit
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>x :wq<CR>
+
+" Clear search highlighting
+nnoremap <leader>h :nohlsearch<CR>
+
+" Better window navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Buffer navigation
+nnoremap <leader>bn :bnext<CR>
+nnoremap <leader>bp :bprev<CR>
+nnoremap <leader>bd :bdelete<CR>
+
+" Tab navigation
+nnoremap <leader>tn :tabnext<CR>
+nnoremap <leader>tp :tabprev<CR>
+nnoremap <leader>tc :tabclose<CR>
+
+" Better indenting
+vnoremap < <gv
+vnoremap > >gv
+
+" Move lines up/down
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
+" =============================================================================
+" Plugin Configuration
+" =============================================================================
+
+" NERDTree
+nnoremap <leader>e :NERDTreeToggle<CR>
+nnoremap <leader>f :NERDTreeFind<CR>
+let NERDTreeShowHidden=1
+let NERDTreeIgnore=['\.git$', '\.DS_Store$', '__pycache__', '\.pyc$', 'node_modules']
+
+" FZF
+nnoremap <leader>p :Files<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>rg :Rg<CR>
+nnoremap <leader>t :Tags<CR>
+
+" Tagbar
+nnoremap <leader>tb :TagbarToggle<CR>
+
+" Airline
+let g:airline_theme='gruvbox'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+
+" CoC Configuration
+let g:coc_global_extensions = [
+  \ 'coc-python',
+  \ 'coc-go',
+  \ 'coc-rust-analyzer',
+  \ 'coc-tsserver',
+  \ 'coc-json',
+  \ 'coc-yaml',
+  \ 'coc-html',
+  \ 'coc-css',
+  \ 'coc-prettier'
+  \ ]
+
+" Use tab for trigger completion
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion
+inoremap <silent><expr> <c-@> coc#refresh()
+
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code
+xmap <leader>F  <Plug>(coc-format-selected)
+nmap <leader>F  <Plug>(coc-format-selected)
+
+" ALE Configuration
+let g:ale_linters = {
+\   'python': ['flake8', 'pylint', 'mypy'],
+\   'go': ['golint', 'go vet', 'gofmt'],
+\   'rust': ['cargo'],
+\   'javascript': ['eslint'],
+\   'typescript': ['eslint', 'tslint'],
+\}
+
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'python': ['black', 'isort'],
+\   'go': ['gofmt', 'goimports'],
+\   'rust': ['rustfmt'],
+\   'javascript': ['prettier', 'eslint'],
+\   'typescript': ['prettier', 'eslint'],
+\}
+
+let g:ale_fix_on_save = 1
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
+
+" =============================================================================
+" Language-Specific Configuration
+" =============================================================================
+
+" Python
+augroup python_settings
+    autocmd!
+    autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+    autocmd FileType python setlocal colorcolumn=88
+    autocmd FileType python setlocal textwidth=88
+    autocmd FileType python nnoremap <buffer> <leader>r :!python %<CR>
+    autocmd FileType python nnoremap <buffer> <leader>R :!python3 %<CR>
+augroup END
+
+let g:python_highlight_all = 1
+
+" Go
+augroup go_settings
+    autocmd!
+    autocmd FileType go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab
+    autocmd FileType go setlocal colorcolumn=100
+    autocmd FileType go nnoremap <buffer> <leader>r :GoRun<CR>
+    autocmd FileType go nnoremap <buffer> <leader>b :GoBuild<CR>
+    autocmd FileType go nnoremap <buffer> <leader>t :GoTest<CR>
+augroup END
+
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
+let g:go_fmt_command = "goimports"
+let g:go_auto_type_info = 1
+
+" Rust
+augroup rust_settings
+    autocmd!
+    autocmd FileType rust setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+    autocmd FileType rust setlocal colorcolumn=100
+    autocmd FileType rust nnoremap <buffer> <leader>r :RustRun<CR>
+    autocmd FileType rust nnoremap <buffer> <leader>b :RustBuild<CR>
+    autocmd FileType rust nnoremap <buffer> <leader>t :RustTest<CR>
+augroup END
+
+let g:rustfmt_autosave = 1
+
+" JavaScript/TypeScript/Node.js
+augroup js_ts_settings
+    autocmd!
+    autocmd FileType javascript,typescript,json setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+    autocmd FileType javascript,typescript setlocal colorcolumn=100
+    autocmd FileType javascript nnoremap <buffer> <leader>r :!node %<CR>
+    autocmd FileType typescript nnoremap <buffer> <leader>r :!ts-node %<CR>
+augroup END
+
+" JSON, YAML, TOML
+augroup config_files
+    autocmd!
+    autocmd FileType json,yaml,toml setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+augroup END
+
+" =============================================================================
+" Custom Functions
+" =============================================================================
+
+" Toggle between absolute and relative line numbers
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set norelativenumber
+    set number
+  else
+    set relativenumber
+  endif
+endfunction
+
+nnoremap <leader>n :call NumberToggle()<CR>
+
+" Remove trailing whitespace
+function! TrimWhitespace()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfunction
+
+nnoremap <leader>tw :call TrimWhitespace()<CR>
+
+" =============================================================================
+" Auto Commands
+" =============================================================================
+
+augroup general_settings
+    autocmd!
+    " Return to last edit position when opening files
+    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+    
+    " Remove trailing whitespace on save for certain file types
+    autocmd BufWritePre *.py,*.js,*.ts,*.go,*.rs call TrimWhitespace()
+    
+    " Highlight long lines
+    autocmd FileType python,go,rust,javascript,typescript match OverLength /\%101v.\+/
+    highlight OverLength ctermbg=red ctermfg=white guibg=#cc6666
+augroup END
+
+" =============================================================================
+" Status line (if airline is not working)
+" =============================================================================
+if !exists(':AirlineToggle')
+    set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ [BUFFER=%n]\ %{strftime('%c')}
+endif
