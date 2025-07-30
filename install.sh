@@ -333,6 +333,30 @@ install_vim_plugins() {
     log_success "vim plugins installed"
 }
 
+# Backup existing dotfile
+backup_file() {
+    local file_path="$1"
+    if [ -f "$file_path" ]; then
+        local backup_path="${file_path}.backup.$(date +%Y%m%d_%H%M%S)"
+        mv "$file_path" "$backup_path"
+        log_warning "Backed up existing $(basename "$file_path") to $(basename "$backup_path")"
+    fi
+}
+
+# Copy dotfile with backup
+copy_dotfile() {
+    local source="$1"
+    local target="$2"
+    
+    if [ -f "$source" ]; then
+        backup_file "$target"
+        cp "$source" "$target"
+        log_info "Copied $(basename "$source") to $(basename "$target")"
+    else
+        log_warning "Source file not found: $source"
+    fi
+}
+
 # Setup dotfiles
 setup_dotfiles() {
     local platform=$(detect_platform)
@@ -341,38 +365,27 @@ setup_dotfiles() {
     # Get the directory where this script is located
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     
-    # Backup existing files
-    if [ -f "$HOME/.zshrc" ]; then
-        mv "$HOME/.zshrc" "$HOME/.zshrc.backup.$(date +%Y%m%d_%H%M%S)"
-        log_warning "Backed up existing .zshrc"
-    fi
-    
-    if [ -f "$HOME/.zshenv" ]; then
-        mv "$HOME/.zshenv" "$HOME/.zshenv.backup.$(date +%Y%m%d_%H%M%S)"
-        log_warning "Backed up existing .zshenv"
-    fi
-    
-    # Create symbolic links
+    # Copy platform-specific dotfiles
     if [ "$platform" = "wsl" ]; then
-        ln -sf "$SCRIPT_DIR/zsh/wsl/.zshrc" "$HOME/.zshrc"
-        ln -sf "$SCRIPT_DIR/zsh/wsl/.zshenv" "$HOME/.zshenv"
+        copy_dotfile "$SCRIPT_DIR/zsh/wsl/.zshrc" "$HOME/.zshrc"
+        copy_dotfile "$SCRIPT_DIR/zsh/wsl/.zshenv" "$HOME/.zshenv"
     else
-        ln -sf "$SCRIPT_DIR/zsh/linux/.zshrc" "$HOME/.zshrc"
-        ln -sf "$SCRIPT_DIR/zsh/linux/.zshenv" "$HOME/.zshenv"
+        copy_dotfile "$SCRIPT_DIR/zsh/linux/.zshrc" "$HOME/.zshrc"
+        copy_dotfile "$SCRIPT_DIR/zsh/linux/.zshenv" "$HOME/.zshenv"
     fi
     
-    # Link other dotfiles
-    ln -sf "$SCRIPT_DIR/vim/.vimrc" "$HOME/.vimrc"
-    ln -sf "$SCRIPT_DIR/bash/.bashrc" "$HOME/.bashrc"
-    ln -sf "$SCRIPT_DIR/bash/.bash_profile" "$HOME/.bash_profile"
+    # Copy other dotfiles
+    copy_dotfile "$SCRIPT_DIR/vim/.vimrc" "$HOME/.vimrc"
+    copy_dotfile "$SCRIPT_DIR/bash/.bashrc" "$HOME/.bashrc"
+    copy_dotfile "$SCRIPT_DIR/bash/.bash_profile" "$HOME/.bash_profile"
     
-    # Link tmux config for Linux
+    # Copy tmux config for Linux
     if [ "$platform" = "linux" ]; then
-        ln -sf "$SCRIPT_DIR/tmux/linux/.tmux.conf" "$HOME/.tmux.conf"
-        ln -sf "$SCRIPT_DIR/tmux/linux/.tmux.conf.local" "$HOME/.tmux.conf.local"
+        copy_dotfile "$SCRIPT_DIR/tmux/linux/.tmux.conf" "$HOME/.tmux.conf"
+        copy_dotfile "$SCRIPT_DIR/tmux/linux/.tmux.conf.local" "$HOME/.tmux.conf.local"
     fi
     
-    log_success "Dotfiles linked successfully"
+    log_success "Dotfiles copied successfully"
 }
 
 # Create necessary directories
