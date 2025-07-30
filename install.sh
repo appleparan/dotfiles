@@ -239,8 +239,30 @@ install_dev_tools() {
         log_info "Installing fnm..."
         curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
         log_success "fnm installed"
+        
+        # Source fnm for current session
+        export PATH="$HOME/.local/share/fnm:$PATH"
+        eval "$(fnm env --use-on-cd)"
+        
+        # Install Node.js LTS
+        log_info "Installing Node.js LTS via fnm..."
+        fnm install --lts
+        fnm use lts-latest
+        fnm default lts-latest
+        log_success "Node.js LTS installed and set as default"
     else
         log_info "fnm already installed"
+        
+        # Check if Node.js is installed via fnm
+        if ! fnm list | grep -q "lts"; then
+            log_info "Installing Node.js LTS via fnm..."
+            fnm install --lts
+            fnm use lts-latest
+            fnm default lts-latest
+            log_success "Node.js LTS installed and set as default"
+        else
+            log_info "Node.js LTS already installed via fnm"
+        fi
     fi
     
     # Install bun (JavaScript runtime and package manager)
