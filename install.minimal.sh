@@ -108,6 +108,24 @@ install_system_packages() {
     fi
 }
 
+# Install bashit framework
+install_bashit() {
+    log_info "Installing bash-it framework..."
+    
+    if [ ! -d "$HOME/.bash_it" ]; then
+        log_info "Cloning bash-it repository..."
+        git clone --depth=1 https://github.com/Bash-it/bash-it.git "$HOME/.bash_it"
+        
+        # Install bash-it non-interactively
+        log_info "Installing bash-it..."
+        "$HOME/.bash_it/install.sh" --silent
+        
+        log_success "bash-it installed"
+    else
+        log_info "bash-it already installed"
+    fi
+}
+
 # Install Python development tools
 install_python_tools() {
     log_info "Installing Python development tools..."
@@ -202,13 +220,13 @@ setup_dotfiles() {
     # Copy minimal vim configuration
     copy_dotfile "$SCRIPT_DIR/vim/minimal/.vimrc" "$HOME/.vimrc"
     
-    # Setup bashrc
-    if [ -f "$SCRIPT_DIR/bash/.bashrc" ]; then
-        copy_dotfile "$SCRIPT_DIR/bash/.bashrc" "$HOME/.bashrc"
+    # Setup modern bash configuration
+    if [ -f "$SCRIPT_DIR/bash/.bashrc.modern" ]; then
+        copy_dotfile "$SCRIPT_DIR/bash/.bashrc.modern" "$HOME/.bashrc"
     fi
     
-    if [ -f "$SCRIPT_DIR/bash/.bash_profile" ]; then
-        copy_dotfile "$SCRIPT_DIR/bash/.bash_profile" "$HOME/.bash_profile"
+    if [ -f "$SCRIPT_DIR/bash/.bash_profile.modern" ]; then
+        copy_dotfile "$SCRIPT_DIR/bash/.bash_profile.modern" "$HOME/.bash_profile"
     fi
     
     log_success "Minimal dotfiles copied successfully"
@@ -255,6 +273,7 @@ main() {
     log_info "Platform detected: $(detect_platform)"
     
     install_system_packages
+    install_bashit
     install_python_tools
     create_directories
     setup_dotfiles
@@ -268,6 +287,7 @@ main() {
     log_info ""
     log_info "Installed tools:"
     log_info "  - Python 3 with pip"
+    log_info "  - bash-it framework with modern shell features"
     log_info "  - uv (fast Python package manager)"
     log_info "  - pipx (isolated Python app installation)"
     log_info "  - Python dev tools: black, isort, flake8, mypy, pytest, ipython"
@@ -287,9 +307,10 @@ case "${1:-}" in
         echo ""
         echo "This script will:"
         echo "  - Install basic system packages (curl, git, python3, pip)"
+        echo "  - Install bash-it framework for enhanced bash experience"
         echo "  - Install Python development tools (uv, pipx, black, isort, flake8, mypy, pytest, ipython)"
         echo "  - Setup minimal vim configuration with essential plugins"
-        echo "  - Setup bashrc for Python development"
+        echo "  - Setup modern bash configuration for Python development"
         echo ""
         echo "This is a minimal version focused on Python development without heavy language servers or complex setups."
         exit 0
@@ -298,10 +319,11 @@ case "${1:-}" in
         log_info "DRY RUN MODE - No changes will be made"
         log_info "Would install:"
         log_info "  - System packages: curl, git, python3, python3-pip"
+        log_info "  - bash-it framework"
         log_info "  - Python tools: uv, pipx"
         log_info "  - Python dev tools: black, isort, flake8, mypy, pytest, ipython"
         log_info "  - vim-plug and minimal vim configuration"
-        log_info "  - Bash configuration for Python development"
+        log_info "  - Modern bash configuration for Python development"
         log_info "  - Platform: $(detect_platform)"
         exit 0
         ;;
