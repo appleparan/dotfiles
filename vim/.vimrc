@@ -101,24 +101,8 @@ set shiftround
 
 " File handling
 set autoread
-set backup
-set backupdir=~/.vim/backup//
-set directory=~/.vim/swap//
-set undofile
-set undodir=~/.vim/undo//
 set encoding=utf-8
 set fileencoding=utf-8
-
-" Create backup directories if they don't exist
-if !isdirectory($HOME."/.vim/backup")
-    call mkdir($HOME."/.vim/backup", "p", 0700)
-endif
-if !isdirectory($HOME."/.vim/swap")
-    call mkdir($HOME."/.vim/swap", "p", 0700)
-endif
-if !isdirectory($HOME."/.vim/undo")
-    call mkdir($HOME."/.vim/undo", "p", 0700)
-endif
 
 " Performance
 set lazyredraw
@@ -380,10 +364,10 @@ augroup general_settings
     autocmd!
     " Return to last edit position when opening files
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-    
+
     " Remove trailing whitespace on save for certain file types
     autocmd BufWritePre *.py,*.js,*.ts,*.go,*.rs call TrimWhitespace()
-    
+
     " Highlight long lines
     autocmd FileType python,go,rust,javascript,typescript match OverLength /\%101v.\+/
     highlight OverLength ctermbg=red ctermfg=white guibg=#cc6666
