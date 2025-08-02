@@ -200,7 +200,7 @@ setup_dotfiles() {
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     
     # Copy minimal vim configuration
-    copy_dotfile "$SCRIPT_DIR/vim/.vimrc.minimal" "$HOME/.vimrc"
+    copy_dotfile "$SCRIPT_DIR/vim/minimal/.vimrc" "$HOME/.vimrc"
     
     # Setup bashrc
     if [ -f "$SCRIPT_DIR/bash/.bashrc" ]; then
