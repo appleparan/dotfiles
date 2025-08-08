@@ -31,9 +31,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'morhetz/gruvbox'
 
-" Code completion and LSP
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 " Language-specific plugins
 " Python
 Plug 'vim-python/python-syntax'
@@ -101,8 +98,24 @@ set shiftround
 
 " File handling
 set autoread
+set backup
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swap//
+set undofile
+set undodir=~/.vim/undo//
 set encoding=utf-8
 set fileencoding=utf-8
+
+" Create backup directories if they don't exist
+if !isdirectory($HOME."/.vim/backup")
+    call mkdir($HOME."/.vim/backup", "p", 0700)
+endif
+if !isdirectory($HOME."/.vim/swap")
+    call mkdir($HOME."/.vim/swap", "p", 0700)
+endif
+if !isdirectory($HOME."/.vim/undo")
+    call mkdir($HOME."/.vim/undo", "p", 0700)
+endif
 
 " Performance
 set lazyredraw
@@ -191,60 +204,6 @@ let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-
-" CoC Configuration
-let g:coc_global_extensions = [
-  \ 'coc-python',
-  \ 'coc-go',
-  \ 'coc-rust-analyzer',
-  \ 'coc-tsserver',
-  \ 'coc-json',
-  \ 'coc-yaml',
-  \ 'coc-html',
-  \ 'coc-css',
-  \ 'coc-prettier'
-  \ ]
-
-" Use tab for trigger completion
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion
-inoremap <silent><expr> <c-@> coc#refresh()
-
-" GoTo code navigation
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
-
-" Formatting selected code
-xmap <leader>F  <Plug>(coc-format-selected)
-nmap <leader>F  <Plug>(coc-format-selected)
 
 " ALE Configuration
 let g:ale_linters = {
@@ -365,8 +324,8 @@ augroup general_settings
     " Return to last edit position when opening files
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-    " Disabled corsor position restore for Git Messages
-    autocmd FileType gitcommit autocmd! BufReadPost <buffer>
+    " Disable cursor position restore for Git commit messages
+    autocmd FileType gitcommit autocmd! BufReadPost <buffer>"
 
     " Remove trailing whitespace on save for certain file types
     autocmd BufWritePre *.py,*.js,*.ts,*.go,*.rs call TrimWhitespace()
