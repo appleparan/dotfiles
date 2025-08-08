@@ -48,7 +48,7 @@ filetype plugin indent on
 syntax on
 
 " UI and appearance
-set number relativenumber
+set number
 set cursorline
 set showmatch
 set ruler
@@ -197,7 +197,7 @@ augroup general_settings
     autocmd!
     " Return to last edit position when opening files
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-    
+
     " Remove trailing whitespace on save for common file types
     autocmd BufWritePre *.py,*.sh,*.txt,*.md call TrimWhitespace()
 augroup END
