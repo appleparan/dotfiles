@@ -79,6 +79,18 @@ set shiftround
 set autoread
 set encoding=utf-8
 set fileencoding=utf-8
+set backup
+set backupdir=~/.vim/backup//
+set undofile
+set undodir=~/.vim/undo//
+
+" Create backup directories if they don't exist
+if !isdirectory($HOME."/.vim/backup")
+    call mkdir($HOME."/.vim/backup", "p", 0700)
+endif
+if !isdirectory($HOME."/.vim/undo")
+    call mkdir($HOME."/.vim/undo")"
+endif
 
 " Performance
 set lazyredraw
@@ -167,18 +179,6 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
 " =============================================================================
 " Custom Functions
 " =============================================================================
-
-" Toggle between absolute and relative line numbers
-function! NumberToggle()
-  if(&relativenumber == 1)
-    set norelativenumber
-    set number
-  else
-    set relativenumber
-  endif
-endfunction
-
-nnoremap <leader>n :call NumberToggle()<CR>
 
 " Remove trailing whitespace
 function! TrimWhitespace()
