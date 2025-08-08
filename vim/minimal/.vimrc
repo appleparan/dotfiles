@@ -200,6 +200,7 @@ augroup general_settings
 
     " Disabled corsor position restore for Git Messages
     autocmd FileType gitcommit autocmd! BufReadPost <buffer>
+    autocmd FileType gitcommit normal! gg
 
     " Remove trailing whitespace on save for common file types
     autocmd BufWritePre *.py,*.sh,*.txt,*.md call TrimWhitespace()
