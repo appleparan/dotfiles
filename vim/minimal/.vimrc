@@ -198,6 +198,9 @@ augroup general_settings
     " Return to last edit position when opening files
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
+    " Disabled corsor position restore for Git Messages
+    autocmd FileType gitcommit autocmd! BufReadPost <buffer>
+
     " Remove trailing whitespace on save for common file types
     autocmd BufWritePre *.py,*.sh,*.txt,*.md call TrimWhitespace()
 augroup END
