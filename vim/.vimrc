@@ -72,7 +72,7 @@ filetype plugin indent on
 syntax on
 
 " UI and appearance
-set number relativenumber
+set number
 set cursorline
 set showmatch
 set ruler
