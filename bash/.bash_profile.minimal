@@ -1,0 +1,119 @@
+# Minimal .bash_profile for Docker/Container Environment
+# Login shell configuration - no bash-it, no keychain, no SSH agent
+
+# =============================================================================
+# Source bashrc
+# =============================================================================
+
+if [[ -f ~/.bashrc ]]; then
+    source ~/.bashrc
+fi
+
+# =============================================================================
+# Login Shell Settings
+# =============================================================================
+
+umask 022
+
+# =============================================================================
+# XDG Base Directory
+# =============================================================================
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
+
+# =============================================================================
+# PATH Deduplication
+# =============================================================================
+
+dedupe_path() {
+    local path_var="$1"
+    local old_path="${!path_var}:"
+    local new_path=""
+
+    while [[ -n "$old_path" ]]; do
+        local entry="${old_path%%:*}"
+        if [[ -n "$entry" ]] && [[ ":$new_path:" != *":$entry:"* ]]; then
+            new_path="$new_path:$entry"
+        fi
+        old_path="${old_path#*:}"
+    done
+
+    new_path="${new_path#:}"
+    export "$path_var"="$new_path"
+}
+
+[[ -n "$PATH" ]] && dedupe_path PATH
+[[ -n "$LD_LIBRARY_PATH" ]] && dedupe_path LD_LIBRARY_PATH
+[[ -n "$PYTHONPATH" ]] && dedupe_path PYTHONPATH
+
+# =============================================================================
+# Development Environment
+# =============================================================================
+
+# Python
+if command -v python3 >/dev/null 2>&1; then
+    export PYTHONIOENCODING=utf-8
+    export PYTHONDONTWRITEBYTECODE=1
+fi
+
+# Rust/Cargo
+if [[ -d "$HOME/.cargo" ]]; then
+    export CARGO_HOME="$HOME/.cargo"
+    source "$HOME/.cargo/env" 2>/dev/null
+fi
+
+# Node.js (fnm - system-wide or user-local)
+if [[ -d "${FNM_DIR:-}" ]]; then
+    export PATH="$FNM_DIR:$PATH"
+elif [[ -d "$HOME/.local/share/fnm" ]]; then
+    export FNM_PATH="$HOME/.local/share/fnm"
+    export PATH="$FNM_PATH:$PATH"
+fi
+if command -v fnm >/dev/null 2>&1; then
+    eval "$(fnm env --use-on-cd)"
+fi
+
+# bun
+if [[ -d "$HOME/.bun/bin" ]]; then
+    export BUN_INSTALL="$HOME/.bun"
+    export PATH="$BUN_INSTALL/bin:$PATH"
+elif command -v bun >/dev/null 2>&1; then
+    : # bun already in PATH (system-wide install)
+fi
+
+# Go
+if [[ -d "/usr/local/go/bin" ]]; then
+    export PATH="/usr/local/go/bin:$PATH"
+fi
+if [[ -d "$HOME/go/bin" ]]; then
+    export GOPATH="$HOME/go"
+    export PATH="$GOPATH/bin:$PATH"
+fi
+
+# =============================================================================
+# Terminal Settings
+# =============================================================================
+
+export TERM=${TERM:-xterm-256color}
+export LESS="-R -M --shift 5"
+export PAGER="less"
+
+# =============================================================================
+# Local Customizations
+# =============================================================================
+
+if [[ -f ~/.bash_profile.local ]]; then
+    source ~/.bash_profile.local
+fi
+
+# =============================================================================
+# Final PATH Cleanup
+# =============================================================================
+
+dedupe_path PATH
+export PATH
