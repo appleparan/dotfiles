@@ -108,22 +108,9 @@ install_system_packages() {
     fi
 }
 
-# Install bashit framework
+# Install bashit framework (skipped in minimal setup)
 install_bashit() {
-    log_info "Installing bash-it framework..."
-    
-    if [ ! -d "$HOME/.bash_it" ]; then
-        log_info "Cloning bash-it repository..."
-        git clone --depth=1 https://github.com/Bash-it/bash-it.git "$HOME/.bash_it"
-        
-        # Install bash-it non-interactively
-        log_info "Installing bash-it..."
-        "$HOME/.bash_it/install.sh" --silent
-        
-        log_success "bash-it installed"
-    else
-        log_info "bash-it already installed"
-    fi
+    log_info "Skipping bash-it framework (not needed for minimal setup)"
 }
 
 # Install Python development tools
@@ -139,30 +126,9 @@ install_python_tools() {
         log_info "uv already installed"
     fi
     
-    # Install pipx for global Python tools
-    if ! command_exists pipx; then
-        log_info "Installing pipx..."
-        python3 -m pip install --user pipx
-        python3 -m pipx ensurepath
-        log_success "pipx installed"
-    else
-        log_info "pipx already installed"
-    fi
-    
-    # Install common Python development tools via pipx
-    log_info "Installing Python development tools via pipx..."
-    
-    local tools=("black" "isort" "flake8" "mypy" "pytest" "ipython")
-    
-    for tool in "${tools[@]}"; do
-        if ! command_exists "$tool"; then
-            log_info "Installing $tool..."
-            pipx install "$tool"
-            log_success "$tool installed"
-        else
-            log_info "$tool already installed"
-        fi
-    done
+    # Note: pipx and individual tools are not installed in minimal setup
+    # Use uv to manage project dependencies instead
+    log_info "Skipping pipx and individual tool installation (use uv for project deps)"
 }
 
 # Install vim plugins
@@ -220,14 +186,9 @@ setup_dotfiles() {
     # Copy minimal vim configuration
     copy_dotfile "$SCRIPT_DIR/vim/minimal/.vimrc" "$HOME/.vimrc"
     
-    # Setup modern bash configuration
-    if [ -f "$SCRIPT_DIR/bash/.bashrc.modern" ]; then
-        copy_dotfile "$SCRIPT_DIR/bash/.bashrc.modern" "$HOME/.bashrc"
-    fi
-    
-    if [ -f "$SCRIPT_DIR/bash/.bash_profile.modern" ]; then
-        copy_dotfile "$SCRIPT_DIR/bash/.bash_profile.modern" "$HOME/.bash_profile"
-    fi
+    # Setup minimal bash configuration
+    copy_dotfile "$SCRIPT_DIR/bash/.bashrc.minimal" "$HOME/.bashrc"
+    copy_dotfile "$SCRIPT_DIR/bash/.bash_profile.minimal" "$HOME/.bash_profile"
     
     log_success "Minimal dotfiles copied successfully"
 }
@@ -244,26 +205,7 @@ create_directories() {
 # Setup Python environment
 setup_python_environment() {
     log_info "Setting up Python environment..."
-    
-    # Add Python user base to PATH if not already there
-    local python_user_base=$(python3 -m site --user-base)
-    local python_user_bin="$python_user_base/bin"
-    
-    if [[ ":$PATH:" != *":$python_user_bin:"* ]]; then
-        echo "# Python user base" >> "$HOME/.bashrc"
-        echo "export PATH=\"$python_user_bin:\$PATH\"" >> "$HOME/.bashrc"
-        log_info "Added Python user base to PATH in .bashrc"
-    fi
-    
-    # Add uv to PATH
-    if [ -d "$HOME/.cargo/bin" ]; then
-        if [[ ":$PATH:" != *":$HOME/.cargo/bin:"* ]]; then
-            echo "# uv (Python package manager)" >> "$HOME/.bashrc"
-            echo "export PATH=\"\$HOME/.cargo/bin:\$PATH\"" >> "$HOME/.bashrc"
-            log_info "Added uv to PATH in .bashrc"
-        fi
-    fi
-    
+    # PATH management is handled by .bashrc.minimal and .bash_profile.minimal
     log_success "Python environment setup completed"
 }
 
@@ -287,11 +229,9 @@ main() {
     log_info ""
     log_info "Installed tools:"
     log_info "  - Python 3 with pip"
-    log_info "  - bash-it framework with modern shell features"
     log_info "  - uv (fast Python package manager)"
-    log_info "  - pipx (isolated Python app installation)"
-    log_info "  - Python dev tools: black, isort, flake8, mypy, pytest, ipython"
     log_info "  - Minimal vim configuration with essential plugins"
+    log_info "  - Minimal bash configuration (no bash-it dependency)"
 }
 
 # Handle script arguments
@@ -307,23 +247,20 @@ case "${1:-}" in
         echo ""
         echo "This script will:"
         echo "  - Install basic system packages (curl, git, python3, pip)"
-        echo "  - Install bash-it framework for enhanced bash experience"
-        echo "  - Install Python development tools (uv, pipx, black, isort, flake8, mypy, pytest, ipython)"
+        echo "  - Install uv (fast Python package manager)"
         echo "  - Setup minimal vim configuration with essential plugins"
-        echo "  - Setup modern bash configuration for Python development"
+        echo "  - Setup minimal bash configuration for container/Docker environments"
         echo ""
-        echo "This is a minimal version focused on Python development without heavy language servers or complex setups."
+        echo "This is a minimal version focused on Python development in Docker containers."
         exit 0
         ;;
     --dry-run)
         log_info "DRY RUN MODE - No changes will be made"
         log_info "Would install:"
         log_info "  - System packages: curl, git, python3, python3-pip"
-        log_info "  - bash-it framework"
-        log_info "  - Python tools: uv, pipx"
-        log_info "  - Python dev tools: black, isort, flake8, mypy, pytest, ipython"
+        log_info "  - Python tools: uv"
         log_info "  - vim-plug and minimal vim configuration"
-        log_info "  - Modern bash configuration for Python development"
+        log_info "  - Minimal bash configuration for Docker/container environments"
         log_info "  - Platform: $(detect_platform)"
         exit 0
         ;;

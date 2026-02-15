@@ -89,7 +89,7 @@ if !isdirectory($HOME."/.vim/backup")
     call mkdir($HOME."/.vim/backup", "p", 0700)
 endif
 if !isdirectory($HOME."/.vim/undo")
-    call mkdir($HOME."/.vim/undo")"
+    call mkdir($HOME."/.vim/undo", "p", 0700)
 endif
 
 " Performance
@@ -165,7 +165,10 @@ nnoremap <leader>f :NERDTreeFind<CR>
 let NERDTreeShowHidden=1
 let NERDTreeIgnore=['\.git$', '\.DS_Store$', '__pycache__', '\.pyc$']
 
-" FZF
+" FZF (use ripgrep if available)
+if executable('rg')
+    let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --glob "!.git/"'
+endif
 nnoremap <leader>p :Files<CR>
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>rg :Rg<CR>
