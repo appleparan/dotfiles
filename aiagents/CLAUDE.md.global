@@ -18,9 +18,18 @@
 
 ## Process
 
-### 1. Planning & Staging
+### Simple Changes
 
-Break complex work into 3-5 stages. Document in `IMPLEMENTATION_PLAN.md`:
+For trivial fixes (typos, single-line changes, obvious bugs):
+- Make the change, verify it works, commit directly
+
+### Complex Changes Workflow
+
+For non-trivial work, follow this end-to-end flow:
+
+#### Step 1: Plan
+
+Break work into 3-5 stages. Document in `IMPLEMENTATION_PLAN.md`:
 
 ```markdown
 ## Stage N: [Name]
@@ -32,13 +41,44 @@ Break complex work into 3-5 stages. Document in `IMPLEMENTATION_PLAN.md`:
 - Update status as you progress
 - Remove file when all stages are done
 
-### 2. Implementation Flow
+#### Step 2: Create Issue
+
+File an issue on the project's remote (GitHub or GitLab):
+- Use `gh issue create` (GitHub) or `glab issue create` (GitLab)
+- Title should be concise and actionable
+- Body should reference the plan and acceptance criteria
+
+#### Step 3: Create Branch & Worktree
+
+Create an isolated worktree with a conventional-commit-prefixed branch:
+- Branch naming: `<type>/<short-description>` (e.g., `feat/user-auth`, `fix/login-redirect`)
+- Types follow conventional commits: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `ci`
+- Use git worktree to isolate work from the main tree
+
+#### Step 4: Implement (per stage)
+
+For **each stage** in the plan, repeat this cycle:
 
 1. **Understand** - Study existing patterns in codebase
-2. **Test** - Write test first (red)
+2. **Test** - Write tests first (red)
 3. **Implement** - Minimal code to pass (green)
 4. **Refactor** - Clean up with tests passing
-5. **Commit** - With clear message linking to plan
+5. **Verify quality** - Run linting, formatting, type checking, and tests
+6. **Commit** - With clear message referencing the issue
+
+**CRITICAL**: Commit at the end of **every stage**, not all at once at the end.
+
+#### Step 5: Tests
+
+- Write unit tests for all new/changed functionality
+- Create or update E2E tests when the change affects user-facing flows
+- Ensure coverage meets project threshold
+
+#### Step 6: Create Pull Request
+
+- Get explicit user confirmation before creating the PR
+- Use `gh pr create` (GitHub) or `glab mr create` (GitLab)
+- PR description should summarize changes, link the issue, and include a test plan
 
 ### 3. When Stuck (After 3 Attempts)
 
