@@ -20,8 +20,6 @@ eval "$(uvx --generate-shell-completion zsh)"
 # Ruby
 #eval "$(~/.rbenv/bin/rbenv init - zsh)"
 
-# ssh agent
-eval `keychain --eval --agents ssh github hf`
 
 #export KUBERNETES_MASTER=$(sudo grep server: /etc/rancher/k3s/k3s.yaml | cut -c13-)
 #export KUBECONFIG=/etc/rancher/k3s/k3s.yaml

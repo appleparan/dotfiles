@@ -128,54 +128,6 @@ export LESSOPEN="|lesspipe %s"
 export PAGER="less"
 
 # =============================================================================
-# SSH Agent Management (if not using keychain)
-# =============================================================================
-
-# Start SSH agent if not running
-start_ssh_agent() {
-    local ssh_env="$HOME/.ssh/environment"
-    
-    # Check if SSH agent is already running
-    if [[ -n "$SSH_AGENT_PID" ]] && kill -0 "$SSH_AGENT_PID" 2>/dev/null; then
-        return 0
-    fi
-    
-    # Try to load existing SSH agent environment
-    if [[ -f "$ssh_env" ]]; then
-        source "$ssh_env" >/dev/null
-        if [[ -n "$SSH_AGENT_PID" ]] && kill -0 "$SSH_AGENT_PID" 2>/dev/null; then
-            return 0
-        fi
-    fi
-    
-    # Start new SSH agent
-    echo "Starting SSH agent..."
-    ssh-agent | sed 's/^echo/#echo/' > "$ssh_env"
-    chmod 600 "$ssh_env"
-    source "$ssh_env" >/dev/null
-    
-    # Add default keys
-    if [[ -f "$HOME/.ssh/id_rsa" ]]; then
-        ssh-add "$HOME/.ssh/id_rsa" 2>/dev/null
-    fi
-    if [[ -f "$HOME/.ssh/id_ed25519" ]]; then
-        ssh-add "$HOME/.ssh/id_ed25519" 2>/dev/null
-    fi
-}
-
-# Only start SSH agent for login shells and if not in tmux
-if [[ -z "$TMUX" ]] && [[ "$-" == *i* ]]; then
-    # Check if keychain is available (preferred)
-    if command -v keychain >/dev/null 2>&1; then
-        # Use keychain if available
-        eval "$(keychain --eval --quiet --agents ssh)"
-    else
-        # Fallback to custom SSH agent management
-        start_ssh_agent
-    fi
-fi
-
-# =============================================================================
 # GPG Settings
 # =============================================================================
 
