@@ -1,35 +1,46 @@
 # Development Guidelines
 
-## Philosophy
+## Language
 
-### Core Beliefs
+- **Code, commits, PR/MR**: English
+- **Conversation with user**: Korean
 
-- **Incremental progress over big bangs** - Small changes that compile and pass tests
-- **Learning from existing code** - Study and plan before implementing
-- **Pragmatic over dogmatic** - Adapt to project reality
-- **Clear intent over clever code** - Be boring and obvious
+## Before Writing Any Code
 
-### Simplicity Means
+Always orient yourself first:
 
-- Single responsibility per function/class
-- Avoid premature abstractions
-- No clever tricks - choose the boring solution
-- If you need to explain it, it's too complex
+- Read existing code in the affected area before making changes
+- Match the project's naming conventions, patterns, and idioms
+- Check how similar problems were solved elsewhere in the codebase
+- If a local `CLAUDE.md` or style guide exists, read it before proceeding
 
-## Process
+## Scope Assessment
 
-### Simple Changes
+Before choosing Simple vs Complex path:
 
-For trivial fixes (typos, single-line changes, obvious bugs):
-- Make the change, verify it works, commit directly
+- Files affected: 1–2 → Simple candidate
+- Files affected: 3+ or cross-directory → Complex
+- Risky/irreversible change → Complex regardless of size
 
-### Complex Changes Workflow
+## Simple Changes
 
-For non-trivial work, follow this end-to-end flow:
+Trivial fixes (typos, single-line, obvious bugs): fix → verify → commit directly.
 
-#### Step 1: Plan
+## Complex Changes Workflow
 
-Break work into 3-5 stages. Document in `IMPLEMENTATION_PLAN.md`:
+### 1. Plan
+
+**Planning comes first — before writing any code.**
+
+Before doing anything, think through:
+- What is the actual problem being solved?
+- What are the edge cases and risks?
+- What parts of the codebase are affected?
+- What is the right approach, and why?
+- Are there simpler alternatives?
+
+Only after this thinking is done, decide whether to document it.
+For non-trivial work, create `IMPLEMENTATION_PLAN.md` in the worktree root:
 
 ```markdown
 ## Stage N: [Name]
@@ -38,155 +49,69 @@ Break work into 3-5 stages. Document in `IMPLEMENTATION_PLAN.md`:
 **Tests**: [Specific test cases]
 **Status**: [Not Started|In Progress|Complete]
 ```
+
 - Update status as you progress
-- Remove file when all stages are done
+- Before removing the file, leave a short summary in the related issue and PR/MR:
+  - completed stages
+  - key decisions
+  - verification/test results
+- Remove file only after the summary is recorded
 
-#### Step 2: Create Issue
+### 2. Create Issue
 
-File an issue on the project's remote (GitHub or GitLab):
-- Use `gh issue create` (GitHub) or `glab issue create` (GitLab)
-- Title should be concise and actionable
-- Body should reference the plan and acceptance criteria
+- GitHub: `gh issue create`
+- GitLab: `glab issue create`
 
-#### Step 3: Create Branch & Worktree
+### 3. Create Branch & Worktree
 
-Create an isolated worktree with a conventional-commit-prefixed branch:
-- Branch naming: `<type>/<short-description>` (e.g., `feat/user-auth`, `fix/login-redirect`)
-- Types follow conventional commits: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `ci`
-- Use git worktree to isolate work from the main tree
+Branch naming: `<type>/<short-description>`
+Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `ci`
 
-#### Step 4: Implement (per stage)
+Worktree policy:
+- Required for medium/large changes (multiple files, cross-directory refactors, risky changes)
+- Optional for small scoped changes (single file, low risk, easy rollback)
 
-For **each stage** in the plan, repeat this cycle:
+### 4. Implement
 
-1. **Understand** - Study existing patterns in codebase
-2. **Test** - Write tests first (red)
-3. **Implement** - Minimal code to pass (green)
-4. **Refactor** - Clean up with tests passing
-5. **Verify quality** - Run linting, formatting, type checking, and tests
-6. **Commit** - With clear message referencing the issue
+For each stage: implement → verify quality (lint, format, type check, tests) → **commit**
 
-**CRITICAL**: Commit at the end of **every stage**, not all at once at the end.
+Commit at the end of **every stage**, not all at once at the end.
 
-#### Step 5: Tests
+### 5. Tests
 
-- Write unit tests for all new/changed functionality
-- Create or update E2E tests when the change affects user-facing flows
-- Ensure coverage meets project threshold
+- If the touched area has a test infrastructure, write/update unit tests for new or changed behavior
+- If user-facing flows are affected and E2E infrastructure exists, create/update E2E tests
+- If no automated test infrastructure exists (common in dotfiles), document manual verification steps and outcomes
 
-#### Step 6: Create Pull Request
+### 6. Create PR/MR
 
-- Get explicit user confirmation before creating the PR
-- Use `gh pr create` (GitHub) or `glab mr create` (GitLab)
-- PR description should summarize changes, link the issue, and include a test plan
+**Get explicit user confirmation before creating the PR/MR.**
 
-### 3. When Stuck (After 3 Attempts)
+- GitHub: `gh pr create`
+- GitLab: `glab mr create`
 
-**CRITICAL**: Maximum 3 attempts per issue, then STOP.
-
-1. **Document what failed**:
-   - What you tried
-   - Specific error messages
-   - Why you think it failed
-
-2. **Research alternatives**:
-   - Find 2-3 similar implementations
-   - Note different approaches used
-
-3. **Question fundamentals**:
-   - Is this the right abstraction level?
-   - Can this be split into smaller problems?
-   - Is there a simpler approach entirely?
-
-4. **Try different angle**:
-   - Different library/framework feature?
-   - Different architectural pattern?
-   - Remove abstraction instead of adding?
-
-## Technical Standards
-
-### Architecture Principles
-
-- **Composition over inheritance** - Use dependency injection
-- **Interfaces over singletons** - Enable testing and flexibility
-- **Explicit over implicit** - Clear data flow and dependencies
-- **Test-driven when possible** - Never disable tests, fix them
-
-### Code Quality
-
-- **Every commit must**:
-  - Compile successfully
-  - Pass all existing tests
-  - Include tests for new functionality
-  - Follow project formatting/linting
-
-- **Before committing**:
-  - Run formatters/linters
-  - Self-review changes
-  - Ensure commit message explains "why"
-
-### Error Handling
-
-- Fail fast with descriptive messages
-- Include context for debugging
-- Handle errors at appropriate level
-- Never silently swallow exceptions
-
-## Decision Framework
-
-When multiple valid approaches exist, choose based on:
-
-1. **Testability** - Can I easily test this?
-2. **Readability** - Will someone understand this in 6 months?
-3. **Consistency** - Does this match project patterns?
-4. **Simplicity** - Is this the simplest solution that works?
-5. **Reversibility** - How hard to change later?
-
-## Project Integration
-
-### Learning the Codebase
-
-- Find 3 similar features/components
-- Identify common patterns and conventions
-- Use same libraries/utilities when possible
-- Follow existing test patterns
-
-### Tooling
-
-- Use project's existing build system
-- Use project's test framework
-- Use project's formatter/linter settings
-- Don't introduce new tools without strong justification
-
-## Quality Gates
-
-### Definition of Done
+## Definition of Done
 
 - [ ] Tests written and passing
 - [ ] Code follows project conventions
 - [ ] No linter/formatter warnings
 - [ ] Commit messages are clear
-- [ ] Implementation matches plan
+- [ ] Implementation matches plan (if plan exists)
 - [ ] No TODOs without issue numbers
 
-### Test Guidelines
+## When Stuck
 
-- Test behavior, not implementation
-- One assertion per test when possible
-- Clear test names describing scenario
-- Use existing test utilities/helpers
-- Tests should be deterministic
+Maximum **3 attempts**. After that, stop and report to user:
+- What you tried and why it failed
+- 2-3 alternative approaches
+- Ask for direction before proceeding
 
-## Important Reminders
+## NEVER
 
-**NEVER**:
 - Use `--no-verify` to bypass commit hooks
 - Disable tests instead of fixing them
 - Commit code that doesn't compile
-- Make assumptions - verify with existing code
-
-**ALWAYS**:
-- Commit working code incrementally
-- Update plan documentation as you go
-- Learn from existing implementations
-- Stop after 3 failed attempts and reassess
+- Make assumptions — verify with existing code
+- Keep trying after 3 failed attempts
+- Create a PR/MR without user confirmation
+- Skip planning and jump straight into implementation
