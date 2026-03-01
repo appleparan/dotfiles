@@ -1,5 +1,5 @@
 # Minimal .bash_profile for Docker/Container Environment
-# Login shell configuration - no bash-it, no keychain, no SSH agent
+# Login shell configuration - no bash-it, no SSH agent
 
 # =============================================================================
 # Source bashrc
