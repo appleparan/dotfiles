@@ -33,6 +33,7 @@ Trivial fixes (typos, single-line, obvious bugs): fix → verify → commit dire
 **Planning comes first — before writing any code.**
 
 Before doing anything, think through:
+
 - What is the actual problem being solved?
 - What are the edge cases and risks?
 - What parts of the codebase are affected?
@@ -68,8 +69,11 @@ Branch naming: `<type>/<short-description>`
 Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `ci`
 
 Worktree policy:
-- Required for medium/large changes (multiple files, cross-directory refactors, risky changes)
-- Optional for small scoped changes (single file, low risk, easy rollback)
+
+- Required for medium/large changes (multiple files,
+  cross-directory refactors, risky changes)
+- Optional for small scoped changes (single file, low
+  risk, easy rollback)
 
 ### 4. Implement
 
@@ -79,9 +83,13 @@ Commit at the end of **every stage**, not all at once at the end.
 
 ### 5. Tests
 
-- If the touched area has a test infrastructure, write/update unit tests for new or changed behavior
-- If user-facing flows are affected and E2E infrastructure exists, create/update E2E tests
-- If no automated test infrastructure exists (common in dotfiles), document manual verification steps and outcomes
+- If the touched area has a test infrastructure,
+  write/update unit tests for new or changed behavior
+- If user-facing flows are affected and E2E
+  infrastructure exists, create/update E2E tests
+- If no automated test infrastructure exists (common
+  in dotfiles), document manual verification steps
+  and outcomes
 
 ### 6. Create PR/MR
 
@@ -101,7 +109,9 @@ Commit at the end of **every stage**, not all at once at the end.
 
 ## When Stuck
 
-Maximum **3 attempts**. After that, stop and report to user:
+Maximum **3 attempts**. After that, stop and report
+to user:
+
 - What you tried and why it failed
 - 2-3 alternative approaches
 - Ask for direction before proceeding
