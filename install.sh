@@ -2,6 +2,7 @@
 
 # Dotfiles Installation Script
 # Full mode:    zsh + oh-my-zsh + dev tools (juliaup, fnm, bun, uv, rust, go)
+#               plus vim/bash/tmux dotfiles and ~/.config/{nvim,zellij}
 # Minimal mode: bash-only + uv for Docker/container environments
 #
 # Usage:
@@ -64,6 +65,15 @@ backup_file() {
     fi
 }
 
+backup_dir() {
+    local dir_path="$1"
+    if [ -d "$dir_path" ]; then
+        local backup_path="${dir_path}.backup.$(date +%Y%m%d_%H%M%S)"
+        mv "$dir_path" "$backup_path"
+        log_warning "Backed up existing $(basename "$dir_path") to $(basename "$backup_path")"
+    fi
+}
+
 copy_dotfile() {
     local source="$1"
     local target="$2"
@@ -74,6 +84,20 @@ copy_dotfile() {
         log_info "Copied $(basename "$source") to $(basename "$target")"
     else
         log_warning "Source file not found: $source"
+    fi
+}
+
+copy_dotdir() {
+    local source="$1"
+    local target="$2"
+
+    if [ -d "$source" ]; then
+        backup_dir "$target"
+        mkdir -p "$(dirname "$target")"
+        cp -r "$source" "$target"
+        log_info "Copied $(basename "$source") to $target"
+    else
+        log_warning "Source directory not found: $source"
     fi
 }
 
@@ -386,9 +410,24 @@ create_directories() {
 
     if ! $MINIMAL; then
         mkdir -p "$HOME/.zsh/completions"
+        mkdir -p "$HOME/.config"
     fi
 
     log_success "Directories created"
+}
+
+check_optional_tools() {
+    if $MINIMAL; then
+        return
+    fi
+
+    if ! command_exists nvim; then
+        log_warning "Neovim not found; ~/.config/nvim stays unused until it is installed"
+    fi
+
+    if ! command_exists zellij; then
+        log_warning "Zellij not found; ~/.config/zellij stays unused until it is installed"
+    fi
 }
 
 setup_dotfiles() {
@@ -422,6 +461,11 @@ setup_dotfiles() {
             copy_dotfile "$SCRIPT_DIR/tmux/linux/.tmux.conf" "$HOME/.tmux.conf"
             copy_dotfile "$SCRIPT_DIR/tmux/linux/.tmux.conf.local" "$HOME/.tmux.conf.local"
         fi
+
+        # XDG configs. Zellij resolves its vendored plugin paths against
+        # ~/.config/zellij, so these are copied rather than symlinked.
+        copy_dotdir "$SCRIPT_DIR/config/nvim" "$HOME/.config/nvim"
+        copy_dotdir "$SCRIPT_DIR/config/zellij" "$HOME/.config/zellij"
     fi
 
     log_success "Dotfiles copied successfully"
@@ -455,6 +499,7 @@ main() {
     create_directories
     setup_dotfiles
     install_vim_plugins
+    check_optional_tools
 
     if ! $MINIMAL; then
         install_oh_my_zsh
@@ -500,6 +545,8 @@ show_help() {
     echo "  - MesloLGS NF Font"
     echo "  - Dev tools: juliaup, fnm, bun, uv, rust, go"
     echo "  - Modern vim + bash + tmux configs"
+    echo "  - Neovim + zellij configs into ~/.config"
+    echo "    (the nvim and zellij binaries are not installed for you)"
     echo ""
     echo "Minimal mode (--minimal):"
     echo "  - bash-only (no zsh)"
@@ -527,6 +574,7 @@ show_dry_run() {
         log_info "  - MesloLGS NF Font"
         log_info "  - Development tools: juliaup, fnm, bun, uv, rust, go"
         log_info "  - vim-plug and modern vim configuration"
+        log_info "  - Neovim and zellij configs into ~/.config"
         log_info "  - Dotfiles for platform: $(detect_platform)"
     fi
 }
