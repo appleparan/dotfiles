@@ -17,14 +17,11 @@ work seamlessly across Linux and WSL environments.
 ├── bash/          # Bash shell configurations
 │   ├── .bashrc
 │   └── .bash_profile
-├── config/        # XDG configs, installed to ~/.config
-│   ├── nvim/      # Neovim (NvChad based)
-│   └── zellij/    # Zellij multiplexer — see its own README
-├── tmux/          # Terminal multiplexer configurations
-│   └── linux/
-│       └── .tmux.conf
-├── vim/           # Vim editor configuration
-│   └── .vimrc
+├── config/        # Application configs, one directory per app
+│   ├── nvim/      # Neovim (NvChad based)   -> ~/.config/nvim
+│   ├── tmux/      # Tmux                    -> ~/.config/tmux
+│   ├── vim/       # Vim, incl. minimal/     -> ~/.vimrc
+│   └── zellij/    # Zellij, see its README  -> ~/.config/zellij
 └── zsh/           # Zsh shell configurations
     ├── .zshrc     # Global zsh configuration
     ├── .zshenv    # Global zsh environment
@@ -82,6 +79,11 @@ work seamlessly across Linux and WSL environments.
 
 ### Vim Configuration
 
+Lives in `config/vim/`, installed to `~/.vimrc` — Vim only
+reads `$XDG_CONFIG_HOME/vim/vimrc` with patch 9.1.0327, which
+distro builds often lack. `config/vim/minimal/vimrc` is the
+container variant used by `--minimal`.
+
 - **vim-plug**: Modern plugin manager for Vim
 - **CoC (Conquer of Completion)**: Language Server Protocol
   support with auto-completion
@@ -109,6 +111,18 @@ which `install.sh` does not install for you.
 - **AI assistance**: avante and minuet-ai
 - **Zellij integration**: `Ctrl h/j/k/l` move between Neovim
   splits and zellij panes transparently
+
+### Tmux Configuration
+
+Installed to `~/.config/tmux/tmux.conf`, which tmux reads
+natively from 3.1 onward. On older tmux `install.sh` writes a
+one-line `~/.tmux.conf` shim that sources it.
+
+- **Prefix**: `C-a` instead of the default `C-b`
+- **Vim-style panes**: `h/j/k/l` navigation, `H/J/K/L` resize
+- **Clipboard integration**: `y` copies via whichever of
+  xsel, xclip, pbcopy or `clip.exe` (WSL) is present
+- **Config reload**: prefix `r`, edit with prefix `e`
 
 ### Zellij Configuration
 
@@ -239,8 +253,6 @@ the process:
    ```bash
    ln -sf ~/dotfiles/zsh/linux/.zshrc ~/.zshrc
    ln -sf ~/dotfiles/zsh/linux/.zshenv ~/.zshenv
-   ln -sf ~/dotfiles/tmux/linux/.tmux.conf \
-     ~/.tmux.conf
    ```
 
    **For WSL:**
@@ -253,21 +265,37 @@ the process:
    **Common configurations:**
 
    ```bash
-   ln -sf ~/dotfiles/vim/.vimrc ~/.vimrc
+   ln -sf ~/dotfiles/config/vim/vimrc ~/.vimrc
    ln -sf ~/dotfiles/bash/.bashrc ~/.bashrc
    ln -sf ~/dotfiles/bash/.bash_profile \
      ~/.bash_profile
    ```
 
-   **Neovim and zellij:**
+   Vim stays at `~/.vimrc` because Vim only reads
+   `$XDG_CONFIG_HOME/vim/vimrc` with patch 9.1.0327, which
+   distro builds often lack. Check yours with
+   `vim --version | head -2`.
+
+   **Neovim, zellij and tmux:**
 
    Copy these rather than symlinking — zellij resolves its
    vendored plugin paths against `~/.config/zellij`.
 
    ```bash
-   mkdir -p ~/.config
+   mkdir -p ~/.config/tmux
    cp -r ~/dotfiles/config/nvim ~/.config/nvim
    cp -r ~/dotfiles/config/zellij ~/.config/zellij
+   cp ~/dotfiles/config/tmux/tmux.conf \
+     ~/.config/tmux/tmux.conf
+   ```
+
+   `~/.config/tmux/tmux.conf` needs tmux 3.1 or newer. On
+   older tmux, add a shim instead — and remove any leftover
+   `~/.tmux.conf`, which tmux prefers over the XDG path:
+
+   ```bash
+   echo 'source-file ~/.config/tmux/tmux.conf' \
+     > ~/.tmux.conf
    ```
 
 7. Change default shell to zsh:
@@ -576,13 +604,16 @@ configure your terminal to use **MesloLGS NF Regular**:
 ### Linux
 
 - Includes native Linux shell optimizations
-- Full tmux configuration
 
 ### WSL (Windows Subsystem for Linux)
 
 - Optimized for Windows integration
 - Adjusted paths and environment variables for WSL
   compatibility
+
+Only the zsh configuration is platform-specific. Everything
+under `config/` is shared, so tmux now installs on WSL too —
+it was previously gated to Linux and silently skipped.
 
 ## Customization
 
