@@ -125,7 +125,11 @@ keybinds clear-defaults=true {
         bind "w" { SearchToggleOption "Wrap"; }
     }
     shared_except "locked" "scroll" "search" "tmux" {
-        bind "Ctrl b" { SwitchToMode "tmux"; }
+        // `Alt b` instead of `Ctrl b`: `Ctrl b` is page-up in vim/less, and
+        // autolock cannot cover every editor invocation (wrappers, `sudo vim`).
+        // Trade-off: shadows readline `backward-word`, matching `Alt f` which
+        // is already bound to monocle above.
+        bind "Alt b" { SwitchToMode "tmux"; }
     }
     shared_except "locked" "scroll" "search" {
         bind "Ctrl s" { SwitchToMode "scroll"; }
@@ -226,7 +230,10 @@ plugins {
     tab-bar location="zellij:tab-bar"
     autolock location="file:~/.config/zellij/plugins/fresh2dev/zellij-autolock/0.2.2/zellij-autolock.wasm" {
         is_enabled true
-        triggers "nvim|git|gitui|zoxide"
+        // Regex over the focused pane's running command. `vim` also matches
+        // `nvim`/`vimdiff`; plain `vim` was previously uncovered, so Zellij
+        // swallowed its `Ctrl` bindings.
+        triggers "vim|git|gitui|zoxide|fzf|less"
         print_to_log true
     }
     monocle location="file:~/.config/zellij/plugins/imsnif/monocle/v0.100.2/monocle.wasm"

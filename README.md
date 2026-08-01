@@ -17,11 +17,11 @@ work seamlessly across Linux and WSL environments.
 ├── bash/          # Bash shell configurations
 │   ├── .bashrc
 │   └── .bash_profile
-├── tmux/          # Terminal multiplexer configurations
-│   └── linux/
-│       └── .tmux.conf
-├── vim/           # Vim editor configuration
-│   └── .vimrc
+├── config/        # Application configs, one directory per app
+│   ├── nvim/      # Neovim (NvChad based)   -> ~/.config/nvim
+│   ├── tmux/      # Tmux, opt-in            -> ~/.config/tmux
+│   ├── vim/       # Vim, incl. minimal/     -> ~/.vimrc
+│   └── zellij/    # Zellij, see its README  -> ~/.config/zellij
 └── zsh/           # Zsh shell configurations
     ├── .zshrc     # Global zsh configuration
     ├── .zshenv    # Global zsh environment
@@ -39,10 +39,10 @@ work seamlessly across Linux and WSL environments.
   Linux and WSL environments
 - **Shell configurations**: Both Bash and Zsh setups with
   platform-specific optimizations
-- **Terminal multiplexing**: Tmux configuration for enhanced
-  terminal productivity
-- **Editor setup**: Vim configuration for consistent editing
-  experience
+- **Terminal multiplexing**: Zellij as the primary
+  multiplexer, with an opt-in tmux configuration
+- **Editor setup**: Vim and Neovim configurations for a
+  consistent editing experience
 - **Oh-My-Zsh integration**: Pre-configured with useful
   plugins and spaceship theme
 - **Development tools**: Automated setup for Julia, Node.js
@@ -79,6 +79,11 @@ work seamlessly across Linux and WSL environments.
 
 ### Vim Configuration
 
+Lives in `config/vim/`, installed to `~/.vimrc` — Vim only
+reads `$XDG_CONFIG_HOME/vim/vimrc` with patch 9.1.0327, which
+distro builds often lack. `config/vim/minimal/vimrc` is the
+container variant used by `--minimal`.
+
 - **vim-plug**: Modern plugin manager for Vim
 - **CoC (Conquer of Completion)**: Language Server Protocol
   support with auto-completion
@@ -92,6 +97,50 @@ work seamlessly across Linux and WSL environments.
   finding
 - **Git Integration**: GitGutter for diff indicators and
   Fugitive for Git commands
+
+### Neovim Configuration
+
+Installed to `~/.config/nvim`. Requires the `nvim` binary,
+which `install.sh` does not install for you.
+
+- **NvChad v2.5**: Base configuration and UI, bootstrapped
+  through lazy.nvim on first launch
+- **Chadracula theme**: Shared with the zellij status bar
+- **LSP**: mason plus per-server configs for Rust, TypeScript,
+  Deno, OCaml, JSON and YAML
+- **AI assistance**: avante and minuet-ai
+- **Zellij integration**: `Ctrl h/j/k/l` move between Neovim
+  splits and zellij panes transparently
+
+### Tmux Configuration
+
+Opt-in — zellij is the primary multiplexer, so `install.sh`
+skips tmux unless you pass `--with-tmux`.
+
+Installed to `~/.config/tmux/tmux.conf`, which tmux reads
+natively from 3.1 onward. On older tmux `install.sh` writes a
+one-line `~/.tmux.conf` shim that sources it.
+
+- **Prefix**: `C-a` instead of the default `C-b`
+- **Vim-style panes**: `h/j/k/l` navigation, `H/J/K/L` resize
+- **Clipboard integration**: `y` copies via whichever of
+  xsel, xclip, pbcopy or `clip.exe` (WSL) is present
+- **Config reload**: prefix `r`, edit with prefix `e`
+
+### Zellij Configuration
+
+Installed to `~/.config/zellij`. Requires the `zellij` binary,
+which `install.sh` does not install for you.
+
+- **Fully custom keymap**: Upstream defaults are cleared, so
+  read [config/zellij/README.md](config/zellij/README.md) for
+  the complete binding reference
+- **Autolock**: Drops into Locked mode for vim, git, fzf and
+  less so they keep their `Ctrl` keys
+- **zjstatus**: Status bar themed to match NvChad Chadracula
+- **monocle**: `Alt f` fuzzy search over files and scrollback
+- **Vendored plugins**: The `.wasm` files are committed, so a
+  fresh machine works without network access
 
 ## Installation
 
@@ -207,8 +256,6 @@ the process:
    ```bash
    ln -sf ~/dotfiles/zsh/linux/.zshrc ~/.zshrc
    ln -sf ~/dotfiles/zsh/linux/.zshenv ~/.zshenv
-   ln -sf ~/dotfiles/tmux/linux/.tmux.conf \
-     ~/.tmux.conf
    ```
 
    **For WSL:**
@@ -221,10 +268,42 @@ the process:
    **Common configurations:**
 
    ```bash
-   ln -sf ~/dotfiles/vim/.vimrc ~/.vimrc
+   ln -sf ~/dotfiles/config/vim/vimrc ~/.vimrc
    ln -sf ~/dotfiles/bash/.bashrc ~/.bashrc
    ln -sf ~/dotfiles/bash/.bash_profile \
      ~/.bash_profile
+   ```
+
+   Vim stays at `~/.vimrc` because Vim only reads
+   `$XDG_CONFIG_HOME/vim/vimrc` with patch 9.1.0327, which
+   distro builds often lack. Check yours with
+   `vim --version | head -2`.
+
+   **Neovim and zellij:**
+
+   Copy these rather than symlinking — zellij resolves its
+   vendored plugin paths against `~/.config/zellij`.
+
+   ```bash
+   cp -r ~/dotfiles/config/nvim ~/.config/nvim
+   cp -r ~/dotfiles/config/zellij ~/.config/zellij
+   ```
+
+   **Tmux (optional):**
+
+   ```bash
+   mkdir -p ~/.config/tmux
+   cp ~/dotfiles/config/tmux/tmux.conf \
+     ~/.config/tmux/tmux.conf
+   ```
+
+   `~/.config/tmux/tmux.conf` needs tmux 3.1 or newer. On
+   older tmux, add a shim instead — and remove any leftover
+   `~/.tmux.conf`, which tmux prefers over the XDG path:
+
+   ```bash
+   echo 'source-file ~/.config/tmux/tmux.conf' \
+     > ~/.tmux.conf
    ```
 
 7. Change default shell to zsh:
@@ -249,6 +328,9 @@ The `install.sh` script supports several options:
 
 # Normal installation
 ./install.sh
+
+# Normal installation, plus the opt-in tmux config
+./install.sh --with-tmux
 ```
 
 ## Tool Management
@@ -456,6 +538,29 @@ vim +PlugInstall +qall
 vim +PlugClean +qall
 ```
 
+### Zellij Usage
+
+```bash
+zellij           # New session
+zellij -s work   # New named session
+zellij ls        # List sessions
+zellij a work    # Attach
+```
+
+Most used keys, all from Normal mode:
+
+- `Alt b` — tmux-style prefix, the way into pane, tab,
+  scroll and session modes
+- `Alt n` — new pane, `Ctrl h/j/k/l` — move between panes
+- `Ctrl s` — scrollback with vim motions
+- `Alt f` — fuzzy search files and scrollback
+- `Ctrl g` — lock, so every key goes to the running program
+- `Ctrl q` — quit
+
+The full reference, including how the autolock plugin keeps
+`Ctrl` keys working inside vim, is in
+[config/zellij/README.md](config/zellij/README.md).
+
 ## Terminal Font Configuration
 
 For the best experience with the spaceship theme,
@@ -510,13 +615,16 @@ configure your terminal to use **MesloLGS NF Regular**:
 ### Linux
 
 - Includes native Linux shell optimizations
-- Full tmux configuration
 
 ### WSL (Windows Subsystem for Linux)
 
 - Optimized for Windows integration
 - Adjusted paths and environment variables for WSL
   compatibility
+
+Only the zsh configuration is platform-specific. Everything
+under `config/` is shared, so `--with-tmux` works on WSL too —
+tmux was previously gated to Linux and silently skipped.
 
 ## Customization
 
