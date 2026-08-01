@@ -416,6 +416,33 @@ create_directories() {
     log_success "Directories created"
 }
 
+# tmux reads ~/.config/tmux/tmux.conf only since 3.1. Older versions look at
+# ~/.tmux.conf exclusively.
+tmux_supports_xdg() {
+    command_exists tmux || return 1
+
+    local version
+    version=$(tmux -V | sed 's/^tmux \([0-9.]*\).*/\1/')
+
+    [ "$(printf '%s\n3.1\n' "$version" | sort -V | head -n1)" = "3.1" ]
+}
+
+setup_tmux_config() {
+    local source="$1"
+
+    mkdir -p "$HOME/.config/tmux"
+    copy_dotfile "$source" "$HOME/.config/tmux/tmux.conf"
+
+    # tmux prefers ~/.tmux.conf when it exists, so a leftover from an older
+    # install would shadow the XDG path we just wrote.
+    backup_file "$HOME/.tmux.conf"
+
+    if ! tmux_supports_xdg; then
+        echo "source-file ~/.config/tmux/tmux.conf" > "$HOME/.tmux.conf"
+        log_warning "tmux is older than 3.1 or missing; wrote a ~/.tmux.conf shim"
+    fi
+}
+
 check_optional_tools() {
     if $MINIMAL; then
         return
@@ -437,7 +464,7 @@ setup_dotfiles() {
     if $MINIMAL; then
         log_info "Setting up minimal dotfiles for platform: $platform"
 
-        copy_dotfile "$SCRIPT_DIR/vim/minimal/.vimrc" "$HOME/.vimrc"
+        copy_dotfile "$SCRIPT_DIR/config/vim/minimal/vimrc" "$HOME/.vimrc"
         copy_dotfile "$SCRIPT_DIR/bash/.bashrc.minimal" "$HOME/.bashrc"
         copy_dotfile "$SCRIPT_DIR/bash/.bash_profile.minimal" "$HOME/.bash_profile"
     else
@@ -452,20 +479,17 @@ setup_dotfiles() {
             copy_dotfile "$SCRIPT_DIR/zsh/linux/.zshenv" "$HOME/.zshenv"
         fi
 
-        # Vim, bash, tmux
-        copy_dotfile "$SCRIPT_DIR/vim/.vimrc" "$HOME/.vimrc"
+        # Bash. Vim stays at ~/.vimrc: Vim only gained XDG vimrc support in
+        # patch 9.1.0327, which distro builds routinely lack.
+        copy_dotfile "$SCRIPT_DIR/config/vim/vimrc" "$HOME/.vimrc"
         copy_dotfile "$SCRIPT_DIR/bash/.bashrc" "$HOME/.bashrc"
         copy_dotfile "$SCRIPT_DIR/bash/.bash_profile" "$HOME/.bash_profile"
-
-        if [ "$platform" = "linux" ]; then
-            copy_dotfile "$SCRIPT_DIR/tmux/linux/.tmux.conf" "$HOME/.tmux.conf"
-            copy_dotfile "$SCRIPT_DIR/tmux/linux/.tmux.conf.local" "$HOME/.tmux.conf.local"
-        fi
 
         # XDG configs. Zellij resolves its vendored plugin paths against
         # ~/.config/zellij, so these are copied rather than symlinked.
         copy_dotdir "$SCRIPT_DIR/config/nvim" "$HOME/.config/nvim"
         copy_dotdir "$SCRIPT_DIR/config/zellij" "$HOME/.config/zellij"
+        setup_tmux_config "$SCRIPT_DIR/config/tmux/tmux.conf"
     fi
 
     log_success "Dotfiles copied successfully"
