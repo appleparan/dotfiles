@@ -19,7 +19,7 @@ work seamlessly across Linux and WSL environments.
 │   └── .bash_profile
 ├── config/        # Application configs, one directory per app
 │   ├── nvim/      # Neovim (NvChad based)   -> ~/.config/nvim
-│   ├── tmux/      # Tmux                    -> ~/.config/tmux
+│   ├── tmux/      # Tmux, opt-in            -> ~/.config/tmux
 │   ├── vim/       # Vim, incl. minimal/     -> ~/.vimrc
 │   └── zellij/    # Zellij, see its README  -> ~/.config/zellij
 └── zsh/           # Zsh shell configurations
@@ -39,8 +39,8 @@ work seamlessly across Linux and WSL environments.
   Linux and WSL environments
 - **Shell configurations**: Both Bash and Zsh setups with
   platform-specific optimizations
-- **Terminal multiplexing**: Tmux and Zellij configurations
-  for enhanced terminal productivity
+- **Terminal multiplexing**: Zellij as the primary
+  multiplexer, with an opt-in tmux configuration
 - **Editor setup**: Vim and Neovim configurations for a
   consistent editing experience
 - **Oh-My-Zsh integration**: Pre-configured with useful
@@ -113,6 +113,9 @@ which `install.sh` does not install for you.
   splits and zellij panes transparently
 
 ### Tmux Configuration
+
+Opt-in — zellij is the primary multiplexer, so `install.sh`
+skips tmux unless you pass `--with-tmux`.
 
 Installed to `~/.config/tmux/tmux.conf`, which tmux reads
 natively from 3.1 onward. On older tmux `install.sh` writes a
@@ -276,15 +279,20 @@ the process:
    distro builds often lack. Check yours with
    `vim --version | head -2`.
 
-   **Neovim, zellij and tmux:**
+   **Neovim and zellij:**
 
    Copy these rather than symlinking — zellij resolves its
    vendored plugin paths against `~/.config/zellij`.
 
    ```bash
-   mkdir -p ~/.config/tmux
    cp -r ~/dotfiles/config/nvim ~/.config/nvim
    cp -r ~/dotfiles/config/zellij ~/.config/zellij
+   ```
+
+   **Tmux (optional):**
+
+   ```bash
+   mkdir -p ~/.config/tmux
    cp ~/dotfiles/config/tmux/tmux.conf \
      ~/.config/tmux/tmux.conf
    ```
@@ -320,6 +328,9 @@ The `install.sh` script supports several options:
 
 # Normal installation
 ./install.sh
+
+# Normal installation, plus the opt-in tmux config
+./install.sh --with-tmux
 ```
 
 ## Tool Management
@@ -612,8 +623,8 @@ configure your terminal to use **MesloLGS NF Regular**:
   compatibility
 
 Only the zsh configuration is platform-specific. Everything
-under `config/` is shared, so tmux now installs on WSL too —
-it was previously gated to Linux and silently skipped.
+under `config/` is shared, so `--with-tmux` works on WSL too —
+tmux was previously gated to Linux and silently skipped.
 
 ## Customization
 

@@ -2,11 +2,14 @@
 
 # Dotfiles Installation Script
 # Full mode:    zsh + oh-my-zsh + dev tools (juliaup, fnm, bun, uv, rust, go)
-#               plus vim/bash/tmux dotfiles and ~/.config/{nvim,zellij}
+#               plus vim/bash dotfiles and ~/.config/{nvim,zellij}
 # Minimal mode: bash-only + uv for Docker/container environments
+#
+# Zellij is the primary multiplexer. The tmux config is opt-in.
 #
 # Usage:
 #   ./install.sh              # Full installation
+#   ./install.sh --with-tmux  # Also install the tmux config
 #   ./install.sh --minimal    # Minimal (Docker/container) installation
 
 set -e
@@ -16,6 +19,8 @@ set -e
 # =============================================================================
 
 MINIMAL=false
+# Zellij is the primary multiplexer; the tmux config is opt-in.
+WITH_TMUX=false
 
 # =============================================================================
 # Colors and Logging
@@ -489,7 +494,11 @@ setup_dotfiles() {
         # ~/.config/zellij, so these are copied rather than symlinked.
         copy_dotdir "$SCRIPT_DIR/config/nvim" "$HOME/.config/nvim"
         copy_dotdir "$SCRIPT_DIR/config/zellij" "$HOME/.config/zellij"
-        setup_tmux_config "$SCRIPT_DIR/config/tmux/tmux.conf"
+        if $WITH_TMUX; then
+            setup_tmux_config "$SCRIPT_DIR/config/tmux/tmux.conf"
+        else
+            log_info "Skipping tmux config; pass --with-tmux to install it"
+        fi
     fi
 
     log_success "Dotfiles copied successfully"
@@ -561,6 +570,8 @@ show_help() {
     echo "Options:"
     echo "  --minimal      Minimal installation for Docker/container environments"
     echo "                 (bash + uv + minimal vim, no zsh/oh-my-zsh)"
+    echo "  --with-tmux    Also install the tmux config into ~/.config/tmux"
+    echo "                 (skipped by default; zellij is the primary multiplexer)"
     echo "  --dry-run      Show what would be installed without actually installing"
     echo "  --help, -h     Show this help message"
     echo ""
@@ -568,7 +579,7 @@ show_help() {
     echo "  - zsh + oh-my-zsh with spaceship theme"
     echo "  - MesloLGS NF Font"
     echo "  - Dev tools: juliaup, fnm, bun, uv, rust, go"
-    echo "  - Modern vim + bash + tmux configs"
+    echo "  - Modern vim + bash configs"
     echo "  - Neovim + zellij configs into ~/.config"
     echo "    (the nvim and zellij binaries are not installed for you)"
     echo ""
@@ -599,6 +610,11 @@ show_dry_run() {
         log_info "  - Development tools: juliaup, fnm, bun, uv, rust, go"
         log_info "  - vim-plug and modern vim configuration"
         log_info "  - Neovim and zellij configs into ~/.config"
+        if $WITH_TMUX; then
+            log_info "  - tmux config into ~/.config/tmux"
+        else
+            log_info "  - tmux config: skipped (pass --with-tmux)"
+        fi
         log_info "  - Dotfiles for platform: $(detect_platform)"
     fi
 }
@@ -610,6 +626,10 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         --minimal)
             MINIMAL=true
+            shift
+            ;;
+        --with-tmux)
+            WITH_TMUX=true
             shift
             ;;
         --dry-run)
