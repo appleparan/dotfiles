@@ -17,6 +17,9 @@ work seamlessly across Linux and WSL environments.
 ├── bash/          # Bash shell configurations
 │   ├── .bashrc
 │   └── .bash_profile
+├── config/        # XDG configs, installed to ~/.config
+│   ├── nvim/      # Neovim (NvChad based)
+│   └── zellij/    # Zellij multiplexer — see its own README
 ├── tmux/          # Terminal multiplexer configurations
 │   └── linux/
 │       └── .tmux.conf
@@ -39,10 +42,10 @@ work seamlessly across Linux and WSL environments.
   Linux and WSL environments
 - **Shell configurations**: Both Bash and Zsh setups with
   platform-specific optimizations
-- **Terminal multiplexing**: Tmux configuration for enhanced
-  terminal productivity
-- **Editor setup**: Vim configuration for consistent editing
-  experience
+- **Terminal multiplexing**: Tmux and Zellij configurations
+  for enhanced terminal productivity
+- **Editor setup**: Vim and Neovim configurations for a
+  consistent editing experience
 - **Oh-My-Zsh integration**: Pre-configured with useful
   plugins and spaceship theme
 - **Development tools**: Automated setup for Julia, Node.js
@@ -92,6 +95,35 @@ work seamlessly across Linux and WSL environments.
   finding
 - **Git Integration**: GitGutter for diff indicators and
   Fugitive for Git commands
+
+### Neovim Configuration
+
+Installed to `~/.config/nvim`. Requires the `nvim` binary,
+which `install.sh` does not install for you.
+
+- **NvChad v2.5**: Base configuration and UI, bootstrapped
+  through lazy.nvim on first launch
+- **Chadracula theme**: Shared with the zellij status bar
+- **LSP**: mason plus per-server configs for Rust, TypeScript,
+  Deno, OCaml, JSON and YAML
+- **AI assistance**: avante and minuet-ai
+- **Zellij integration**: `Ctrl h/j/k/l` move between Neovim
+  splits and zellij panes transparently
+
+### Zellij Configuration
+
+Installed to `~/.config/zellij`. Requires the `zellij` binary,
+which `install.sh` does not install for you.
+
+- **Fully custom keymap**: Upstream defaults are cleared, so
+  read [config/zellij/README.md](config/zellij/README.md) for
+  the complete binding reference
+- **Autolock**: Drops into Locked mode for vim, git, fzf and
+  less so they keep their `Ctrl` keys
+- **zjstatus**: Status bar themed to match NvChad Chadracula
+- **monocle**: `Alt f` fuzzy search over files and scrollback
+- **Vendored plugins**: The `.wasm` files are committed, so a
+  fresh machine works without network access
 
 ## Installation
 
@@ -225,6 +257,17 @@ the process:
    ln -sf ~/dotfiles/bash/.bashrc ~/.bashrc
    ln -sf ~/dotfiles/bash/.bash_profile \
      ~/.bash_profile
+   ```
+
+   **Neovim and zellij:**
+
+   Copy these rather than symlinking — zellij resolves its
+   vendored plugin paths against `~/.config/zellij`.
+
+   ```bash
+   mkdir -p ~/.config
+   cp -r ~/dotfiles/config/nvim ~/.config/nvim
+   cp -r ~/dotfiles/config/zellij ~/.config/zellij
    ```
 
 7. Change default shell to zsh:
@@ -455,6 +498,29 @@ vim +PlugInstall +qall
 # Clean unused plugins
 vim +PlugClean +qall
 ```
+
+### Zellij Usage
+
+```bash
+zellij           # New session
+zellij -s work   # New named session
+zellij ls        # List sessions
+zellij a work    # Attach
+```
+
+Most used keys, all from Normal mode:
+
+- `Alt b` — tmux-style prefix, the way into pane, tab,
+  scroll and session modes
+- `Alt n` — new pane, `Ctrl h/j/k/l` — move between panes
+- `Ctrl s` — scrollback with vim motions
+- `Alt f` — fuzzy search files and scrollback
+- `Ctrl g` — lock, so every key goes to the running program
+- `Ctrl q` — quit
+
+The full reference, including how the autolock plugin keeps
+`Ctrl` keys working inside vim, is in
+[config/zellij/README.md](config/zellij/README.md).
 
 ## Terminal Font Configuration
 
