@@ -138,7 +138,7 @@ which `install.sh` does not install for you.
 - **Autolock**: Drops into Locked mode for vim, git, fzf and
   less so they keep their `Ctrl` keys
 - **zjstatus**: Status bar themed to match NvChad Chadracula
-- **monocle**: `Alt f` fuzzy search over files and scrollback
+- **monocle**: `Ctrl g f` fuzzy search over files and scrollback
 - **Vendored plugins**: The `.wasm` files are committed, so a
   fresh machine works without network access
 
@@ -547,14 +547,20 @@ zellij ls        # List sessions
 zellij a work    # Attach
 ```
 
+`Ctrl g` is the single gateway. Pressing it cycles
+Locked → Normal → command mode → Locked, so `Ctrl g` once
+gives you the command mode and twice locks. There are no
+`Alt` bindings.
+
 Most used keys, all from Normal mode:
 
-- `Alt b` — tmux-style prefix, the way into pane, tab,
-  scroll and session modes
-- `Alt n` — new pane, `Ctrl h/j/k/l` — move between panes
+- `Ctrl g` — command mode, the way into pane, tab, scroll
+  and session modes
+- `Ctrl g n` — new pane, `Ctrl h/j/k/l` — move between panes
 - `Ctrl s` — scrollback with vim motions
-- `Alt f` — fuzzy search files and scrollback
-- `Ctrl g` — lock, so every key goes to the running program
+- `Ctrl g f` — fuzzy search files and scrollback
+- `Ctrl g Ctrl g` — lock, so every key goes to the running
+  program
 - `Ctrl q` — quit
 
 The full reference, including how the autolock plugin keeps
