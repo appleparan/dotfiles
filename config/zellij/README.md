@@ -4,10 +4,13 @@ A [Zellij](https://zellij.dev) setup that starts from
 `keybinds clear-defaults=true`, so **none of the upstream default
 keybindings apply**. Everything you can press is listed on this page.
 
-The design goal is to stay out of the way of terminal editors: an
-autolock plugin drops Zellij into Locked mode whenever a program that
-needs raw `Ctrl` keys is focused, and the remaining bindings favour
-`Alt` over `Ctrl`.
+Two design goals:
+
+1. **Stay out of the way of terminal editors.** An autolock plugin
+   drops Zellij into Locked mode whenever a program that needs raw
+   `Ctrl` keys is focused.
+2. **One key to remember.** `Ctrl g` is the only gateway into Zellij.
+   There are no `Alt` bindings at all.
 
 ## Files
 
@@ -39,28 +42,35 @@ zellij ka               # Kill all sessions
 zellij da               # Delete all exited sessions
 ```
 
-Detach from inside a session with `Alt b` then `d`. Note that
+Detach from inside a session with `Ctrl g` then `d`. Note that
 `on_force_close "quit"` is set: closing the terminal window kills the
 session instead of detaching it.
 
-## Modes
+## The `Ctrl g` cycle
 
-Zellij is modal. The current mode is shown on the left of the status
-bar. Only these entry points exist:
+Zellij is modal, and `Ctrl g` is the only key that changes mode by
+itself. Pressing it repeatedly walks a three-state cycle:
 
-| From Normal | Goes to      | Notes                             |
-| ----------- | ------------ | --------------------------------- |
-| `Alt b`     | Tmux         | Gateway to Pane/Tab/Session modes |
-| `Ctrl s`    | Scroll       | Scrollback and search             |
-| `Ctrl g`    | Locked       | Passthrough; `Ctrl g` to leave    |
-| `Alt w`     | Session mgr  | Floating plugin, not a mode       |
+```text
+Locked  --Ctrl g-->  Normal  --Ctrl g-->  Tmux  --Ctrl g-->  Locked
+```
 
-`Esc` or `Enter` returns to Normal from any mode except Locked.
+- **Locked** — every key goes to the running program. Autolock puts you
+  here automatically when an editor is focused.
+- **Normal** — what you type still reaches the shell, but the `Ctrl`
+  keys below are Zellij's.
+- **Tmux** — the command mode. One keypress does something and drops
+  you back to Normal.
 
-Pane mode and Tab mode have **no direct binding** — reach them with
-`Alt b p` and `Alt b t`. Direct `Ctrl p` / `Ctrl t` entries exist in
-`config.kdl` but are commented out, because both keys are useful
-inside editors.
+So `Ctrl g` alone means "give me the command mode", and `Ctrl g` twice
+means "lock". `Esc` or `Enter` returns to Normal from any mode except
+Locked.
+
+The current mode is shown on the left of the status bar. `Ctrl s`
+(scroll) is the one other direct mode entry. Pane mode and Tab mode
+have **no direct binding** — reach them with `Ctrl g p` and `Ctrl g t`.
+Direct `Ctrl p` / `Ctrl t` entries exist in `config.kdl` but are
+commented out, because both keys are useful inside editors.
 
 ## Global keys
 
@@ -70,44 +80,40 @@ Available in every mode except Locked.
 | ------------------- | ----------------------------------------- |
 | `Ctrl h` / `Ctrl l` | Focus pane left/right, else prev/next tab |
 | `Ctrl j` / `Ctrl k` | Focus pane down/up                        |
-| `Alt n`             | New pane                                  |
-| `Alt =` / `Alt -`   | Resize pane larger/smaller                |
-| `Alt [` / `Alt ]`   | Previous/next swap layout                 |
-| `Alt z`             | Lock (also disables autolock)             |
-| `Ctrl g`            | Lock (autolock stays enabled)             |
+| `Ctrl s`            | Scroll mode                               |
 | `Ctrl q`            | Quit Zellij                               |
 
-Available in every mode **including** Locked:
+That is the complete list. Everything else lives behind `Ctrl g`.
 
-| Key           | Action                                     |
-| ------------- | ------------------------------------------ |
-| `Alt f`       | Monocle — fuzzy find files and scrollback  |
-| `Alt Shift z` | Re-enable the autolock plugin              |
-| `Alt w`       | Session manager (floating)                 |
+## Command mode (`Ctrl g`)
 
-## Tmux mode (`Alt b`)
+Still called `tmux` mode in `config.kdl` because the bindings mirror a
+tmux prefix. This is the hub for every other mode.
 
-Named after tmux because the bindings mirror a tmux prefix. This is
-the hub for the other modes.
+| Key                 | Action                                 |
+| ------------------- | -------------------------------------- |
+| `"` / `%`           | Split down / split right               |
+| `n`                 | New pane                               |
+| `c`                 | New tab                                |
+| `,`                 | Rename tab                             |
+| `z`                 | Toggle fullscreen                      |
+| `x`                 | Close focused pane                     |
+| `d`                 | Detach session                         |
+| `q`                 | Quit Zellij                            |
+| `Space`             | Next swap layout                       |
+| `h` `j` `k` `l`     | Move focus                             |
+| `Ctrl h/j/k/l`      | Move the pane itself                   |
+| `H` `J` `K` `L`     | Resize toward that direction           |
+| `=` / `-`           | Resize pane larger / smaller           |
+| `f`                 | Monocle — fuzzy find files, scrollback |
+| `w`                 | Session manager (floating)             |
+| `p` / `t` / `s`     | Pane / Tab / Scroll mode               |
+| `o` / `[`           | Session mode / Scroll mode             |
+| `g` / `Ctrl g`      | Locked mode                            |
+| `Z`                 | Disable autolock, stay in Normal       |
+| `A`                 | Re-enable autolock                     |
 
-| Key                 | Action                        |
-| ------------------- | ----------------------------- |
-| `"` / `%`           | Split down / split right      |
-| `c`                 | New tab                       |
-| `,`                 | Rename tab                    |
-| `z`                 | Toggle fullscreen             |
-| `x`                 | Close focused pane            |
-| `d`                 | Detach session                |
-| `q`                 | Quit Zellij                   |
-| `Space`             | Next swap layout              |
-| `h` `j` `k` `l`     | Move focus                    |
-| `Ctrl h/j/k/l`      | Move the pane itself          |
-| `Alt h/j/k/l`       | Resize toward that direction  |
-| `p` / `t` / `s`     | Pane / Tab / Scroll mode      |
-| `o` / `[`           | Session mode / Scroll mode    |
-| `g`                 | Locked mode                   |
-
-## Pane mode (`Alt b p`)
+## Pane mode (`Ctrl g p`)
 
 | Key             | Action                              |
 | --------------- | ----------------------------------- |
@@ -121,7 +127,7 @@ the hub for the other modes.
 | `x`             | Close focused pane                  |
 | `h` `j` `k` `l` | Move focus                          |
 
-## Tab mode (`Alt b t`)
+## Tab mode (`Ctrl g t`)
 
 | Key             | Action                          |
 | --------------- | ------------------------------- |
@@ -161,7 +167,7 @@ running command matches this regex from `config.kdl`:
 vim|git|gitui|zoxide|fzf|less
 ```
 
-In Locked mode Zellij forwards every key to the program, so `Ctrl b`,
+In Locked mode Zellij forwards every key to the program, so `Ctrl g`,
 `Ctrl h/j/k/l`, `Ctrl s` and friends behave normally inside vim.
 `vim` matches `nvim` and `vimdiff` too. Add your own tools to the
 regex if they need raw `Ctrl` keys.
@@ -170,13 +176,17 @@ Three things to know when it misbehaves:
 
 - Locking is evaluated on `Enter` and on a short poll interval, so a
   program launched in an unusual way (a wrapper script, `sudo vim`)
-  may not be recognised. Press `Ctrl g` to lock manually.
-- `Alt z` locks *and disables* autolock, which is what you want when
-  the detection keeps fighting you. `Alt Shift z` turns it back on.
-- The tmux-mode prefix is `Alt b`, not `Ctrl b`, specifically so that
-  a missed autolock does not steal page-up from vim. The trade-off is
-  that readline's `backward-word` is shadowed — the same trade-off
-  `Alt f` already makes for monocle.
+  may not be recognised. Press `Ctrl g` twice to lock manually.
+- `Ctrl g Z` disables autolock and leaves you in Normal, which is what
+  you want when the detection keeps fighting you. `Ctrl g A` turns it
+  back on.
+- The gateway is `Ctrl g` rather than `Ctrl b` specifically so that a
+  missed autolock does not steal page-up from vim. The only thing it
+  shadows is readline's `abort`, and only while in Normal mode.
+
+Because the gateway is a `Ctrl` chord, a Caps Lock to Ctrl remap is
+worth doing at the OS level (PowerToys Keyboard Manager on Windows,
+`setxkbmap -option ctrl:nocaps` on X11).
 
 Neovim adds a second layer: `fresh2dev/zellij.vim` maps `Ctrl h/j/k/l`
 to `ZellijNavigate*`, so those keys cross the boundary between Neovim
