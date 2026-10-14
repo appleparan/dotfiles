@@ -74,9 +74,9 @@ ZSH_THEME="spaceship"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git 
-    zsh-autosuggestions 
-    zsh-syntax-highlighting 
+plugins=(git
+    zsh-autosuggestions
+    zsh-syntax-highlighting
     1password)
 
 source $ZSH/oh-my-zsh.sh
@@ -109,19 +109,3 @@ source $ZSH/oh-my-zsh.sh
 
 
 . "$HOME/.local/bin/env"
-
-# >>> juliaup initialize >>>
-
-# !! Contents within this block are managed by juliaup !!
-
-path=('/home/appleparan/.juliaup/bin' $path)
-export PATH
-
-# <<< juliaup initialize <<<
-. "/home/appleparan/.deno/env"
-# fnm
-FNM_PATH="/home/appleparan/.local/share/fnm"
-if [ -d "$FNM_PATH" ]; then
-  export PATH="/home/appleparan/.local/share/fnm:$PATH"
-  eval "`fnm env`"
-fi
