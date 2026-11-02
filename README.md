@@ -18,11 +18,13 @@ work seamlessly across Linux and WSL environments.
 │   ├── .bashrc
 │   └── .bash_profile
 ├── config/        # Application configs, one directory per app
-│   ├── noctty/    # Noctty, WSL only        -> %LOCALAPPDATA%\noctty
+│   ├── noctty/    # Noctty (Windows)        -> %LOCALAPPDATA%\noctty
 │   ├── nvim/      # Neovim (NvChad based)   -> ~/.config/nvim
 │   ├── tmux/      # Tmux, opt-in            -> ~/.config/tmux
 │   ├── vim/       # Vim, incl. minimal/     -> ~/.vimrc
 │   └── zellij/    # Zellij, see its README  -> ~/.config/zellij
+├── windows/       # Windows-side installer
+│   └── install.ps1  # Noctty config and themes
 └── zsh/           # Zsh configs, shared by Linux and WSL
     ├── .zshrc
     ├── .zshenv    # WSL-only parts check $WSL_DISTRO_NAME
@@ -141,9 +143,17 @@ which `install.sh` does not install for you.
 ### Noctty Configuration
 
 Noctty is a Windows terminal built on the Ghostty core.
-On WSL, `install.sh` copies `config/noctty/config.ghostty` to
-`%LOCALAPPDATA%\noctty\config.ghostty`. The settings came
-from Tabby.
+`windows/install.ps1` copies `config/noctty/config.ghostty` to
+`%LOCALAPPDATA%\noctty\config.ghostty` and installs the themes.
+It runs in Windows PowerShell and needs no WSL and no admin
+rights. The settings came from Tabby.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\windows\install.ps1
+```
+
+If you run it again, it backs up the existing
+`config.ghostty`. Pass `-SkipThemes` to copy the config only.
 
 - **Shell**: Opens the default WSL distribution
 - **Look**: Grey Green theme, MesloLGS NF at 12pt, Hangul in
