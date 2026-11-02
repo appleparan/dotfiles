@@ -3,6 +3,7 @@
 # Dotfiles Installation Script
 # Full mode:    zsh + oh-my-zsh + dev tools (juliaup, fnm, bun, uv, rust, go)
 #               plus vim/bash dotfiles and ~/.config/{nvim,zellij}
+#               (WSL also gets the Noctty config in %LOCALAPPDATA%\noctty)
 # Minimal mode: bash-only + uv for Docker/container environments
 #
 # Zellij is the primary multiplexer. The tmux config is opt-in.
@@ -499,9 +500,36 @@ setup_dotfiles() {
         else
             log_info "Skipping tmux config; pass --with-tmux to install it"
         fi
+
+        if [ "$platform" = "wsl" ]; then
+            setup_noctty_config "$SCRIPT_DIR/config/noctty/config.ghostty"
+        fi
     fi
 
     log_success "Dotfiles copied successfully"
+}
+
+# Noctty is a Windows app, so its config lives on the Windows side under
+# %LOCALAPPDATA%\noctty. Only WSL can reach it.
+setup_noctty_config() {
+    local source="$1"
+    local localappdata
+
+    if ! command_exists cmd.exe || ! command_exists wslpath; then
+        log_warning "cmd.exe or wslpath not found; skipping Noctty config"
+        return
+    fi
+
+    localappdata=$(cmd.exe /c "echo %LOCALAPPDATA%" 2>/dev/null | tr -d '\r')
+    if [ -z "$localappdata" ] || [ "$localappdata" = "%LOCALAPPDATA%" ]; then
+        log_warning "Could not resolve %LOCALAPPDATA%; skipping Noctty config"
+        return
+    fi
+
+    local target_dir
+    target_dir="$(wslpath -u "$localappdata")/noctty"
+    mkdir -p "$target_dir"
+    copy_dotfile "$source" "$target_dir/config.ghostty"
 }
 
 change_shell() {
@@ -610,6 +638,9 @@ show_dry_run() {
         log_info "  - Development tools: juliaup, fnm, bun, uv, rust, go"
         log_info "  - vim-plug and modern vim configuration"
         log_info "  - Neovim and zellij configs into ~/.config"
+        if [ "$(detect_platform)" = "wsl" ]; then
+            log_info "  - Noctty config into %LOCALAPPDATA%/noctty (Windows)"
+        fi
         if $WITH_TMUX; then
             log_info "  - tmux config into ~/.config/tmux"
         else
