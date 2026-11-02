@@ -58,6 +58,16 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # ====================
+# WSL: open links in the Windows default browser
+# ====================
+
+# wslview (from wslu) hands URLs to Windows, so tools that read $BROWSER
+# open Windows Chrome instead of a browser installed inside WSL.
+if [[ -n "$WSL_DISTRO_NAME" ]] && (( $+commands[wslview] )); then
+  export BROWSER=wslview
+fi
+
+# ====================
 # CUDA Configuration
 # ====================
 
