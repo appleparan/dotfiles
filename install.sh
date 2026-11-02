@@ -22,6 +22,8 @@ set -e
 MINIMAL=false
 # Zellij is the primary multiplexer; the tmux config is opt-in.
 WITH_TMUX=false
+# Source of the Noctty themes: the iTerm2-Color-Schemes repository.
+NOCTTY_THEMES_URL="https://codeload.github.com/mbadolato/iTerm2-Color-Schemes/tar.gz/refs/heads/master"
 
 # =============================================================================
 # Colors and Logging
@@ -528,6 +530,42 @@ setup_noctty_config() {
     target_dir="$(wslpath -u "$localappdata")/noctty"
     mkdir -p "$target_dir"
     copy_dotfile "$source" "$target_dir/config.ghostty"
+    setup_noctty_themes "$target_dir/themes"
+}
+
+# Noctty bundles only part of the iTerm2-Color-Schemes collection
+# (https://iterm2colorschemes.com). Install every Ghostty-format theme into
+# the user themes directory, which Noctty searches before its bundled ones.
+# The user directory survives Noctty updates and needs no admin rights.
+setup_noctty_themes() {
+    local target_dir="$1"
+    local tmp_dir
+
+    if ! command_exists curl || ! command_exists tar; then
+        log_warning "curl or tar not found; skipping Noctty themes"
+        return
+    fi
+
+    tmp_dir=$(mktemp -d)
+    if ! curl -fsSL "$NOCTTY_THEMES_URL" \
+        | tar -xz -C "$tmp_dir" --strip-components=1 --wildcards '*/ghostty/*'; then
+        log_warning "Could not download iTerm2 color schemes; skipping Noctty themes"
+        rm -r "$tmp_dir"
+        return
+    fi
+
+    mkdir -p "$target_dir"
+    local theme name count=0
+    for theme in "$tmp_dir"/ghostty/*; do
+        [ -f "$theme" ] || continue
+        # The theme name is the file name. Windows file names cannot hold
+        # <>:"/\|?*, so "Foo: Bar" installs as the theme "Foo - Bar".
+        name=$(basename "$theme" | sed -e 's/:/ -/g' -e 's/[<>"\\|?*]/-/g')
+        cp "$theme" "$target_dir/$name"
+        count=$((count + 1))
+    done
+    rm -r "$tmp_dir"
+    log_info "Installed $count Noctty themes into $target_dir"
 }
 
 # xdg-open ignores $BROWSER when a desktop file claims http/https, and a
@@ -654,6 +692,7 @@ show_dry_run() {
         log_info "  - Neovim and zellij configs into ~/.config"
         if [ "$(detect_platform)" = "wsl" ]; then
             log_info "  - Noctty config into %LOCALAPPDATA%/noctty (Windows)"
+            log_info "  - iTerm2 color schemes into %LOCALAPPDATA%/noctty/themes"
             log_info "  - wslview as the xdg-open browser (Windows default)"
         fi
         if $WITH_TMUX; then
