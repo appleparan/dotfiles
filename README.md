@@ -146,7 +146,8 @@ On WSL, `install.sh` copies `config/noctty/config.ghostty` to
 from Tabby.
 
 - **Shell**: Opens the default WSL distribution
-- **Look**: Dracula theme, MesloLGS NF at 12pt
+- **Look**: Dracula theme, MesloLGS NF at 12pt, Hangul in
+  goorm Sans Code (install it on Windows first)
 - **Themes**: Installs every scheme from
   [iterm2colorschemes.com](https://iterm2colorschemes.com) into
   `%LOCALAPPDATA%\noctty\themes`. List them with
