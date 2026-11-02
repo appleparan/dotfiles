@@ -1,0 +1,34 @@
+# Noctty configuration, migrated from Tabby.
+#
+# Noctty is a Windows terminal built on the Ghostty core, so this file uses
+# Ghostty syntax. On WSL, install.sh copies it to
+# %LOCALAPPDATA%\noctty\config.ghostty. Reload with Ctrl+Shift+comma.
+# List every option with `noctty +show-config --default --docs`.
+
+# Shell: the default WSL distribution. Noctty never picks WSL on its own.
+default-profile = wsl-default
+
+# Appearance
+theme = Dracula
+background = #1e1f29
+font-family = MesloLGS NF
+font-family = Fira Code
+# Ghostty sizes are points. Tabby used pixels: 16px is about 12pt.
+font-size = 12
+bell-features = attention,title,border
+
+# Keybindings carried over from Tabby. Noctty defaults stay active too.
+# global: grabs Ctrl+Space system-wide while Noctty runs.
+keybind = global:ctrl+space=toggle_visibility
+keybind = ctrl+shift+s=new_split:right
+keybind = ctrl+shift+d=new_split:down
+keybind = ctrl+alt+arrow_left=goto_split:left
+keybind = ctrl+alt+arrow_right=goto_split:right
+keybind = ctrl+alt+arrow_up=goto_split:up
+keybind = ctrl+alt+arrow_down=goto_split:down
+keybind = ctrl+alt+[=goto_split:previous
+keybind = ctrl+alt+]=goto_split:next
+keybind = ctrl+alt+enter=toggle_split_zoom
+keybind = alt+page_up=scroll_page_up
+keybind = alt+page_down=scroll_page_down
+keybind = ctrl+shift+r=prompt_surface_title

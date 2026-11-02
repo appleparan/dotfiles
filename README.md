@@ -18,6 +18,7 @@ work seamlessly across Linux and WSL environments.
 │   ├── .bashrc
 │   └── .bash_profile
 ├── config/        # Application configs, one directory per app
+│   ├── noctty/    # Noctty, WSL only        -> %LOCALAPPDATA%\noctty
 │   ├── nvim/      # Neovim (NvChad based)   -> ~/.config/nvim
 │   ├── tmux/      # Tmux, opt-in            -> ~/.config/tmux
 │   ├── vim/       # Vim, incl. minimal/     -> ~/.vimrc
@@ -141,6 +142,19 @@ which `install.sh` does not install for you.
 - **monocle**: `Ctrl g f` fuzzy search over files and scrollback
 - **Vendored plugins**: The `.wasm` files are committed, so a
   fresh machine works without network access
+
+### Noctty Configuration
+
+Noctty is a Windows terminal built on the Ghostty core.
+On WSL, `install.sh` copies `config/noctty/config.ghostty` to
+`%LOCALAPPDATA%\noctty\config.ghostty`. The settings came
+from Tabby.
+
+- **Shell**: Opens the default WSL distribution
+- **Look**: Dracula theme, MesloLGS NF at 12pt
+- **Tabby keys**: `Ctrl+Shift+S`/`D` split, `Ctrl+Alt+arrows`
+  move between panes, `Ctrl+Space` shows or hides the window
+  from anywhere
 
 ## Installation
 
