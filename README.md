@@ -147,6 +147,11 @@ from Tabby.
 
 - **Shell**: Opens the default WSL distribution
 - **Look**: Dracula theme, MesloLGS NF at 12pt
+- **Themes**: Installs every scheme from
+  [iterm2colorschemes.com](https://iterm2colorschemes.com) into
+  `%LOCALAPPDATA%\noctty\themes`. List them with
+  `noctty +list-themes`. Names with `:` install with ` -`
+  instead, because Windows file names cannot hold `:`.
 - **Tabby keys**: `Ctrl+Shift+S`/`D` split, `Ctrl+Alt+arrows`
   move between panes, `Ctrl+Space` shows or hides the window
   from anywhere
