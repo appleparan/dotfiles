@@ -503,6 +503,7 @@ setup_dotfiles() {
 
         if [ "$platform" = "wsl" ]; then
             setup_noctty_config "$SCRIPT_DIR/config/noctty/config.ghostty"
+            setup_wsl_browser
         fi
     fi
 
@@ -530,6 +531,22 @@ setup_noctty_config() {
     target_dir="$(wslpath -u "$localappdata")/noctty"
     mkdir -p "$target_dir"
     copy_dotfile "$source" "$target_dir/config.ghostty"
+}
+
+# xdg-open ignores $BROWSER when a desktop file claims http/https, and a
+# Linux browser inside WSL registers one. Point the scheme at wslview so
+# xdg-open also opens the Windows default browser.
+setup_wsl_browser() {
+    if ! command_exists wslview || ! command_exists xdg-settings; then
+        log_warning "wslview or xdg-settings not found; links keep opening inside WSL"
+        return
+    fi
+
+    if xdg-settings set default-web-browser wslview.desktop; then
+        log_info "Set wslview as the default browser for xdg-open"
+    else
+        log_warning "Could not set wslview as the default browser"
+    fi
 }
 
 change_shell() {
@@ -640,6 +657,7 @@ show_dry_run() {
         log_info "  - Neovim and zellij configs into ~/.config"
         if [ "$(detect_platform)" = "wsl" ]; then
             log_info "  - Noctty config into %LOCALAPPDATA%/noctty (Windows)"
+            log_info "  - wslview as the xdg-open browser (Windows default)"
         fi
         if $WITH_TMUX; then
             log_info "  - tmux config into ~/.config/tmux"
