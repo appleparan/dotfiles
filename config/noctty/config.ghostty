@@ -9,7 +9,7 @@
 default-profile = wsl-default
 
 # Appearance
-theme = Dracula
+theme = Grey Green
 background = #1e1f29
 font-family = MesloLGS NF
 font-family = Fira Code
