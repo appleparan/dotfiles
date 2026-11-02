@@ -476,14 +476,11 @@ setup_dotfiles() {
     else
         log_info "Setting up dotfiles for platform: $platform"
 
-        # Zsh config (platform-specific)
-        if [ "$platform" = "wsl" ]; then
-            copy_dotfile "$SCRIPT_DIR/zsh/wsl/.zshrc" "$HOME/.zshrc"
-            copy_dotfile "$SCRIPT_DIR/zsh/wsl/.zshenv" "$HOME/.zshenv"
-        else
-            copy_dotfile "$SCRIPT_DIR/zsh/linux/.zshrc" "$HOME/.zshrc"
-            copy_dotfile "$SCRIPT_DIR/zsh/linux/.zshenv" "$HOME/.zshenv"
-        fi
+        # Zsh config. One set serves Linux and WSL; WSL-only parts check
+        # $WSL_DISTRO_NAME at runtime.
+        copy_dotfile "$SCRIPT_DIR/zsh/.zshrc" "$HOME/.zshrc"
+        copy_dotfile "$SCRIPT_DIR/zsh/.zshenv" "$HOME/.zshenv"
+        copy_dotfile "$SCRIPT_DIR/zsh/.spaceshiprc.zsh" "$HOME/.spaceshiprc.zsh"
 
         # Bash. Vim stays at ~/.vimrc: Vim only gained XDG vimrc support in
         # patch 9.1.0327, which distro builds routinely lack.

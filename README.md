@@ -23,21 +23,16 @@ work seamlessly across Linux and WSL environments.
 │   ├── tmux/      # Tmux, opt-in            -> ~/.config/tmux
 │   ├── vim/       # Vim, incl. minimal/     -> ~/.vimrc
 │   └── zellij/    # Zellij, see its README  -> ~/.config/zellij
-└── zsh/           # Zsh shell configurations
-    ├── .zshrc     # Global zsh configuration
-    ├── .zshenv    # Global zsh environment
-    ├── linux/     # Linux-specific configurations
-    │   ├── .zshrc
-    │   └── .zshenv
-    └── wsl/       # WSL-specific configurations
-        ├── .zshrc
-        └── .zshenv
+└── zsh/           # Zsh configs, shared by Linux and WSL
+    ├── .zshrc
+    ├── .zshenv    # WSL-only parts check $WSL_DISTRO_NAME
+    └── .spaceshiprc.zsh
 ```
 
 ## Features
 
-- **Multi-platform support**: Separate configurations for
-  Linux and WSL environments
+- **Multi-platform support**: One zsh setup for Linux and
+  WSL; WSL-only settings switch on at runtime
 - **Shell configurations**: Both Bash and Zsh setups with
   platform-specific optimizations
 - **Terminal multiplexing**: Zellij as the primary
@@ -263,20 +258,12 @@ the process:
    fc-cache -f -v
    ```
 
-6. Create symbolic links based on your platform:
-
-   **For Linux:**
+6. Create symbolic links for zsh (Linux and WSL):
 
    ```bash
-   ln -sf ~/dotfiles/zsh/linux/.zshrc ~/.zshrc
-   ln -sf ~/dotfiles/zsh/linux/.zshenv ~/.zshenv
-   ```
-
-   **For WSL:**
-
-   ```bash
-   ln -sf ~/dotfiles/zsh/wsl/.zshrc ~/.zshrc
-   ln -sf ~/dotfiles/zsh/wsl/.zshenv ~/.zshenv
+   ln -sf ~/dotfiles/zsh/.zshrc ~/.zshrc
+   ln -sf ~/dotfiles/zsh/.zshenv ~/.zshenv
+   ln -sf ~/dotfiles/zsh/.spaceshiprc.zsh ~/.spaceshiprc.zsh
    ```
 
    **Common configurations:**
