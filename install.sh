@@ -501,6 +501,7 @@ setup_dotfiles() {
 
         if [ "$platform" = "wsl" ]; then
             setup_wsl_browser
+            setup_wsl_ssh_agent
         fi
     fi
 
@@ -521,6 +522,38 @@ setup_wsl_browser() {
     else
         log_warning "Could not set wslview as the default browser"
     fi
+}
+
+# The Bitwarden SSH agent runs on Windows and serves the named pipe
+# //./pipe/openssh-ssh-agent. zsh/.zshenv bridges that pipe to a WSL socket
+# with socat and npiperelay.exe. windows/install.ps1 -BitwardenSshAgent
+# installs npiperelay.exe on the Windows side; this links it onto PATH.
+setup_wsl_ssh_agent() {
+    if ! command_exists socat; then
+        if command_exists apt-get && check_sudo; then
+            log_info "Installing socat for the WSL SSH agent bridge..."
+            sudo apt-get install -y socat
+        else
+            log_warning "socat not found; install it to use the Windows SSH agent from WSL"
+        fi
+    fi
+
+    if ! command_exists cmd.exe || ! command_exists wslpath; then
+        log_warning "cmd.exe or wslpath not found; skipping npiperelay link"
+        return
+    fi
+
+    local localappdata relay
+    localappdata=$(cmd.exe /c "echo %LOCALAPPDATA%" 2>/dev/null | tr -d '\r')
+    relay="$(wslpath -u "$localappdata")/Programs/npiperelay/npiperelay.exe"
+    if [ ! -f "$relay" ]; then
+        log_warning "npiperelay.exe not found; run windows/install.ps1 -BitwardenSshAgent first"
+        return
+    fi
+
+    mkdir -p "$HOME/.local/bin"
+    ln -sf "$relay" "$HOME/.local/bin/npiperelay.exe"
+    log_info "Linked npiperelay.exe into ~/.local/bin"
 }
 
 change_shell() {
@@ -631,6 +664,7 @@ show_dry_run() {
         log_info "  - Neovim and zellij configs into ~/.config"
         if [ "$(detect_platform)" = "wsl" ]; then
             log_info "  - wslview as the xdg-open browser (Windows default)"
+            log_info "  - socat and npiperelay.exe for the Windows SSH agent bridge"
         fi
         if $WITH_TMUX; then
             log_info "  - tmux config into ~/.config/tmux"

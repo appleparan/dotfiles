@@ -68,6 +68,25 @@ if [[ -n "$WSL_DISTRO_NAME" ]] && (( $+commands[wslview] )); then
 fi
 
 # ====================
+# WSL: use the SSH agent that runs on Windows (Bitwarden)
+# ====================
+
+# The agent serves the Windows pipe //./pipe/openssh-ssh-agent. socat and
+# npiperelay.exe bridge it to a socket here, so ssh, git and ssh-add in WSL
+# use the keys in Bitwarden. One bridge serves every shell; a new shell
+# starts it again only when no bridge process is running.
+if [[ -n "$WSL_DISTRO_NAME" ]] && (( $+commands[socat] && $+commands[npiperelay.exe] )); then
+  export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+  if ! pgrep -f "^socat UNIX-LISTEN:$SSH_AUTH_SOCK," >/dev/null; then
+    # A socket file left by a bridge that died blocks UNIX-LISTEN.
+    [[ -S "$SSH_AUTH_SOCK" ]] && rm "$SSH_AUTH_SOCK"
+    (setsid socat "UNIX-LISTEN:$SSH_AUTH_SOCK,fork,umask=077" \
+      "EXEC:npiperelay.exe -ei -s //./pipe/openssh-ssh-agent,nofork" \
+      >/dev/null 2>&1 &)
+  fi
+fi
+
+# ====================
 # CUDA Configuration
 # ====================
 
