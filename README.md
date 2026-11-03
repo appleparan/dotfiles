@@ -167,6 +167,42 @@ If you run it again, it backs up the existing
   move between panes, `Ctrl+Space` shows or hides the window
   from anywhere
 
+### Bitwarden SSH Agent
+
+SSH keys live in Bitwarden, not in files. The Bitwarden desktop
+app serves them as the SSH agent on Windows, and WSL reaches the
+same agent through a bridge. You approve each key use in
+Bitwarden. SSH configs cannot hold passwords, so this setup uses
+key login only.
+
+1. In Windows PowerShell, run the installer with the switch. It
+   installs `npiperelay.exe` and asks for admin rights once to
+   disable the Windows "OpenSSH Authentication Agent" service.
+   Bitwarden needs that service off
+   ([docs](https://bitwarden.com/help/ssh-agent/)).
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File .\windows\install.ps1 -BitwardenSshAgent
+   ```
+
+2. In Bitwarden Desktop settings, turn on the SSH agent. Add or
+   import your keys as SSH key items (OpenSSH or PKCS#8 format).
+3. In WSL, run `./install.sh`. It installs `socat` and links
+   `npiperelay.exe` into `~/.local/bin`.
+4. Open a new shell and run `ssh-add -l`. It lists the keys in
+   Bitwarden.
+
+In WSL, `zsh/.zshenv` starts one `socat` bridge from
+`~/.ssh/agent.sock` to the Windows pipe and sets
+`SSH_AUTH_SOCK`. Noctty SSH profiles run Windows `ssh.exe`, which
+uses the agent directly. Hosts in `%USERPROFILE%\.ssh\config`
+appear in the Noctty profile list.
+
+The agent offers every key in the vault until one works. If a
+server rejects you with "Too many authentication failures", add
+`IdentityFile <public key file>` and `IdentitiesOnly yes` for that
+host.
+
 ## Installation
 
 ### Quick Installation (Recommended)
