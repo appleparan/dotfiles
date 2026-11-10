@@ -44,12 +44,6 @@ export LD_LIBRARY_PATH
 
 export KUBECONFIG=~/.kube/config
 
-FNM_PATH="/home/appleparan/.local/share/fnm"
-if [ -d "$FNM_PATH" ]; then
-  export PATH="/home/appleparan/.local/share/fnm:$PATH"
-  eval "`fnm env`"
-fi
-
 # bun completions
 [ -s "/home/appleparan/.bun/_bun" ] && source "/home/appleparan/.bun/_bun"
 
@@ -107,13 +101,20 @@ export PATH=/home/appleparan/.opencode/bin:$PATH
 export PATH="/home/appleparan/src/authentik:$PATH"
 export PATH="/home/appleparan/src/authentik:$PATH"
 
-# fnm
-export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
-mkdir -p "$XDG_RUNTIME_DIR/fnm_multishells" 2>/dev/null
+# ====================
+# fnm (Node.js version manager)
+# ====================
 
-FNM_PATH="/home/appleparan/.local/share/fnm"
-if [ -d "$FNM_PATH" ]; then
-  export PATH="$FNM_PATH:$PATH"
+# fnm keeps a per-shell link under $XDG_RUNTIME_DIR. WSL shells start
+# without a systemd login session, so /run/user/<uid> may not exist.
+# Drop the variable in that case; fnm then uses ~/.local/state instead.
+if [[ -n "$XDG_RUNTIME_DIR" && ! -w "$XDG_RUNTIME_DIR" ]]; then
+  unset XDG_RUNTIME_DIR
+fi
+
+FNM_PATH="$HOME/.local/share/fnm"
+if [[ -d "$FNM_PATH" ]]; then
+  path=("$FNM_PATH" $path)
   eval "$(fnm env --shell zsh)"
 fi
 
@@ -128,12 +129,6 @@ export PATH
 
 # <<< juliaup initialize <<<
 . "/home/appleparan/.deno/env"
-# fnm
-FNM_PATH="/home/appleparan/.local/share/fnm"
-if [ -d "$FNM_PATH" ]; then
-  export PATH="/home/appleparan/.local/share/fnm:$PATH"
-  eval "`fnm env`"
-fi
 
 
 autoload -U +X bashcompinit && bashcompinit
